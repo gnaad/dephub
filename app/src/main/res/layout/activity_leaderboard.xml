@@ -1,0 +1,47 @@
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mainlb"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/MainActivity">
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewpagerlb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbarlb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarlb"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            app:titleTextAppearance="@style/toolbartextentity" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabslb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            android:tooltipText="@null"
+            app:tabBackground="@color/colorPrimary"
+            app:tabGravity="center"
+            app:tabIndicatorColor="@color/indicatorcolor"
+            app:tabIndicatorFullWidth="false"
+            app:tabIndicatorHeight="2.5sp"
+            app:tabMode="scrollable"
+            app:tabRippleColor="@null"
+            app:tabSelectedTextColor="@color/selectedtextcolor"
+            app:tabTextAppearance="@style/TabLayoutTextStyle"
+            app:tabTextColor="@color/tabTextColormain" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

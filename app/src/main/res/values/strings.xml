@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">DepHub</string>
+
+    <string name="notification">General</string>
+    <string name="follow">Follow</string>
+
+
+    <string name="short_text1">Home</string>
+    <string name="long_text1">Home</string>
+    <string name="disable_text1">Sorry for the inconvience caused</string>
+
+    <string name="search_hint">Type Dependency Name</string>
+</resources>

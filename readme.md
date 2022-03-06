@@ -34,7 +34,7 @@ DepHub is collection of android dependencies. All dependencies are arranged in a
   * Create a [Pull Request](https://github.com/gnanendraprasadp/DepHub/pulls)
 
 ## Install
-#### Latest Version 1.0.9
+#### Latest Version 1.0.13
 
 [Download App Now](https://play.google.com/store/apps/details?id=com.dephub.android)
 <br>

@@ -31,7 +31,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class Top10 extends Fragment {
-    public static final String url = "https://android-dephub.web.app/json/leaderboardfollowedbytop10.json";
+    public static final String url = "https://gnanendraprasadp.github.io/DepHub-Web/json/leaderboardfollowedbytop10.json";
     private RecyclerView cardrecyclerviewtopten;
     private Cardadapter cardviewadaptertopten;
     private ArrayList<Cardmodel> cardtopten;

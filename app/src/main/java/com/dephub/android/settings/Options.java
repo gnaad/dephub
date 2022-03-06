@@ -130,7 +130,7 @@ public class Options extends AppCompatActivity {
                     startActivity(intent);
                 }
                 if (position == 2) {
-                    String website = "https://android-dephub.web.app";
+                    String website = "https://gnanendraprasadp.github.io/DepHub-Web";
                     CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder( );
                     builder.setToolbarColor(ContextCompat.getColor(Options.this,R.color.colorPrimary));
                     builder.setShowTitle(true);

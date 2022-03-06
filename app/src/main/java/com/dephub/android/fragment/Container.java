@@ -30,7 +30,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class Container extends Fragment {
-    public static final String url = "https://android-dephub.web.app/json/fragmentfollowedbycontainer.json";
+    public static final String url = "https://gnanendraprasadp.github.io/DepHub-Web/json/fragmentfollowedbycontainer.json";
     private RecyclerView cardrecyclerviewcontainer;
     private Cardadapter cardviewadaptercontainer;
     private ArrayList<Cardmodel> cardcontainer;

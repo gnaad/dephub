@@ -30,8 +30,8 @@ import com.dephub.android.R;
 
 
 public class Login extends AppCompatActivity {
-    public static final String pp = "https://android-dephub.web.app/privacypolicy";
-    public static final String tos = "https://android-dephub.web.app/termsofservice";
+    public static final String pp = "https://gnanendraprasadp.github.io/DepHub-Web/privacypolicy";
+    public static final String tos = "https://gnanendraprasadp.github.io/DepHub-Web/termsofservice";
     public TextView textView;
     public Button signInButton;
 

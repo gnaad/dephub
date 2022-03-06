@@ -65,7 +65,7 @@ public class URL extends AppCompatActivity {
                         if (parameters.length( ) == 4) {
                             RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext( ));
                             requestQueue.getCache( ).clear( );
-                            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,"https://android-dephub.web.app/json/search.json",null,new Response.Listener<JSONArray>( ) {
+                            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,"https://gnanendraprasadp.github.io/DepHub-Web/json/search.json",null,new Response.Listener<JSONArray>( ) {
 
                                 @Override
                                 public void onResponse(JSONArray response) {

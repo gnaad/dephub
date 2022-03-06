@@ -38,13 +38,14 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 public class Help extends AppCompatActivity {
-    public static final String pp = "https://android-dephub.web.app/privacypolicy";
-    public static final String tos = "https://android-dephub.web.app/termsofservice";
+    public static final String pp = "https://gnanendraprasadp.github.io/DepHub-Web/privacypolicy";
+    public static final String tos = "https://gnanendraprasadp.github.io/DepHub-Web/termsofservice";
     String[] Listviewtitle = new String[]{
             "Terms of Service",
             "Privacy Policy",
@@ -276,17 +277,41 @@ public class Help extends AppCompatActivity {
                     String versionName = BuildConfig.VERSION_NAME;
                     int versionCode = BuildConfig.VERSION_CODE;
 
-                    @SuppressLint("SimpleDateFormat")
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
+                    String installer = "";
 
-                    alertDialogBuilder.setCancelable(true);
-                    alertDialogBuilder.setMessage("DepHub\nVersion v" + versionName + " (" + versionCode + ")\n\n© " + simpleDateFormat.format(new Date( )) + " DepHub");
-                    AlertDialog alertDialog = alertDialogBuilder.create( );
-                    alertDialog.show( );
-                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
-                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
+                    if (!verifyinstaller(getApplicationContext( ))) {
+                        installer = "•Unknown Resources";
+                    }
+
+                    if (BuildConfig.DEBUG) {
+                        @SuppressLint("SimpleDateFormat")
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
+
+                        alertDialogBuilder.setCancelable(true);
+                        alertDialogBuilder.setMessage("DepHub\nVersion v" + versionName + " (" + versionCode + ")\n•Debug Mode\n" + installer + "\n\n\u00a9 " + simpleDateFormat.format(new Date( )) + " DepHub");
+                        AlertDialog alertDialog = alertDialogBuilder.create( );
+                        alertDialog.show( );
+                        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
+                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
+                    } else {
+                        @SuppressLint("SimpleDateFormat")
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
+
+                        alertDialogBuilder.setCancelable(true);
+                        alertDialogBuilder.setMessage("DepHub\nVersion v" + versionName + " (" + versionCode + ")\n" + installer + "\n\n\u00a9 " + simpleDateFormat.format(new Date( )) + " DepHub");
+                        AlertDialog alertDialog = alertDialogBuilder.create( );
+                        alertDialog.show( );
+                        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
+                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
+                    }
                 }
             }
         });
+    }
+
+    boolean verifyinstaller(Context context) {
+        List<String> validInstallers = new ArrayList<>(Collections.singletonList("com.android.vending"));
+        final String installer = context.getPackageManager( ).getInstallerPackageName(context.getPackageName( ));
+        return installer != null && validInstallers.contains(installer);
     }
 }

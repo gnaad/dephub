@@ -49,7 +49,7 @@ public class Search extends AppCompatActivity {
     Button submityourdependency;
     LinearLayoutManager linearLayoutManager;
     CompoundIconTextView compoundIconTextView;
-    String url = "https://android-dephub.web.app/json/search.json";
+    String url = "https://gnanendraprasadp.github.io/DepHub-Web/json/search.json";
 
     Searchadapter cardviewsearch;
     String[] background = {"#3F51B5","#FF5001","#F44336","#FFC107","#3BEC1B","#00BCD4","#FF8000"};

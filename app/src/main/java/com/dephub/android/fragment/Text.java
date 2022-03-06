@@ -33,7 +33,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class Text extends Fragment {
-    public static final String url = "https://android-dephub.web.app/json/fragmentfollowedbytext.json";
+    public static final String url = "https://gnanendraprasadp.github.io/DepHub-Web/json/fragmentfollowedbytext.json";
     ProgressDialog progressDialog;
     LinearLayoutManager linearLayoutManager;
     private RecyclerView cardrecyclerviewtext;

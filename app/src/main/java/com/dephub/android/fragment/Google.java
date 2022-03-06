@@ -30,7 +30,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class Google extends Fragment {
-    public static final String url = "https://android-dephub.web.app/json/fragmentfollowedbygoogle.json";
+    public static final String url = "https://gnanendraprasadp.github.io/DepHub-Web/json/fragmentfollowedbygoogle.json";
     private RecyclerView cardrecyclerviewgoogle;
     private Cardadapter cardviewadaptergoogle;
     private ArrayList<Cardmodel> cardgoogle;

@@ -30,7 +30,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class Legacy extends Fragment {
-    public static final String url = "https://android-dephub.web.app/json/fragmentfollowedbylegacy.json";
+    public static final String url = "https://gnanendraprasadp.github.io/DepHub-Web/json/fragmentfollowedbylegacy.json";
     private RecyclerView cardrecyclerviewlegacy;
     private Cardadapter cardviewadapterlegacy;
     private ArrayList<Cardmodel> cardlegacy;

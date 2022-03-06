@@ -38,7 +38,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class News extends AppCompatActivity {
-    public static final String url = "https://android-dephub.web.app/news";
+    public static final String url = "https://gnanendraprasadp.github.io/DepHub-Web/news";
     ProgressDialog progressDialog;
     Activity activity;
     CompoundIconTextView compoundIconTextView;

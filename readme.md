@@ -26,12 +26,12 @@ DepHub is collection of android dependencies. All dependencies are arranged in a
  5. Some dependencies are provided with YouTube video link which give information about how to implement them
  6. Get Information about new features and many more stuff through News
 
-## Install
+# Install
 
 [<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Google Play Download" height="100">](https://play.google.com/store/apps/details?id=com.dephub.android)
 
 #### Latest Version 1.0.13
-## Screenshots
+# Screenshots
 
 <img src="https://play-lh.googleusercontent.com/FZBPIVuM-QgkJMehGkHEc8ndAgUl5BRLNESmrFNUfFxVXOLC_9jxUy7rdLNhxwFwaf0=w1536-h722-rw" width="200"/>|
 <img src="https://play-lh.googleusercontent.com/mxf-5FGDdaMQZE-BDpGEibIHHriX35nBt0GfDw9Fy9D4qJs3EMXKYbBIU40dx5CNxA=w1536-h722-rw" width="200"/>|
@@ -54,20 +54,17 @@ DepHub is collection of android dependencies. All dependencies are arranged in a
 <li>Dependency URL</li>
 <li>Dependency Description</li>
 
-## Join our team
+# Join our team
   * Test the app with different devices
   * Report issues in the [issue tracker](https://github.com/gnanendraprasadp/DepHub/issues)
   * Create a [Pull Request](https://github.com/gnanendraprasadp/DepHub/pulls)
 
-[Download App Now](https://play.google.com/store/apps/details?id=com.dephub.android)
-<br>
-
-## Feedback
+# Feedback
 ##### Your feedback is important to us
 
 [Write Feedback](https://dephub.co/feedback)
 
-## Support and Sponsorship
+# Support and Sponsorship
 #### Support
 
 [Support App Development](https://dephub.co/support)
@@ -77,7 +74,7 @@ DepHub is collection of android dependencies. All dependencies are arranged in a
 
 [Mail Now](mailto:mailtodephub@gmail.com)
 
-## Credits
+# Credits
 
 •Flaticon<br>
 •Storyset

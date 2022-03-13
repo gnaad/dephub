@@ -41,6 +41,7 @@
             android:name=".activity.URL"
             android:exported="true"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             android:theme="@style/mainactivitytheme">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
@@ -72,34 +73,41 @@
 
         <activity
             android:name=".activity.Search"
+            android:exported="false"
             android:parentActivityName=".activity.MainActivity"
             android:theme="@style/mainactivitytheme"
             android:usesCleartextTraffic="true" />
         <activity
             android:name=".activity.Opensource"
+            android:exported="false"
             android:hardwareAccelerated="false"
             android:parentActivityName=".settings.Help"
             android:theme="@style/mainactivitytheme" />
         <activity
             android:name=".activity.Leaderboard"
+            android:exported="false"
             android:parentActivityName=".activity.MainActivity"
             android:theme="@style/mainactivitytheme" />
         <activity
             android:name=".activity.QRCode"
+            android:exported="false"
             android:hardwareAccelerated="true"
             android:parentActivityName=".activity.Web"
             android:screenOrientation="portrait"
             android:theme="@style/mainactivitytheme" />
         <activity
             android:name=".settings.Help"
+            android:exported="false"
             android:parentActivityName=".settings.Options"
             android:theme="@style/mainactivitytheme" />
         <activity
             android:name=".settings.Follow"
+            android:exported="false"
             android:parentActivityName=".settings.Options"
             android:theme="@style/mainactivitytheme" />
         <activity
             android:name=".settings.Options"
+            android:exported="false"
             android:parentActivityName=".activity.MainActivity"
             android:theme="@style/mainactivitytheme" />
         <activity
@@ -110,11 +118,13 @@
         <activity
             android:name=".activity.News"
             android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
             android:launchMode="singleTask"
             android:parentActivityName=".activity.MainActivity"
             android:theme="@style/mainactivitytheme" />
         <activity
             android:name=".activity.WriteFeedback"
+            android:exported="false"
             android:parentActivityName=".settings.Help"
             android:theme="@style/mainactivitytheme" />
         <activity
@@ -133,18 +143,20 @@
         </activity>
         <activity
             android:name=".activity.Credits"
+            android:exported="false"
             android:parentActivityName=".settings.Help"
             android:theme="@style/mainactivitytheme" />
         <activity
             android:name=".activity.Web"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:exported="true"
+            android:exported="false"
             android:hardwareAccelerated="true"
             android:launchMode="singleTask"
             android:parentActivityName=".activity.MainActivity"
             android:theme="@style/mainactivitytheme" />
         <activity
             android:name=".activity.SplashScreen"
+            android:exported="false"
             android:theme="@style/mainactivitytheme" />
         <activity
             android:name=".activity.MainActivity"
@@ -154,6 +166,7 @@
         <activity
             android:name=".activity.Login"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:theme="@style/logintheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

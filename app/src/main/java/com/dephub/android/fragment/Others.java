@@ -102,9 +102,7 @@ public class Others extends Fragment {
     }
 
     private void buildcardview() {
-
         cardviewadapteruncategorised = new Cardadapter(carduncategorised,getActivity( ));
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext( ));
         cardrecyclerviewuncategorised.setHasFixedSize(true);
         cardrecyclerviewuncategorised.setLayoutManager(linearLayoutManager);

@@ -103,9 +103,7 @@ public class Helper extends Fragment {
     }
 
     private void buildcardview() {
-
         cardviewadapterhelper = new Cardadapter(cardhelper,getActivity( ));
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext( ));
         cardrecyclerviewhelper.setHasFixedSize(true);
         cardrecyclerviewhelper.setLayoutManager(linearLayoutManager);

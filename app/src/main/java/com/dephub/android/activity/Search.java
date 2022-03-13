@@ -219,10 +219,8 @@ public class Search extends AppCompatActivity {
     }
 
     private void buildcardview() {
-
-        cardviewsearch = new Searchadapter(cardsearch,getApplicationContext( ));
-
-        linearLayoutManager = new LinearLayoutManager(getApplicationContext( ));
+        cardviewsearch = new Searchadapter(cardsearch,Search.this);
+        linearLayoutManager = new LinearLayoutManager(Search.this);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(cardviewsearch);

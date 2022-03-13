@@ -100,9 +100,7 @@ public class Button extends Fragment {
     }
 
     private void buildcardview() {
-
         cardviewadapterbutton = new Cardadapter(cardbutton,getActivity( ));
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext( ));
         cardrecyclerviewbutton.setHasFixedSize(true);
         cardrecyclerviewbutton.setLayoutManager(linearLayoutManager);

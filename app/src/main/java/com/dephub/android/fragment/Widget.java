@@ -53,7 +53,6 @@ public class Widget extends Fragment {
         buildcardview( );
 
         return view;
-
     }
 
     private void getdependency() {
@@ -104,9 +103,7 @@ public class Widget extends Fragment {
     }
 
     private void buildcardview() {
-
         cardviewadapterwidget = new Cardadapter(cardwidget,getActivity( ));
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext( ));
         cardrecyclerviewwidget.setHasFixedSize(true);
         cardrecyclerviewwidget.setLayoutManager(linearLayoutManager);

@@ -98,7 +98,7 @@ public class SubmitDependency extends AppCompatActivity {
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SubmitDependency.this,R.style.CustomAlertDialog);
 
                     alertDialogBuilder.setCancelable(true);
-                    alertDialogBuilder.setMessage("Please add Dependency Description");
+                    alertDialogBuilder.setMessage("Please include Dependency Description");
                     alertDialogBuilder.setPositiveButton("Ok",new DialogInterface.OnClickListener( ) {
                         public void onClick(DialogInterface dialog,int id) {
                             dialog.dismiss( );
@@ -108,6 +108,23 @@ public class SubmitDependency extends AppCompatActivity {
                     alertDialog.show( );
                     alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
+                    return;
+                }
+                if (!(depurl.startsWith("http://") || depurl.startsWith("https://"))) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SubmitDependency.this,R.style.CustomAlertDialog);
+
+                    alertDialogBuilder.setCancelable(true);
+                    alertDialogBuilder.setMessage("Please include a valid Dependency URL starts with http or https");
+                    alertDialogBuilder.setPositiveButton("Ok",new DialogInterface.OnClickListener( ) {
+                        public void onClick(DialogInterface dialog,int id) {
+                            dialog.dismiss( );
+                        }
+                    });
+                    AlertDialog alertDialog = alertDialogBuilder.create( );
+                    alertDialog.show( );
+                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
+                    return;
                 } else {
 
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SubmitDependency.this,R.style.CustomAlertDialog);
@@ -169,6 +186,68 @@ public class SubmitDependency extends AppCompatActivity {
         } else {
             startActivity(new Intent(SubmitDependency.this,Login.class));
             finish( );
+        }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        String depname = Dependency_Name.getText( ).toString( ).trim( );
+        String depurl = Dependency_URL.getText( ).toString( ).trim( );
+        String depdesc = Dependency_Description.getText( ).toString( ).trim( );
+
+        if (TextUtils.isEmpty(depname) && TextUtils.isEmpty(depurl) && TextUtils.isEmpty(depdesc)) {
+            onBackPressed( );
+        } else {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SubmitDependency.this,R.style.CustomAlertDialog);
+            alertDialogBuilder.setCancelable(true);
+            alertDialogBuilder.setMessage("Are you sure you want to go back?");
+            alertDialogBuilder.setPositiveButton("Yes",new DialogInterface.OnClickListener( ) {
+                public void onClick(DialogInterface dialog,int id) {
+                    startActivity(new Intent(SubmitDependency.this,MainActivity.class));
+                }
+            });
+            alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener( ) {
+                @Override
+                public void onClick(DialogInterface dialog,int which) {
+                    dialog.dismiss( );
+                }
+            });
+            AlertDialog alertDialog = alertDialogBuilder.create( );
+            alertDialog.show( );
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        String depname = Dependency_Name.getText( ).toString( ).trim( );
+        String depurl = Dependency_URL.getText( ).toString( ).trim( );
+        String depdesc = Dependency_Description.getText( ).toString( ).trim( );
+
+        if (TextUtils.isEmpty(depname) && TextUtils.isEmpty(depurl) && TextUtils.isEmpty(depdesc)) {
+            super.onBackPressed( );
+        } else {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SubmitDependency.this,R.style.CustomAlertDialog);
+            alertDialogBuilder.setCancelable(true);
+            alertDialogBuilder.setMessage("Are you sure you want to go back?");
+            alertDialogBuilder.setPositiveButton("Yes",new DialogInterface.OnClickListener( ) {
+                public void onClick(DialogInterface dialog,int id) {
+                    startActivity(new Intent(SubmitDependency.this,MainActivity.class));
+                }
+            });
+            alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener( ) {
+                @Override
+                public void onClick(DialogInterface dialog,int which) {
+                    dialog.dismiss( );
+                }
+            });
+            AlertDialog alertDialog = alertDialogBuilder.create( );
+            alertDialog.show( );
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
         }
     }
 }

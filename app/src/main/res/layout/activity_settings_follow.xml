@@ -24,12 +24,12 @@
         ads:adSize="BANNER"
         ads:adUnitId="ca-app-pub-3037529522611130/2556459152" />
 
-
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbarfollow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbarfollow"

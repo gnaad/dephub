@@ -51,8 +51,6 @@ public class Follow extends AppCompatActivity {
 
         setContentView(R.layout.activity_settings_follow);
 
-        //
-
         MobileAds.initialize(this,new OnInitializationCompleteListener( ) {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
@@ -84,8 +82,6 @@ public class Follow extends AppCompatActivity {
             public void onAdClosed() {
             }
         });
-
-        //
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow( ).setNavigationBarColor(getResources( ).getColor(R.color.black));

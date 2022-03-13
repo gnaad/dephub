@@ -15,6 +15,10 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/favactivity"
+        android:title="My Favorites" />
+
+    <item
         android:id="@+id/settings_submityourdependency"
         android:title="Submit Dependency" />
 

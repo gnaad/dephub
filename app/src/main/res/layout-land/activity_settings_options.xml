@@ -7,32 +7,48 @@
     android:orientation="vertical">
 
     <ListView
-        android:id="@+id/info_list"
+        android:id="@+id/listview1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/adhelp"
-        android:layout_below="@id/appbarhelp"
+        android:layout_above="@id/adoptions"
+        android:layout_below="@id/name"
         android:listSelector="@android:color/transparent"
         android:overScrollMode="never" />
 
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/appbarsettings"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="15sp"
+        android:layout_marginRight="25dp"
+        android:layout_marginBottom="15sp"
+        android:fontFamily="@font/sans"
+        android:text="Good Morning User"
+        android:textColor="@color/blacktowhite"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
     <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/adhelp"
+        android:id="@+id/adoptions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         ads:adSize="BANNER"
-        ads:adUnitId="ca-app-pub-3037529522611130/5928727959" />
+        ads:adUnitId="ca-app-pub-3037529522611130/1615938613" />
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbarhelp"
+        android:id="@+id/appbarsettings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbarshelp"
+            android:id="@+id/toolbarsettings"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|enterAlways"
@@ -42,3 +58,4 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 </RelativeLayout>
+

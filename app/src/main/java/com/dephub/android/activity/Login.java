@@ -116,7 +116,6 @@ public class Login extends AppCompatActivity {
         textView.setText(ss1);
         textView.setMovementMethod(LinkMovementMethod.getInstance( ));
 
-
         View decorView = getWindow( ).getDecorView( );
         decorView.setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE

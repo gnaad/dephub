@@ -62,7 +62,7 @@ public class URL extends AppCompatActivity {
                     home.setVisibility(View.VISIBLE);
                 } else {
                     if (TextUtils.isDigitsOnly(parameters)) {
-                        if (parameters.length( ) == 4) {
+                        if (parameters.length( ) == 4 || parameters.length( ) == 3) {
                             RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext( ));
                             requestQueue.getCache( ).clear( );
                             JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,"https://gnanendraprasadp.github.io/DepHub-Web/json/search.json",null,new Response.Listener<JSONArray>( ) {
@@ -141,5 +141,11 @@ public class URL extends AppCompatActivity {
             progressBar.setVisibility(View.INVISIBLE);
             home.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        getCacheDir( ).delete( );
+        super.onDestroy( );
     }
 }

@@ -20,6 +20,10 @@ import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.content.ContextCompat;
 
 import com.dephub.android.R;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -52,6 +56,7 @@ public class Options extends AppCompatActivity {
             R.drawable.ic_external};
 
     TextView txt;
+    private AdView mAdView;
 
     @SuppressLint({"SetTextI18n","ResourceAsColor"})
     @Override
@@ -60,12 +65,37 @@ public class Options extends AppCompatActivity {
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
 
-        setContentView(R.layout.activity_settings);
+        setContentView(R.layout.activity_settings_options);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow( ).setNavigationBarColor(getResources( ).getColor(R.color.black));
         }
 
+        mAdView = findViewById(R.id.adoptions);
+        AdRequest adRequest = new AdRequest.Builder( ).build( );
+        mAdView.loadAd(adRequest);
+
+        mAdView.setAdListener(new AdListener( ) {
+            @Override
+            public void onAdLoaded() {
+            }
+
+            @Override
+            public void onAdFailedToLoad(LoadAdError adError) {
+            }
+
+            @Override
+            public void onAdOpened() {
+            }
+
+            @Override
+            public void onAdClicked() {
+            }
+
+            @Override
+            public void onAdClosed() {
+            }
+        });
 
         txt = findViewById(R.id.name);
         Calendar c = Calendar.getInstance( );
@@ -74,9 +104,9 @@ public class Options extends AppCompatActivity {
         //noinspection ConstantConditions
         if (timeOfDay >= 0 && timeOfDay < 12) {
             txt.setText("Good Morning");
-        } else if (timeOfDay >= 12 && timeOfDay < 18) {
+        } else if (timeOfDay >= 12 && timeOfDay < 17) {
             txt.setText("Good Afternoon");
-        } else if (timeOfDay >= 18 && timeOfDay < 24) {
+        } else if (timeOfDay >= 17 && timeOfDay < 24) {
             txt.setText("Good Evening");
         }
 

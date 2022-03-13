@@ -38,7 +38,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_marginStart="30sp"
         android:drawablePadding="4dp"
         android:fontFamily="@font/sans"
         android:gravity="center"
@@ -47,9 +46,9 @@
         android:textSize="20sp"
         android:textStyle="bold"
         android:visibility="gone"
-        app:cit_drawableTop="@drawable/ic_nofavorite"
-        app:cit_iconHeight="350sp"
-        app:cit_iconWidth="350sp" />
+        app:cit_drawableLeft="@drawable/ic_nofavorite"
+        app:cit_iconHeight="280sp"
+        app:cit_iconWidth="300sp" />
 
     <TextView
         android:id="@+id/favtext"

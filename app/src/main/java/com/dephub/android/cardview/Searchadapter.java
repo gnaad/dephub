@@ -37,9 +37,9 @@ import java.util.ArrayList;
 
 public class Searchadapter extends RecyclerView.Adapter<Searchadapter.Viewholder> {
 
+    private final Context context;
     View view;
     String id;
-    private final Context context;
     private ArrayList<Cardmodel> cardArrayList;
 
     public Searchadapter(ArrayList<Cardmodel> cardArrayList,Context context) {
@@ -65,6 +65,31 @@ public class Searchadapter extends RecyclerView.Adapter<Searchadapter.Viewholder
 
         Cardmodel model = cardArrayList.get(position);
         holder.dependencynameadapter.setText(model.getDependencyname( ));
+        holder.dependencynameadapter.setOnClickListener(new View.OnClickListener( ) {
+            @Override
+            public void onClick(View v) {
+                String link = model.getGithublink( );
+                String youtube = model.getYoutubelink( );
+                String name = model.getDependencyname( );
+                String devname = model.getDevelopername( );
+                String id = model.getId( );
+                String license = model.getLicense( );
+                String licenselink = model.getLicenselink( );
+
+                Intent intent = new Intent(context,Web.class);
+                intent.putExtra("link",link);
+                intent.putExtra("title",name);
+                intent.putExtra("ylink",youtube);
+                intent.putExtra("devname",devname);
+                intent.putExtra("id",id);
+                intent.putExtra("license",license);
+                intent.putExtra("licenselink",licenselink);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                }
+                context.startActivity(intent);
+            }
+        });
         holder.dependencynameadapter.setOnLongClickListener(new View.OnLongClickListener( ) {
             @Override
             public boolean onLongClick(View v) {
@@ -250,7 +275,6 @@ public class Searchadapter extends RecyclerView.Adapter<Searchadapter.Viewholder
                 return false;
             }
         });
-
     }
 
     @Override

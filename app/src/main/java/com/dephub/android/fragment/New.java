@@ -103,9 +103,7 @@ public class New extends Fragment {
     }
 
     private void buildcardview() {
-
         cardviewadapternew = new Cardadapter(cardnew,getActivity( ));
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext( ));
         cardrecyclerviewnew.setHasFixedSize(true);
         cardrecyclerviewnew.setLayoutManager(linearLayoutManager);

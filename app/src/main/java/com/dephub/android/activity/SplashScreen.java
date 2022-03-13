@@ -51,8 +51,6 @@ public class SplashScreen extends AppCompatActivity {
             alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
 
         } else {
-
-
             new Handler( ).postDelayed(new Runnable( ) {
                 @Override
                 public void run() {

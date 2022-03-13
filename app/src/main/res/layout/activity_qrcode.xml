@@ -97,8 +97,7 @@
         android:textStyle="bold"
         app:backgroundTint="@color/colorAccent" />
 
-    <com.google.android.gms.ads.AdView
-        xmlns:ads="http://schemas.android.com/apk/res-auto"
+    <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/adqrcode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -111,7 +110,8 @@
         android:id="@+id/appbarqrcode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbarqrcode"

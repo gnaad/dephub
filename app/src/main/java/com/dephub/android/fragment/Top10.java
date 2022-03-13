@@ -121,9 +121,7 @@ public class Top10 extends Fragment {
     }
 
     private void buildcardview() {
-
         cardviewadaptertopten = new Cardadapter(cardtopten,getActivity( ));
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext( ));
         cardrecyclerviewtopten.setHasFixedSize(true);
         cardrecyclerviewtopten.setLayoutManager(linearLayoutManager);

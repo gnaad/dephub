@@ -212,6 +212,10 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent5 = new Intent(this,Options.class);
                 this.startActivity(intent5);
                 break;
+            case R.id.favactivity:
+                Intent intent6 = new Intent(this,Favorite.class);
+                this.startActivity(intent6);
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }

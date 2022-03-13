@@ -65,8 +65,8 @@
                     android:layout_marginTop="50sp"
                     android:layout_marginRight="25sp"
                     android:layout_marginBottom="25sp"
-                    android:src="@drawable/ic_flaticon"
-                    android:contentDescription="flaticon" />
+                    android:contentDescription="flaticon"
+                    android:src="@drawable/ic_flaticon" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -94,8 +94,8 @@
                     android:layout_marginTop="50sp"
                     android:layout_marginRight="25sp"
                     android:layout_marginBottom="25sp"
-                    android:src="@drawable/ic_storyset"
-                    android:contentDescription="storyset" />
+                    android:contentDescription="storyset"
+                    android:src="@drawable/ic_storyset" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -130,7 +130,8 @@
         android:id="@+id/appbarcredits"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbarcredits"

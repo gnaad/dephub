@@ -9,6 +9,10 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/addtofavorite"
+        android:title="Add To Favorites" />
+
+    <item
         android:id="@+id/licensetype"
         android:title="" />
 

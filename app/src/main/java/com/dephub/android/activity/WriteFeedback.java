@@ -20,6 +20,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.dephub.android.BuildConfig;
 import com.dephub.android.R;
+import com.dephub.android.settings.Help;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -160,5 +161,62 @@ public class WriteFeedback extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        String probleminput = Problem.getText( ).toString( ).trim( );
+
+        if (TextUtils.isEmpty(probleminput)) {
+            super.onBackPressed( );
+        } else {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(WriteFeedback.this,R.style.CustomAlertDialog);
+            alertDialogBuilder.setCancelable(true);
+            alertDialogBuilder.setMessage("Are you sure you want to go back?");
+            alertDialogBuilder.setPositiveButton("Yes",new DialogInterface.OnClickListener( ) {
+                public void onClick(DialogInterface dialog,int id) {
+                    startActivity(new Intent(WriteFeedback.this,Help.class));
+                }
+            });
+            alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener( ) {
+                @Override
+                public void onClick(DialogInterface dialog,int which) {
+                    dialog.dismiss( );
+                }
+            });
+            AlertDialog alertDialog = alertDialogBuilder.create( );
+            alertDialog.show( );
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
+        }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        String probleminput = Problem.getText( ).toString( ).trim( );
+
+        if (TextUtils.isEmpty(probleminput)) {
+            super.onBackPressed( );
+        } else {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(WriteFeedback.this,R.style.CustomAlertDialog);
+            alertDialogBuilder.setCancelable(true);
+            alertDialogBuilder.setMessage("Are you sure you want to go back?");
+            alertDialogBuilder.setPositiveButton("Yes",new DialogInterface.OnClickListener( ) {
+                public void onClick(DialogInterface dialog,int id) {
+                    startActivity(new Intent(WriteFeedback.this,Help.class));
+                }
+            });
+            alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener( ) {
+                @Override
+                public void onClick(DialogInterface dialog,int which) {
+                    dialog.dismiss( );
+                }
+            });
+            AlertDialog alertDialog = alertDialogBuilder.create( );
+            alertDialog.show( );
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
+        }
+        return false;
     }
 }

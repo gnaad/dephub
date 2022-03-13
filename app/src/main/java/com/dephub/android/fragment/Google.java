@@ -105,7 +105,6 @@ public class Google extends Fragment {
     private void buildcardview() {
 
         cardviewadaptergoogle = new Cardadapter(cardgoogle,getActivity( ));
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext( ));
         cardrecyclerviewgoogle.setHasFixedSize(true);
         cardrecyclerviewgoogle.setLayoutManager(linearLayoutManager);

@@ -103,9 +103,7 @@ public class Legacy extends Fragment {
     }
 
     private void buildcardview() {
-
         cardviewadapterlegacy = new Cardadapter(cardlegacy,getActivity( ));
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext( ));
         cardrecyclerviewlegacy.setHasFixedSize(true);
         cardrecyclerviewlegacy.setLayoutManager(linearLayoutManager);

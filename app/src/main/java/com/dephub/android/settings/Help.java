@@ -114,8 +114,6 @@ public class Help extends AppCompatActivity {
 
         setContentView(R.layout.activity_settings_help);
 
-        //
-
         MobileAds.initialize(this,new OnInitializationCompleteListener( ) {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
@@ -147,8 +145,6 @@ public class Help extends AppCompatActivity {
             public void onAdClosed() {
             }
         });
-
-        //
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow( ).setNavigationBarColor(getResources( ).getColor(R.color.black));
@@ -249,7 +245,7 @@ public class Help extends AppCompatActivity {
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Help.this,R.style.CustomAlertDialog);
 
                     alertDialogBuilder.setCancelable(true);
-                    alertDialogBuilder.setMessage("Are you sure want to clear cache?\n\nNote: Please don't clear cache until or unless DepHub is running slow.\n\nAlso clearing cache won't delete the dependencies you submitted.");
+                    alertDialogBuilder.setMessage("Are you sure want to clear cache?\n\nNote: Please don't clear cache until or unless DepHub is running slow.");
                     alertDialogBuilder.setPositiveButton("Clear Cache",new DialogInterface.OnClickListener( ) {
                         public void onClick(DialogInterface dialog,int id) {
                             deleteCache(getApplicationContext( ));
@@ -298,7 +294,7 @@ public class Help extends AppCompatActivity {
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
 
                         alertDialogBuilder.setCancelable(true);
-                        alertDialogBuilder.setMessage("DepHub\nVersion v" + versionName + " (" + versionCode + ")\n" + installer + "\n\n\u00a9 " + simpleDateFormat.format(new Date( )) + " DepHub");
+                        alertDialogBuilder.setMessage("DepHub\nVersion v" + versionName + " (" + versionCode + ")\n" + installer + "\n\n\u00A9 " + simpleDateFormat.format(new Date( )) + " DepHub");
                         AlertDialog alertDialog = alertDialogBuilder.create( );
                         alertDialog.show( );
                         alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));

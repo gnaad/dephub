@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -38,6 +39,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.dephub.android.BuildConfig;
 import com.dephub.android.R;
+import com.dephub.android.favorite.DatabaseHelper;
 import com.github.aakira.compoundicontextview.CompoundIconTextView;
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdListener;
@@ -57,11 +59,12 @@ public class Web extends AppCompatActivity {
     Activity activity;
     CompoundIconTextView compoundIconTextView;
     FloatingActionButton floatingActionButton, floatingActionButton1;
-    String devname, qrcodelink, qrcodetitle,qrcodeid, weblink, license, licenselink, title, model, versionRelease, versionName,id;
+    String devname, qrcodelink, qrcodetitle, qrcodeid, weblink, license, licenselink, title, model, versionRelease, versionName, id, cardbg, youtubelink, fullname;
     int version, versioncode;
     WebView webView;
+    DatabaseHelper databaseHelper;
     private ProgressDialog progressDialog;
-    private InterstitialAd mInterstitialAd;
+    private InterstitialAd mInterstitialAd, mInterstitialAd1;
     private AdView mAdView;
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
@@ -73,6 +76,8 @@ public class Web extends AppCompatActivity {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
 
         setContentView(R.layout.activity_webview);
+
+        databaseHelper = new DatabaseHelper(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow( ).setNavigationBarColor(getResources( ).getColor(R.color.black));
@@ -88,14 +93,15 @@ public class Web extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.show( );
 
+        youtubelink = getIntent( ).getExtras( ).getString("ylink");
+        cardbg = getIntent( ).getExtras( ).getString("cardbg");
         weblink = getIntent( ).getExtras( ).getString("link");
-        String youtubelink = getIntent( ).getExtras( ).getString("ylink");
         title = getIntent( ).getExtras( ).getString("title");
         devname = getIntent( ).getExtras( ).getString("devname");
-        String cardbg = getIntent( ).getExtras( ).getString("cardbg");
         license = getIntent( ).getExtras( ).getString("license");
         licenselink = getIntent( ).getExtras( ).getString("licenselink");
-        id = getIntent().getExtras().getString("id");
+        id = getIntent( ).getExtras( ).getString("id");
+        fullname = getIntent( ).getExtras( ).getString("fullname");
         model = Build.MODEL;
         version = Build.VERSION.SDK_INT;
         versionRelease = Build.VERSION.RELEASE;
@@ -140,7 +146,8 @@ public class Web extends AppCompatActivity {
 
         //Banner Ad End
 
-        // Interstitial Ad start
+        // Interstitial Ad start GitHub Icon
+
         MobileAds.initialize(this,new OnInitializationCompleteListener( ) {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
@@ -208,7 +215,54 @@ public class Web extends AppCompatActivity {
                     }
                 });
 
-        // Interstitial Ad End
+        // Interstitial Ad End GitHub Icon
+
+        // Interstitial Ad start YouTube Icon
+
+        MobileAds.initialize(this,new OnInitializationCompleteListener( ) {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+
+        AdRequest adRequestyoutube = new AdRequest.Builder( ).build( );
+
+        InterstitialAd.load
+                (this,"ca-app-pub-3037529522611130/1476337817",adRequestyoutube,new InterstitialAdLoadCallback( ) {
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                        mInterstitialAd1 = interstitialAd;
+
+                        mInterstitialAd1.setFullScreenContentCallback(new FullScreenContentCallback( ) {
+                            @Override
+                            public void onAdShowedFullScreenContent() {
+                            }
+
+                            @Override
+                            public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                                Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse(youtubelink));
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }
+
+                            @Override
+                            public void onAdDismissedFullScreenContent() {
+                                Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse(youtubelink));
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        // Handle the error
+                        mInterstitialAd1 = null;
+                    }
+                });
+
+        // Interstitial Ad End YouTube Icon
 
         floatingActionButton = findViewById(R.id.github);
         floatingActionButton.setOnClickListener(new View.OnClickListener( ) {
@@ -226,9 +280,7 @@ public class Web extends AppCompatActivity {
             floatingActionButton1.setOnClickListener(new View.OnClickListener( ) {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse(youtubelink));
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
+                    mInterstitialAd1.show(Web.this);
                 }
             });
             floatingActionButton1.setOnLongClickListener(new View.OnLongClickListener( ) {
@@ -368,13 +420,25 @@ public class Web extends AppCompatActivity {
 
             }
         });
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater( );
         menuInflater.inflate(R.menu.webview_settings,menu);
+
+        Cursor cursor = databaseHelper.getFavorite( );
+        if (cursor != null && cursor.getCount( ) > 0) {
+            while (cursor.moveToNext( )) {
+                String dbid = cursor.getString(1);
+
+                if (dbid.equals(id)) {
+                    menu.findItem(R.id.addtofavorite).setTitle("Remove From Favorites");
+                } else {
+                    menu.findItem(R.id.addtofavorite).setTitle("Add To Favorites");
+                }
+            }
+        }
 
         menu.findItem(R.id.licensetype).setTitle("License : " + license);
 
@@ -386,6 +450,29 @@ public class Web extends AppCompatActivity {
 
         switch (item.getItemId( )) {
 
+            case R.id.addtofavorite:
+
+                if (item.getTitle( ).equals("Add To Favorites")) {
+
+                    boolean inserted = databaseHelper.insertData(id,title,devname,weblink,cardbg,fullname,license,licenselink,youtubelink);
+                    if (inserted) {
+                        Toast.makeText(Web.this,"Added to Favorites",Toast.LENGTH_SHORT).show( );
+                    } else {
+                        Toast.makeText(Web.this,"It's already in My Favorites",Toast.LENGTH_SHORT).show( );
+                    }
+                }
+
+                if (item.getTitle( ).equals("Remove From Favorites")) {
+
+                    Integer deleteFavorite = databaseHelper.deleteFavorite(id);
+                    if (deleteFavorite > 0) {
+                        Toast.makeText(Web.this,"Removed From Favorites",Toast.LENGTH_SHORT).show( );
+                    } else {
+                        Toast.makeText(Web.this,"It's already Removed From Favorites",Toast.LENGTH_SHORT).show( );
+                    }
+                }
+
+                break;
             case R.id.licensetype:
                 if (license.equals("No License")) {
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Web.this,R.style.CustomAlertDialog);
@@ -418,7 +505,7 @@ public class Web extends AppCompatActivity {
                 Intent intent60 = new Intent(Intent.ACTION_SEND);
                 intent60.setType("text/plain");
                 String shareBody10 = "About Android Dependency";
-                String shareSub10 = "Hi there\n\nDependency Name : " + title + "\nDependency Website : " + weblink + "\n\nIn-App link : https://dephub.co/app/"+id+"\n\nInformation Delivered by : DepHub\nInformation Provided by : Github\n\nDownload our Android App : https://bit.ly/installdephubapp\n\nThank You\nLet's code for a better tomorrow";
+                String shareSub10 = "Hi there\n\nDependency Name : " + title + "\nDependency Website : " + weblink + "\n\nIn-App link : https://dephub.co/app/" + id + "\n\nInformation Delivered by : DepHub\nInformation Provided by : Github\n\nDownload our Android App : https://bit.ly/installdephubapp\n\nThank You\nLet's code for a better tomorrow";
                 intent60.putExtra(Intent.EXTRA_SUBJECT,shareBody10);
                 intent60.putExtra(Intent.EXTRA_TEXT,shareSub10);
                 startActivity(Intent.createChooser(intent60,"Share this Dependency using"));
@@ -445,6 +532,13 @@ public class Web extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        databaseHelper.close( );
+        webView.clearCache(true);
+        super.onDestroy( );
     }
 
     @Override

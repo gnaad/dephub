@@ -30,7 +30,7 @@ DepHub is collection of android dependencies. All dependencies are arranged in a
 
 [<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Google Play Download" height="100">](https://play.google.com/store/apps/details?id=com.dephub.android)
 
-#### Latest Version 1.0.13
+#### Latest Version 1.0.15
 # Screenshots
 
 <img src="https://play-lh.googleusercontent.com/FZBPIVuM-QgkJMehGkHEc8ndAgUl5BRLNESmrFNUfFxVXOLC_9jxUy7rdLNhxwFwaf0=w1536-h722-rw" width="200"/>|

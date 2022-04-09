@@ -37,7 +37,7 @@
         android:drawablePadding="4dp"
         android:fontFamily="@font/sans"
         android:gravity="center"
-        android:text="Please check your Internet or WiFi Connection. Go back and try again."
+        android:text="@string/webview_reconnect"
         android:textColor="@color/bluetowhite"
         android:textSize="20sp"
         android:textStyle="bold"

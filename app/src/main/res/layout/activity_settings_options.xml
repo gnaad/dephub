@@ -31,7 +31,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/sans"
-        android:text="Good Morning User"
+        android:text="@string/settings_good_morning"
         android:textColor="@color/blacktowhite"
         android:textSize="20sp"
         android:textStyle="bold" />

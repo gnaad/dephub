@@ -34,7 +34,7 @@
                     android:layout_marginTop="50sp"
                     android:layout_marginRight="25sp"
                     android:layout_marginBottom="25sp"
-                    android:contentDescription="GitHub"
+                    android:contentDescription="@string/credits_cont_github"
                     android:src="@drawable/ic_github_credits" />
 
                 <TextView
@@ -43,7 +43,7 @@
                     android:layout_marginLeft="20sp"
                     android:layout_marginRight="20sp"
                     android:fontFamily="@font/sans"
-                    android:text="1. GitHub"
+                    android:text="@string/credits_github"
                     android:textColor="@color/blacktowhite"
                     android:textSize="16dp"
                     android:textStyle="normal" />
@@ -65,7 +65,7 @@
                     android:layout_marginTop="50sp"
                     android:layout_marginRight="25sp"
                     android:layout_marginBottom="25sp"
-                    android:contentDescription="flaticon"
+                    android:contentDescription="@string/credits_cont_flaticon"
                     android:src="@drawable/ic_flaticon" />
 
                 <TextView
@@ -73,7 +73,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20sp"
                     android:fontFamily="@font/sans"
-                    android:text="2. Flaticon"
+                    android:text="@string/credits_flaticon"
                     android:textColor="@color/blacktowhite"
                     android:textSize="16dp"
                     android:textStyle="normal" />
@@ -94,7 +94,7 @@
                     android:layout_marginTop="50sp"
                     android:layout_marginRight="25sp"
                     android:layout_marginBottom="25sp"
-                    android:contentDescription="storyset"
+                    android:contentDescription="@string/credits_cont_storyset"
                     android:src="@drawable/ic_storyset" />
 
                 <TextView
@@ -102,7 +102,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20sp"
                     android:fontFamily="@font/sans"
-                    android:text="3. Storyset"
+                    android:text="@string/credits_storyset"
                     android:textColor="@color/blacktowhite"
                     android:textSize="16dp"
                     android:textStyle="normal" />
@@ -118,7 +118,7 @@
                 android:layout_marginTop="15sp"
                 android:layout_marginRight="20sp"
                 android:fontFamily="@font/sans"
-                android:text="We would like to Thank all these three platforms mentioned below:"
+                android:text="@string/credits_title"
                 android:textColor="@color/blacktowhite"
                 android:textSize="18dp"
                 android:textStyle="normal" />

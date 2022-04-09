@@ -14,7 +14,7 @@
         android:layout_marginLeft="15sp"
         android:layout_marginRight="15sp"
         android:src="@drawable/ic_welcome"
-        android:contentDescription="Welcome Image" />
+        android:contentDescription="@string/login_cont_welcome" />
 
     <TextView
         android:id="@+id/tnc"
@@ -59,7 +59,7 @@
         android:layout_marginRight="20dp"
         android:fontFamily="@font/sans"
         android:lineHeight="20dp"
-        android:text="Don't search for dependencies anymore"
+        android:text="@string/login_desc"
         android:textColor="@color/blacktowhite"
         android:textSize="18sp"
         android:textStyle="bold" />
@@ -78,7 +78,7 @@
         android:fontFamily="@font/sans"
         android:textColor="@color/white"
         android:padding="8dp"
-        android:text="Continue Now"
+        android:text="@string/login_continue"
         android:textAlignment="center" />
 
 </RelativeLayout>

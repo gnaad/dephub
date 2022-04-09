@@ -56,7 +56,7 @@
                 android:fontFamily="@font/sans"
                 android:letterSpacing="0.05"
                 android:maxLines="1"
-                android:text="Developer Name"
+                android:text="@string/cardview_developer_name"
                 android:textAlignment="center"
                 android:textColor="@color/blacktowhite"
                 android:textSize="14.25sp"
@@ -74,7 +74,7 @@
                 android:layout_toLeftOf="@id/github"
                 android:fontFamily="@font/sans"
                 android:maxLines="1"
-                android:text="Dependency Name"
+                android:text="@string/cardview_dependency_name"
                 android:textColor="@color/blacktowhite"
                 android:textSize="21sp"
                 android:textStyle="bold" />
@@ -88,7 +88,7 @@
                 android:layout_marginStart="15sp"
                 android:layout_marginBottom="18sp"
                 android:fontFamily="@font/sans"
-                android:text="Developed By :"
+                android:text="@string/cardview_developed_by"
                 android:textColor="@color/blacktowhite"
                 android:textSize="13.5sp"
                 android:textStyle="normal" />

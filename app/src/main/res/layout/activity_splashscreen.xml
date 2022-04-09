@@ -9,7 +9,7 @@
         android:layout_width="75sp"
         android:layout_height="75sp"
         android:layout_centerInParent="true"
-        android:contentDescription="DepHub"
+        android:contentDescription="@string/app_name"
         android:src="@mipmap/ic_launcher_round" />
 
 </RelativeLayout>

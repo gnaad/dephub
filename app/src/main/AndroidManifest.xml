@@ -33,6 +33,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".activity.AppIntroduction"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Myappintro" />
+        <activity
             android:name=".activity.Favorite"
             android:exported="false"
             android:parentActivityName=".activity.MainActivity"
@@ -84,11 +89,6 @@
             android:parentActivityName=".settings.Help"
             android:theme="@style/mainactivitytheme" />
         <activity
-            android:name=".activity.Leaderboard"
-            android:exported="false"
-            android:parentActivityName=".activity.MainActivity"
-            android:theme="@style/mainactivitytheme" />
-        <activity
             android:name=".activity.QRCode"
             android:exported="false"
             android:hardwareAccelerated="true"
@@ -110,11 +110,6 @@
             android:exported="false"
             android:parentActivityName=".activity.MainActivity"
             android:theme="@style/mainactivitytheme" />
-        <activity
-            android:name=".activity.AppIntro"
-            android:label="AppIntro"
-            android:screenOrientation="portrait"
-            android:theme="@style/Myappintro" />
         <activity
             android:name=".activity.News"
             android:configChanges="orientation|screenSize|keyboardHidden"

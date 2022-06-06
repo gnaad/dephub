@@ -2,6 +2,7 @@ package com.dephub.android.cardview;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -40,6 +41,7 @@ public class Cardadapter extends RecyclerView.Adapter<Cardadapter.Viewholder> {
     private final Context context;
     View view;
     String id;
+    ProgressDialog progressDialog;
     private ArrayList<Cardmodel> cardArrayList;
 
     public Cardadapter(ArrayList<Cardmodel> cardArrayList,Context context) {
@@ -56,6 +58,11 @@ public class Cardadapter extends RecyclerView.Adapter<Cardadapter.Viewholder> {
 
     @Override
     public void onBindViewHolder(@NonNull Viewholder holder,int position) {
+
+        progressDialog = new ProgressDialog(context,R.style.CustomAlertDialog);
+        progressDialog.setMessage("Getting Overview");
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
 
         Cardmodel model = cardArrayList.get(position);
         holder.dependencynameadapter.setText(model.getDependencyname( ));
@@ -90,6 +97,8 @@ public class Cardadapter extends RecyclerView.Adapter<Cardadapter.Viewholder> {
         holder.dependencynameadapter.setOnLongClickListener(new View.OnLongClickListener( ) {
         @Override
         public boolean onLongClick(View v) {
+            progressDialog.show( );
+
             String fullname = model.getFullname( );
             String depname = model.getDependencyname( );
 
@@ -101,6 +110,7 @@ public class Cardadapter extends RecyclerView.Adapter<Cardadapter.Viewholder> {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
+                        progressDialog.dismiss();
                         id = model.getId( );
                         String developer = model.getDevelopername( );
                         String name = response.getString("name");
@@ -143,6 +153,7 @@ public class Cardadapter extends RecyclerView.Adapter<Cardadapter.Viewholder> {
                         alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(view.getResources( ).getColor(R.color.colorAccent));
                         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(view.getResources( ).getColor(R.color.colorAccent));
                     } catch (JSONException e) {
+                        progressDialog.dismiss();
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext( ),R.style.CustomAlertDialog);
 
                         alertDialogBuilder.setCancelable(true);
@@ -190,6 +201,7 @@ public class Cardadapter extends RecyclerView.Adapter<Cardadapter.Viewholder> {
             },new Response.ErrorListener( ) {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    progressDialog.dismiss();
                     Toast.makeText(context,"Failed to load overview with code " + error.networkResponse.statusCode,Toast.LENGTH_SHORT).show( );
                 }
             });

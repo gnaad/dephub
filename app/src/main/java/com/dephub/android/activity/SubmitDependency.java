@@ -203,7 +203,7 @@ public class SubmitDependency extends AppCompatActivity {
             alertDialogBuilder.setMessage("Are you sure you want to go back?");
             alertDialogBuilder.setPositiveButton("Yes",new DialogInterface.OnClickListener( ) {
                 public void onClick(DialogInterface dialog,int id) {
-                    startActivity(new Intent(SubmitDependency.this,MainActivity.class));
+                    SubmitDependency.super.onBackPressed( );
                 }
             });
             alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener( ) {
@@ -235,7 +235,7 @@ public class SubmitDependency extends AppCompatActivity {
             alertDialogBuilder.setMessage("Are you sure you want to go back?");
             alertDialogBuilder.setPositiveButton("Yes",new DialogInterface.OnClickListener( ) {
                 public void onClick(DialogInterface dialog,int id) {
-                    startActivity(new Intent(SubmitDependency.this,MainActivity.class));
+                    SubmitDependency.super.onBackPressed( );
                 }
             });
             alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener( ) {

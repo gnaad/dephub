@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.Window;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -59,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @SuppressLint({"ResourceAsColor","UseCompatLoadingForDrawables","RestrictedApi"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
 
         mFirebaseRemoteConfig.setDefaultsAsync(R.xml.default_map);
 
-
         mFirebaseRemoteConfig.fetchAndActivate( ).addOnCompleteListener(this,new OnCompleteListener<Boolean>( ) {
             @Override
             public void onComplete(@NonNull Task<Boolean> task) {
@@ -134,7 +131,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
 
         mFirebaseRemoteConfig.fetchAndActivate( ).addOnCompleteListener(this,new OnCompleteListener<Boolean>( ) {
             @Override
@@ -203,10 +199,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.settings_submityourdependency:
                 Intent intent3 = new Intent(this,SubmitDependency.class);
                 this.startActivity(intent3);
-                break;
-            case R.id.settings_leaderboard:
-                Intent intent4 = new Intent(this,Leaderboard.class);
-                this.startActivity(intent4);
                 break;
             case R.id.settings:
                 Intent intent5 = new Intent(this,Options.class);

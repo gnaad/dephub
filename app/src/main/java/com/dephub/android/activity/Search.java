@@ -181,14 +181,7 @@ public class Search extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        View view = getCurrentFocus( );
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (searchview.hasFocus( )) {
-            searchview.clearFocus( );
-            imm.hideSoftInputFromWindow(view.getWindowToken( ),0);
-        } else {
-            super.onBackPressed( );
-        }
+        super.onBackPressed();
     }
 
     @SuppressLint("SetTextI18n")

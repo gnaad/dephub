@@ -284,7 +284,7 @@ public class Help extends AppCompatActivity {
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
 
                         alertDialogBuilder.setCancelable(true);
-                        alertDialogBuilder.setMessage("DepHub\nVersion v" + versionName + " (" + versionCode + ")\n•Debug Mode\n" + installer + "\n\n\u00a9 " + simpleDateFormat.format(new Date( )) + " DepHub");
+                        alertDialogBuilder.setMessage("DepHub\nVersion v" + versionName + " (" + versionCode + ")\n•Debug Mode\n" + installer + "\n\nCopyright \u00a9 2020-" + simpleDateFormat.format(new Date( )) + " DepHub");
                         AlertDialog alertDialog = alertDialogBuilder.create( );
                         alertDialog.show( );
                         alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
@@ -294,7 +294,7 @@ public class Help extends AppCompatActivity {
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
 
                         alertDialogBuilder.setCancelable(true);
-                        alertDialogBuilder.setMessage("DepHub\nVersion v" + versionName + " (" + versionCode + ")\n" + installer + "\n\n\u00A9 " + simpleDateFormat.format(new Date( )) + " DepHub");
+                        alertDialogBuilder.setMessage("DepHub\nVersion v" + versionName + " (" + versionCode + ")\n" + installer + "\nCopyright \u00A9 2020-" + simpleDateFormat.format(new Date( )) + " DepHub");
                         AlertDialog alertDialog = alertDialogBuilder.create( );
                         alertDialog.show( );
                         alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));

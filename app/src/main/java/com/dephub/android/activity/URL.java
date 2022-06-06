@@ -2,6 +2,7 @@ package com.dephub.android.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -48,98 +49,106 @@ public class URL extends AppCompatActivity {
             }
         });
 
-        Uri uri = getIntent( ).getData( );
-        if (uri != null) {
-            String parameters = uri.getLastPathSegment( );
-            if (parameters == null) {
-                textView.setText("URL doesn't exist");
-                progressBar.setVisibility(View.INVISIBLE);
-                home.setVisibility(View.VISIBLE);
-            } else {
-                if (parameters.equals("") || parameters.isEmpty( ) || parameters.length( ) == 0) {
-                    textView.setText("Dependency parameters is missing");
+        SharedPreferences prefs = getSharedPreferences("policy",MODE_PRIVATE);
+        boolean firstStart = prefs.getBoolean("agreed",false);
+
+        if (firstStart) {
+            Uri uri = getIntent( ).getData( );
+            if (uri != null) {
+                String parameters = uri.getLastPathSegment( );
+                if (parameters == null) {
+                    textView.setText("URL doesn't exist");
                     progressBar.setVisibility(View.INVISIBLE);
                     home.setVisibility(View.VISIBLE);
                 } else {
-                    if (TextUtils.isDigitsOnly(parameters)) {
-                        if (parameters.length( ) == 4 || parameters.length( ) == 3) {
-                            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext( ));
-                            requestQueue.getCache( ).clear( );
-                            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,"https://gnanendraprasadp.github.io/DepHub-Web/json/search.json",null,new Response.Listener<JSONArray>( ) {
+                    if (parameters.equals("") || parameters.isEmpty( ) || parameters.length( ) == 0) {
+                        textView.setText("Dependency parameters is missing");
+                        progressBar.setVisibility(View.INVISIBLE);
+                        home.setVisibility(View.VISIBLE);
+                    } else {
+                        if (TextUtils.isDigitsOnly(parameters)) {
+                            if (parameters.length( ) == 4 || parameters.length( ) == 3) {
+                                RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext( ));
+                                requestQueue.getCache( ).clear( );
+                                JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,"https://gnanendraprasadp.github.io/DepHub-Web/json/search.json",null,new Response.Listener<JSONArray>( ) {
 
-                                @Override
-                                public void onResponse(JSONArray response) {
-                                    for (int i = 0; i < response.length( ); i++) {
-                                        try {
-                                            textView.setText("Loading");
-                                            progressBar.setVisibility(View.VISIBLE);
+                                    @Override
+                                    public void onResponse(JSONArray response) {
+                                        for (int i = 0; i < response.length( ); i++) {
+                                            try {
+                                                textView.setText("Loading");
+                                                progressBar.setVisibility(View.VISIBLE);
 
-                                            JSONObject jsonObject = response.getJSONObject(i);
+                                                JSONObject jsonObject = response.getJSONObject(i);
 
-                                            id = jsonObject.getString("Id");
+                                                id = jsonObject.getString("Id");
 
-                                            if (id.equals(parameters)) {
+                                                if (id.equals(parameters)) {
 
-                                                String title = jsonObject.getString("Dependency Name");
-                                                String devname = jsonObject.getString("Developer Name");
-                                                String weblink = jsonObject.getString("Github Link");
-                                                String youtubelink = jsonObject.getString("YouTube Link");
-                                                String license = jsonObject.getString("License");
-                                                String licenselink = jsonObject.getString("License Link");
+                                                    String title = jsonObject.getString("Dependency Name");
+                                                    String devname = jsonObject.getString("Developer Name");
+                                                    String weblink = jsonObject.getString("Github Link");
+                                                    String youtubelink = jsonObject.getString("YouTube Link");
+                                                    String license = jsonObject.getString("License");
+                                                    String licenselink = jsonObject.getString("License Link");
 
-                                                Intent intent = new Intent(URL.this,Web.class);
-                                                intent.putExtra("id",id);
-                                                intent.putExtra("title",title);
-                                                intent.putExtra("devname",devname);
-                                                intent.putExtra("link",weblink);
-                                                intent.putExtra("ylink",youtubelink);
-                                                intent.putExtra("license",license);
-                                                intent.putExtra("licenselink",licenselink);
-                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                    Intent intent = new Intent(URL.this,Web.class);
+                                                    intent.putExtra("id",id);
+                                                    intent.putExtra("title",title);
+                                                    intent.putExtra("devname",devname);
+                                                    intent.putExtra("link",weblink);
+                                                    intent.putExtra("ylink",youtubelink);
+                                                    intent.putExtra("license",license);
+                                                    intent.putExtra("licenselink",licenselink);
+                                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                    }
+                                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                    startActivity(intent);
+                                                    break;
+                                                } else {
+                                                    textView.setText("Dependency doesn't exist");
+                                                    progressBar.setVisibility(View.INVISIBLE);
+                                                    home.setVisibility(View.VISIBLE);
                                                 }
-                                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                startActivity(intent);
-                                                break;
-                                            } else {
-                                                textView.setText("Dependency doesn't exist");
-                                                progressBar.setVisibility(View.INVISIBLE);
-                                                home.setVisibility(View.VISIBLE);
+                                            } catch (JSONException e) {
+                                                textView.setText("Loading");
+                                                progressBar.setVisibility(View.VISIBLE);
+                                                home.setVisibility(View.GONE);
+                                                e.printStackTrace( );
                                             }
-                                        } catch (JSONException e) {
-                                            textView.setText("Loading");
-                                            progressBar.setVisibility(View.VISIBLE);
-                                            home.setVisibility(View.GONE);
-                                            e.printStackTrace( );
                                         }
                                     }
-                                }
-                            },new Response.ErrorListener( ) {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    textView.setText("There is some error while loading Dependency");
-                                    progressBar.setVisibility(View.INVISIBLE);
-                                    home.setVisibility(View.VISIBLE);
-                                }
-                            });
-                            jsonArrayRequest.setShouldCache(false);
-                            requestQueue.add(jsonArrayRequest);
+                                },new Response.ErrorListener( ) {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        textView.setText("There is some error while loading Dependency");
+                                        progressBar.setVisibility(View.INVISIBLE);
+                                        home.setVisibility(View.VISIBLE);
+                                    }
+                                });
+                                jsonArrayRequest.setShouldCache(false);
+                                requestQueue.add(jsonArrayRequest);
+                            } else {
+                                textView.setText("Dependency Id should contain 4 digits only");
+                                progressBar.setVisibility(View.INVISIBLE);
+                                home.setVisibility(View.VISIBLE);
+                            }
                         } else {
-                            textView.setText("Dependency Id should contain 4 digits only");
+                            textView.setText("Dependency Id should contain numbers only");
                             progressBar.setVisibility(View.INVISIBLE);
                             home.setVisibility(View.VISIBLE);
                         }
-                    } else {
-                        textView.setText("Dependency Id should contain numbers only");
-                        progressBar.setVisibility(View.INVISIBLE);
-                        home.setVisibility(View.VISIBLE);
                     }
                 }
+            } else {
+                textView.setText("URL is Invalid");
+                progressBar.setVisibility(View.INVISIBLE);
+                home.setVisibility(View.VISIBLE);
             }
         } else {
-            textView.setText("URL is Invalid");
-            progressBar.setVisibility(View.INVISIBLE);
-            home.setVisibility(View.VISIBLE);
+            startActivity(new Intent(URL.this,Login.class));
+            finish( );
         }
     }
 

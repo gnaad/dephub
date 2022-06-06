@@ -34,6 +34,7 @@
     <color name="introwhite">#ffffff</color>
     <color name="introblack">#121212</color>
     <color name="introblue">#0027FF</color>
+    <color name="introunselected">#ada19e</color>
 
     <color name="splashblue">#0027FF</color>
     <color name="splashblack">#121212</color>

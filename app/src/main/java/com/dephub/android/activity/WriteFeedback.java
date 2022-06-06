@@ -20,7 +20,6 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.dephub.android.BuildConfig;
 import com.dephub.android.R;
-import com.dephub.android.settings.Help;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -175,7 +174,7 @@ public class WriteFeedback extends AppCompatActivity {
             alertDialogBuilder.setMessage("Are you sure you want to go back?");
             alertDialogBuilder.setPositiveButton("Yes",new DialogInterface.OnClickListener( ) {
                 public void onClick(DialogInterface dialog,int id) {
-                    startActivity(new Intent(WriteFeedback.this,Help.class));
+                    WriteFeedback.super.onBackPressed( );
                 }
             });
             alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener( ) {
@@ -203,7 +202,7 @@ public class WriteFeedback extends AppCompatActivity {
             alertDialogBuilder.setMessage("Are you sure you want to go back?");
             alertDialogBuilder.setPositiveButton("Yes",new DialogInterface.OnClickListener( ) {
                 public void onClick(DialogInterface dialog,int id) {
-                    startActivity(new Intent(WriteFeedback.this,Help.class));
+                    WriteFeedback.super.onBackPressed( );
                 }
             });
             alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener( ) {

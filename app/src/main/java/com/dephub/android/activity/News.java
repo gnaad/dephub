@@ -117,7 +117,6 @@ public class News extends AppCompatActivity {
                 nine = Integer.valueOf(widget);
 
                 total = one + two + three + four + five + six + seven + eight + nine;
-
             }
 
             @Override
@@ -239,9 +238,24 @@ public class News extends AppCompatActivity {
     }
 
     @Override
+    public boolean onSupportNavigateUp() {
+        if (webview.canGoBack( )) {
+            webview.goBack( );
+        } else {
+            webview.clearCache(true);
+            super.onBackPressed( );
+        }
+        return false;
+    }
+
+    @Override
     public void onBackPressed() {
-        webview.clearCache(true);
-        super.onBackPressed( );
+        if (webview.canGoBack( )) {
+            webview.goBack( );
+        } else {
+            webview.clearCache(true);
+            super.onBackPressed( );
+        }
     }
 
     @Override

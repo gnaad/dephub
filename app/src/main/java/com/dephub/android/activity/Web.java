@@ -300,6 +300,7 @@ public class Web extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbarwv);
         AppBarLayout appBarLayout = findViewById(R.id.appbarwv);
         toolbar.setTitle(title);
+        toolbar.setSubtitle(devname);
 
         toolbar.setOnLongClickListener(new View.OnLongClickListener( ) {
             @Override

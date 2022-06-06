@@ -65,11 +65,11 @@
         <item name="android:adjustViewBounds">true</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="fontFamily">@font/sans</item>
-        <item name="android:forceDarkAllowed">false</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">

@@ -23,10 +23,6 @@
         android:title="Submit Dependency" />
 
     <item
-        android:id="@+id/settings_leaderboard"
-        android:title="Leaderboard" />
-
-    <item
         android:id="@+id/settings"
         android:title="Settings" />
 

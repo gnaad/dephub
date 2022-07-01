@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/xmlrelativelayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/darktoggle"
     android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/welcomeimage"
-        android:layout_width="wrap_content"
-        android:layout_height="300sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/footer"
+        android:layout_below="@id/tagline"
         android:layout_centerInParent="true"
         android:layout_marginLeft="15sp"
+        android:layout_marginTop="15sp"
         android:layout_marginRight="15sp"
-        android:src="@drawable/ic_welcome"
-        android:contentDescription="@string/login_cont_welcome" />
+        android:layout_marginBottom="15sp"
+        android:contentDescription="@string/login_cont_welcome"
+        android:src="@drawable/ic_welcome" />
 
     <TextView
-        android:id="@+id/tnc"
+        android:id="@+id/footer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/sign_in"
@@ -50,6 +52,7 @@
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/tagline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/welcome"
@@ -71,14 +74,14 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="45sp"
-        android:textAllCaps="false"
         android:background="@drawable/roundedcorner"
         android:elevation="12dp"
-        android:textStyle="bold"
         android:fontFamily="@font/sans"
-        android:textColor="@color/white"
         android:padding="8dp"
         android:text="@string/login_continue"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
 
 </RelativeLayout>

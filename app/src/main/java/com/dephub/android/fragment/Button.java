@@ -18,8 +18,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.dephub.android.R;
-import com.dephub.android.cardview.Cardadapter;
-import com.dephub.android.cardview.Cardmodel;
+import com.dephub.android.cardview.CardAdapter;
+import com.dephub.android.cardview.CardModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,66 +30,69 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class Button extends Fragment {
-    public static final String url = "https://gnanendraprasadp.github.io/DepHub-Web/json/fragmentfollowedbybutton.json";
-    private RecyclerView cardrecyclerviewbutton;
-    private Cardadapter cardviewadapterbutton;
-    private ArrayList<Cardmodel> cardbutton;
+    public static final String url = "https://gnanendraprasadp.github.io/DepHub-Web/json/data.json";
+    private RecyclerView cardRecyclerViewButton;
+    private ArrayList<CardModel> cardButton;
 
     @Override
-    public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
 
-        View view = inflater.inflate(R.layout.activity_fragment_button,container,false);
+        View view = inflater.inflate(R.layout.activity_fragment_button, container, false);
 
-        cardrecyclerviewbutton = view.findViewById(R.id.buttonfragment);
+        cardRecyclerViewButton = view.findViewById(R.id.buttonfragment);
         setRetainInstance(true);
 
-        cardbutton = new ArrayList<>( );
+        cardButton = new ArrayList<>();
 
-        getdependency( );
+        getDependency();
 
-        buildcardview( );
+        buildCardView();
 
         return view;
     }
 
-    private void getdependency() {
-        @SuppressWarnings("ConstantConditions") RequestQueue requestQueue = Volley.newRequestQueue(getContext( ));
+    private void getDependency() {
+        @SuppressWarnings("ConstantConditions") RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.getCache().clear();
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,url,null,new Response.Listener<JSONArray>( ) {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                for (int i = 0; i < response.length( ); i++) {
+                for (int i = 0; i < response.length(); i++) {
                     try {
                         JSONObject jsonObject = response.getJSONObject(i);
 
-                        String depname = jsonObject.getString("Dependency Name");
-                        String devname = jsonObject.getString("Developer Name");
-                        String fullname = jsonObject.getString("Full Name");
-                        String gitlink = jsonObject.getString("Github Link");
-                        @SuppressLint("ResourceType")
-                        String bg = getString(R.color.whitetoblack);
-                        String youtube = jsonObject.getString("YouTube Link");
-                        String id = jsonObject.getString("Id");
-                        String license = jsonObject.getString("License");
-                        String licenselink = jsonObject.getString("License Link");
-                        cardbutton.add(new Cardmodel(depname,devname,gitlink,bg,youtube,id,license,licenselink,fullname));
+                        String type = jsonObject.getString("Type");
 
-                        Collections.sort(cardbutton,new Comparator<Cardmodel>( ) {
-                            @Override
-                            public int compare(Cardmodel o1,Cardmodel o2) {
-                                return o1.getDependencyname( ).compareTo(o2.getDependencyname( ));
-                            }
-                        });
+                        if (type.equals("Button")) {
+                            String dependencyName = jsonObject.getString("Dependency Name");
+                            String developerName = jsonObject.getString("Developer Name");
+                            String fullName = jsonObject.getString("Full Name");
+                            String githubLink = jsonObject.getString("Github Link");
+                            @SuppressLint("ResourceType")
+                            String bg = getString(R.color.whitetoblack);
+                            String youtube = jsonObject.getString("YouTube Link");
+                            String id = jsonObject.getString("Id");
+                            String license = jsonObject.getString("License");
+                            String licenseLink = jsonObject.getString("License Link");
+                            cardButton.add(new CardModel(dependencyName, developerName, githubLink, bg, youtube, id, license, licenseLink, fullName));
 
-                        buildcardview( );
+                            Collections.sort(cardButton, new Comparator<CardModel>() {
+                                @Override
+                                public int compare(CardModel o1, CardModel o2) {
+                                    return o1.getDependencyName().compareTo(o2.getDependencyName());
+                                }
+                            });
+
+                            buildCardView();
+                        }
                     } catch (JSONException e) {
-                        e.printStackTrace( );
+                        e.printStackTrace();
                     }
                 }
             }
-        },new Response.ErrorListener( ) {
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
 
@@ -99,11 +102,11 @@ public class Button extends Fragment {
         requestQueue.add(jsonArrayRequest);
     }
 
-    private void buildcardview() {
-        cardviewadapterbutton = new Cardadapter(cardbutton,getActivity( ));
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext( ));
-        cardrecyclerviewbutton.setHasFixedSize(true);
-        cardrecyclerviewbutton.setLayoutManager(linearLayoutManager);
-        cardrecyclerviewbutton.setAdapter(cardviewadapterbutton);
+    private void buildCardView() {
+        CardAdapter cardViewAdapterButton = new CardAdapter(cardButton, getActivity());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        cardRecyclerViewButton.setHasFixedSize(true);
+        cardRecyclerViewButton.setLayoutManager(linearLayoutManager);
+        cardRecyclerViewButton.setAdapter(cardViewAdapterButton);
     }
 }

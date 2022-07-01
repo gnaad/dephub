@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -21,8 +20,8 @@ import androidx.appcompat.widget.Toolbar;
 import com.dephub.android.R;
 
 public class SubmitDependency extends AppCompatActivity {
-    EditText Dependency_Name, Dependency_URL, Dependency_Description;
-    Button Submitnow;
+    EditText dependencyDeveloperName, dependencyURL, dependencyDescription;
+    Button SubmitNow;
 
     @SuppressLint("ResourceAsColor")
     @Override
@@ -33,14 +32,12 @@ public class SubmitDependency extends AppCompatActivity {
 
         setContentView(R.layout.activity_submityourdependency);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow( ).setNavigationBarColor(getResources( ).getColor(R.color.black));
-        }
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.black));
 
-        Toolbar toolbar = findViewById(R.id.toolbarsubmityourdependency);
+        Toolbar toolbar = findViewById(R.id.toolbarSubmitYourDependency);
         toolbar.setTitle("Submit Dependency");
         toolbar.setNavigationIcon(R.drawable.ic_back);
-        int nightModeFlags = getResources( ).getConfiguration( ).uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
             int white = Color.parseColor("#ffffff");
             toolbar.setTitleTextColor(white);
@@ -50,172 +47,100 @@ public class SubmitDependency extends AppCompatActivity {
         }
         setSupportActionBar(toolbar);
 
-        Dependency_Name = findViewById(R.id.etdepname);
-        Dependency_URL = findViewById(R.id.etdepurl);
-        Dependency_Description = findViewById(R.id.etdepdes);
-        Submitnow = findViewById(R.id.formsubmit);
+        dependencyDeveloperName = findViewById(R.id.etDependencyName);
+        dependencyURL = findViewById(R.id.etDependencyUrl);
+        dependencyDescription = findViewById(R.id.etDependencyDesc);
+        SubmitNow = findViewById(R.id.submitForm);
 
-        Submitnow.setOnClickListener(new View.OnClickListener( ) {
+        SubmitNow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String depname = Dependency_Name.getText( ).toString( ).trim( );
-                String depurl = Dependency_URL.getText( ).toString( ).trim( );
-                String depdes = Dependency_Description.getText( ).toString( ).trim( );
+                String dependencyName = dependencyDeveloperName.getText().toString().trim();
+                String dependencyUrl = dependencyURL.getText().toString().trim();
+                String dependencyDesc = dependencyDescription.getText().toString().trim();
 
-                if (TextUtils.isEmpty(depname)) {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SubmitDependency.this,R.style.CustomAlertDialog);
-
-                    alertDialogBuilder.setCancelable(true);
-                    alertDialogBuilder.setMessage("Please enter Dependency Name");
-                    alertDialogBuilder.setPositiveButton("Ok",new DialogInterface.OnClickListener( ) {
-                        public void onClick(DialogInterface dialog,int id) {
-                            dialog.dismiss( );
-                        }
-                    });
-                    AlertDialog alertDialog = alertDialogBuilder.create( );
-                    alertDialog.show( );
-                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
-                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
-                    return;
+                if (TextUtils.isEmpty(dependencyName)) {
+                    showDialog("Please enter Dependency Name");
                 }
-                if (TextUtils.isEmpty(depurl)) {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SubmitDependency.this,R.style.CustomAlertDialog);
-
-                    alertDialogBuilder.setCancelable(true);
-                    alertDialogBuilder.setMessage("Please include Dependency URL");
-                    alertDialogBuilder.setPositiveButton("Ok",new DialogInterface.OnClickListener( ) {
-                        public void onClick(DialogInterface dialog,int id) {
-                            dialog.dismiss( );
-                        }
-                    });
-                    AlertDialog alertDialog = alertDialogBuilder.create( );
-                    alertDialog.show( );
-                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
-                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
-                    return;
+                if (TextUtils.isEmpty(dependencyUrl)) {
+                    showDialog("Please include Dependency URL");
                 }
-                if (TextUtils.isEmpty(depdes)) {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SubmitDependency.this,R.style.CustomAlertDialog);
-
-                    alertDialogBuilder.setCancelable(true);
-                    alertDialogBuilder.setMessage("Please include Dependency Description");
-                    alertDialogBuilder.setPositiveButton("Ok",new DialogInterface.OnClickListener( ) {
-                        public void onClick(DialogInterface dialog,int id) {
-                            dialog.dismiss( );
-                        }
-                    });
-                    AlertDialog alertDialog = alertDialogBuilder.create( );
-                    alertDialog.show( );
-                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
-                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
-                    return;
+                if (TextUtils.isEmpty(dependencyDesc)) {
+                    showDialog("Please include Dependency Description");
                 }
-                if (!(depurl.startsWith("http://") || depurl.startsWith("https://"))) {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SubmitDependency.this,R.style.CustomAlertDialog);
-
-                    alertDialogBuilder.setCancelable(true);
-                    alertDialogBuilder.setMessage("Please include a valid Dependency URL starts with http or https");
-                    alertDialogBuilder.setPositiveButton("Ok",new DialogInterface.OnClickListener( ) {
-                        public void onClick(DialogInterface dialog,int id) {
-                            dialog.dismiss( );
-                        }
-                    });
-                    AlertDialog alertDialog = alertDialogBuilder.create( );
-                    alertDialog.show( );
-                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
-                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
-                    return;
+                if (!(dependencyUrl.startsWith("http://") || dependencyUrl.startsWith("https://"))) {
+                    showDialog("Please include a valid Dependency URL starts with http or https");
                 } else {
-
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SubmitDependency.this,R.style.CustomAlertDialog);
-
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SubmitDependency.this, R.style.CustomAlertDialog);
                     alertDialogBuilder.setCancelable(true);
                     alertDialogBuilder.setMessage("Are you sure, You want to submit all the details that you have entered?");
-                    alertDialogBuilder.setPositiveButton("Yes, Submit Now",new DialogInterface.OnClickListener( ) {
-                        public void onClick(DialogInterface dialog,int id) {
-
+                    alertDialogBuilder.setPositiveButton("Yes, Submit Now", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
                             Intent intent = new Intent(Intent.ACTION_SEND);
                             String[] mailto = {"mailtodephub@gmail.com"};
-                            intent.putExtra(Intent.EXTRA_EMAIL,mailto);
-                            intent.putExtra(Intent.EXTRA_SUBJECT,"Dependency Submission");
-                            intent.putExtra(Intent.EXTRA_TEXT,"Hello\n\nI would like to submit a dependency for DepHub Android app. Details of dependency are below:" +
-                                    "\n\n•Dependency Name : " + depname + "\n•Dependency URL : " + depurl + "\n•Dependency Description : " + depdes + "\n\nPlease add this dependency in DepHub App.\n\nThank You");
+                            intent.putExtra(Intent.EXTRA_EMAIL, mailto);
+                            intent.putExtra(Intent.EXTRA_SUBJECT, "Dependency Submission");
+                            intent.putExtra(Intent.EXTRA_TEXT, "Hello\n\nI would like to submit a dependency for DepHub Android app. Details of dependency are below:" +
+                                    "\n\n•Dependency Name : " + dependencyName + "\n•Dependency URL : " + dependencyUrl + "\n•Dependency Description : " + dependencyDesc + "\n\nPlease add this dependency in DepHub App.\n\nThank You");
                             intent.setType("message/rfc822");
-                            startActivity(Intent.createChooser(intent,"Choose an email client"));
+                            startActivity(Intent.createChooser(intent, "Choose an email client"));
                         }
                     });
-                    alertDialogBuilder.setNegativeButton("No, I want to edit",new DialogInterface.OnClickListener( ) {
+                    alertDialogBuilder.setNegativeButton("No, I want to edit", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog,int which) {
-                            dialog.dismiss( );
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
                         }
                     });
-                    AlertDialog alertDialog = alertDialogBuilder.create( );
-                    alertDialog.show( );
-                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
-                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorAccent));
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorAccent));
                 }
             }
         });
 
-        Intent receiverdIntent = getIntent( );
-        String receivedAction = receiverdIntent.getAction( );
-        String receivedType = receiverdIntent.getType( );
+        Intent receivedIntent = getIntent();
+        String receivedAction = receivedIntent.getAction();
+        String receivedType = receivedIntent.getType();
 
-        SharedPreferences prefs = getSharedPreferences("policy",MODE_PRIVATE);
-        boolean firstStart = prefs.getBoolean("agreed",false);
+        SharedPreferences prefs = getSharedPreferences("policy", MODE_PRIVATE);
+        boolean firstStart = prefs.getBoolean("agreed", false);
 
         if (firstStart) {
             if ("android.intent.action.SEND".equals(receivedAction) && receivedType != null) {
                 if (receivedType.startsWith("text/")) {
 
-                    String receivedText = receiverdIntent.getStringExtra(Intent.EXTRA_TEXT);
-                    String[] splittedtext = receivedText.split("\\s+");
+                    String receivedText = receivedIntent.getStringExtra(Intent.EXTRA_TEXT);
+                    String[] splittedText = receivedText.split("\\s+");
                     //noinspection ConstantConditions
                     if (receivedText != null) {
                         if (receivedText.startsWith("http://") || receivedText.startsWith("https://")) {
-                            Dependency_URL.setText(receivedText);
-                        } else if (splittedtext.length >= 4) {
-                            Dependency_Description.setText(receivedText);
+                            dependencyURL.setText(receivedText);
+                        } else if (splittedText.length >= 4) {
+                            dependencyDescription.setText(receivedText);
                         } else {
-                            Dependency_Name.setText(receivedText);
+                            dependencyDeveloperName.setText(receivedText);
                         }
                     }
                 }
             }
         } else {
-            startActivity(new Intent(SubmitDependency.this,Login.class));
-            finish( );
+            startActivity(new Intent(SubmitDependency.this, Login.class));
+            finish();
         }
     }
 
     @Override
     public boolean onSupportNavigateUp() {
-        String depname = Dependency_Name.getText( ).toString( ).trim( );
-        String depurl = Dependency_URL.getText( ).toString( ).trim( );
-        String depdesc = Dependency_Description.getText( ).toString( ).trim( );
+        String depName = dependencyDeveloperName.getText().toString().trim();
+        String depUrl = dependencyURL.getText().toString().trim();
+        String depDesc = dependencyDescription.getText().toString().trim();
 
-        if (TextUtils.isEmpty(depname) && TextUtils.isEmpty(depurl) && TextUtils.isEmpty(depdesc)) {
-            onBackPressed( );
+        if (TextUtils.isEmpty(depName) && TextUtils.isEmpty(depUrl) && TextUtils.isEmpty(depDesc)) {
+            onBackPressed();
         } else {
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SubmitDependency.this,R.style.CustomAlertDialog);
-            alertDialogBuilder.setCancelable(true);
-            alertDialogBuilder.setMessage("Are you sure you want to go back?");
-            alertDialogBuilder.setPositiveButton("Yes",new DialogInterface.OnClickListener( ) {
-                public void onClick(DialogInterface dialog,int id) {
-                    SubmitDependency.super.onBackPressed( );
-                }
-            });
-            alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener( ) {
-                @Override
-                public void onClick(DialogInterface dialog,int which) {
-                    dialog.dismiss( );
-                }
-            });
-            AlertDialog alertDialog = alertDialogBuilder.create( );
-            alertDialog.show( );
-            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
-            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
+            backButton();
             return true;
         }
         return false;
@@ -223,31 +148,51 @@ public class SubmitDependency extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        String depname = Dependency_Name.getText( ).toString( ).trim( );
-        String depurl = Dependency_URL.getText( ).toString( ).trim( );
-        String depdesc = Dependency_Description.getText( ).toString( ).trim( );
+        String depName = dependencyDeveloperName.getText().toString().trim();
+        String depUrl = dependencyURL.getText().toString().trim();
+        String depDesc = dependencyDescription.getText().toString().trim();
 
-        if (TextUtils.isEmpty(depname) && TextUtils.isEmpty(depurl) && TextUtils.isEmpty(depdesc)) {
-            super.onBackPressed( );
+        if (TextUtils.isEmpty(depName) && TextUtils.isEmpty(depUrl) && TextUtils.isEmpty(depDesc)) {
+            super.onBackPressed();
         } else {
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SubmitDependency.this,R.style.CustomAlertDialog);
-            alertDialogBuilder.setCancelable(true);
-            alertDialogBuilder.setMessage("Are you sure you want to go back?");
-            alertDialogBuilder.setPositiveButton("Yes",new DialogInterface.OnClickListener( ) {
-                public void onClick(DialogInterface dialog,int id) {
-                    SubmitDependency.super.onBackPressed( );
-                }
-            });
-            alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener( ) {
-                @Override
-                public void onClick(DialogInterface dialog,int which) {
-                    dialog.dismiss( );
-                }
-            });
-            AlertDialog alertDialog = alertDialogBuilder.create( );
-            alertDialog.show( );
-            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
-            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
+            backButton();
         }
+    }
+
+    private void backButton() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SubmitDependency.this, R.style.CustomAlertDialog);
+        alertDialogBuilder.setCancelable(true);
+        alertDialogBuilder.setMessage("Are you sure you want to go back?");
+        alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                SubmitDependency.super.onBackPressed();
+            }
+        });
+        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorAccent));
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorAccent));
+    }
+
+    private void showDialog(String s) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SubmitDependency.this, R.style.CustomAlertDialog);
+        alertDialogBuilder.setCancelable(true);
+        alertDialogBuilder.setMessage(s);
+        alertDialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorAccent));
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorAccent));
+        return;
     }
 }

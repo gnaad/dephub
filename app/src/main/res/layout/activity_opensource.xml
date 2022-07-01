@@ -7,14 +7,14 @@
     android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbaropensource"
+        android:id="@+id/appbarOpenSource"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbaropensource"
+            android:id="@+id/toolbarOpenSource"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|enterAlways"
@@ -24,9 +24,9 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <WebView
-        android:id="@+id/ossweb"
+        android:id="@+id/osWeb"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/appbaropensource" />
+        android:layout_below="@id/appbarOpenSource" />
 
 </RelativeLayout>

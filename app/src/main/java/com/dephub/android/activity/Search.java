@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,8 +29,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.dephub.android.R;
-import com.dephub.android.cardview.Cardmodel;
-import com.dephub.android.cardview.Searchadapter;
+import com.dephub.android.cardview.CardModel;
+import com.dephub.android.cardview.SearchAdapter;
 import com.github.aakira.compoundicontextview.CompoundIconTextView;
 
 import org.json.JSONArray;
@@ -39,39 +40,36 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class Search extends AppCompatActivity {
-
     SearchView searchview;
     RecyclerView recyclerView;
-
-    String depname, devname, gitlink, cardbg, youtube, id, license, licenselink, fullname;
-
-    TextView centretext, notfound, count;
-    Button submityourdependency;
+    String dependencyName, devName, githubLink, cardBackground, youtube, id, license, licenseLink, fullName;
+    TextView centerText, notFound, count;
+    Button submitYourDependency;
     LinearLayoutManager linearLayoutManager;
     CompoundIconTextView compoundIconTextView;
-    String url = "https://gnanendraprasadp.github.io/DepHub-Web/json/search.json";
+    String url = "https://gnanendraprasadp.github.io/DepHub-Web/json/data.json";
+    SearchAdapter cardViewSearch;
+    private ArrayList<CardModel> cardSearch;
+    RelativeLayout relativeLayout;
 
-    Searchadapter cardviewsearch;
-    String[] background = {"#3F51B5","#FF5001","#F44336","#FFC107","#3BEC1B","#00BCD4","#FF8000"};
-    private ArrayList<Cardmodel> cardsearch;
-
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searchview);
 
         searchview = findViewById(R.id.search);
-        recyclerView = findViewById(R.id.searchrecyclerview);
-        centretext = findViewById(R.id.nodep);
-        compoundIconTextView = findViewById(R.id.nodependency);
-        notfound = findViewById(R.id.notfound);
-        submityourdependency = findViewById(R.id.syd);
-        count = findViewById(R.id.depnum);
+        recyclerView = findViewById(R.id.searchRecyclerView);
+        centerText = findViewById(R.id.description);
+        compoundIconTextView = findViewById(R.id.noDependencyImage);
+        notFound = findViewById(R.id.notFoundText);
+        submitYourDependency = findViewById(R.id.submitYourDependencyButton);
+        count = findViewById(R.id.dependencyNumber);
+        relativeLayout = findViewById(R.id.searchView);
 
-
-        Toolbar toolbar = findViewById(R.id.toolbarsearch);
+        Toolbar toolbar = findViewById(R.id.toolbarSearch);
         toolbar.setNavigationIcon(R.drawable.ic_back);
-        int nightModeFlags = getResources( ).getConfiguration( ).uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
             int white = Color.parseColor("#ffffff");
             toolbar.setTitleTextColor(white);
@@ -81,55 +79,54 @@ public class Search extends AppCompatActivity {
         }
         setSupportActionBar(toolbar);
 
-        Drawable drawable = toolbar.getOverflowIcon( );
+        Drawable drawable = toolbar.getOverflowIcon();
 
-        DrawableCompat.setTint(drawable.mutate( ),getResources( ).getColor(R.color.toolbaricon));
+        DrawableCompat.setTint(drawable.mutate(), getResources().getColor(R.color.toolbaricon));
         toolbar.setOverflowIcon(drawable);
 
-        submityourdependency.setOnClickListener(new View.OnClickListener( ) {
+        submitYourDependency.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Search.this,SubmitDependency.class);
+                Intent intent = new Intent(Search.this, SubmitDependency.class);
                 startActivity(intent);
             }
         });
 
-        cardsearch = new ArrayList<>( );
+        cardSearch = new ArrayList<>();
 
-        searchview.onActionViewExpanded( );
+        searchview.onActionViewExpanded();
 
-        centretext.setVisibility(View.VISIBLE);
-        centretext.setText("Type Dependency name or Developer Name or Id\nTap 🔍\n\nHint : Long Hold on Dependency Name to know Id");
+        centerText.setText("Type Dependency name or Developer Name or Id\nTap 🔍\n\nHint : Long Hold on Dependency Name to know Id");
 
         RequestQueue requestQueue = Volley.newRequestQueue(Search.this);
-        requestQueue.getCache( ).clear( );
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,url,null,new Response.Listener<JSONArray>( ) {
+        requestQueue.getCache().clear();
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                for (int i = 0; i < response.length( ); i++) {
+                for (int i = 0; i < response.length(); i++) {
                     try {
                         JSONObject jsonObject = response.getJSONObject(i);
 
-                        depname = jsonObject.getString("Dependency Name");
-                        devname = jsonObject.getString("Developer Name");
-                        fullname = jsonObject.getString("Full Name");
-                        gitlink = jsonObject.getString("Github Link");
+                        dependencyName = jsonObject.getString("Dependency Name");
+                        devName = jsonObject.getString("Developer Name");
+                        fullName = jsonObject.getString("Full Name");
+                        githubLink = jsonObject.getString("Github Link");
                         @SuppressLint("ResourceType")
                         String bg = getString(R.color.whitetoblack);
-                        cardbg = bg;
+                        cardBackground = bg;
                         youtube = jsonObject.getString("YouTube Link");
                         id = jsonObject.getString("Id");
                         license = jsonObject.getString("License");
-                        licenselink = jsonObject.getString("License Link");
-                        cardsearch.add(new Cardmodel(depname,devname,gitlink,cardbg,youtube,id,license,licenselink,fullname));
-                        buildcardview( );
+                        licenseLink = jsonObject.getString("License Link");
+                        cardSearch.add(new CardModel(dependencyName, devName, githubLink, cardBackground, youtube, id, license, licenseLink, fullName));
+                        buildCardView();
 
                     } catch (JSONException e) {
-                        e.printStackTrace( );
+                        e.printStackTrace();
                     }
                 }
             }
-        },new Response.ErrorListener( ) {
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
 
@@ -138,39 +135,38 @@ public class Search extends AppCompatActivity {
         jsonArrayRequest.setShouldCache(false);
         requestQueue.add(jsonArrayRequest);
 
-        searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener( ) {
+        searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                View view = getCurrentFocus( );
+                View view = getCurrentFocus();
                 if (view != null) {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken( ),0);
-                    searchview.clearFocus( );
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    searchview.clearFocus();
                 }
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-
-                centretext.setVisibility(View.INVISIBLE);
+                centerText.setVisibility(View.INVISIBLE);
                 count.setVisibility(View.VISIBLE);
 
                 if (TextUtils.isDigitsOnly(newText)) {
-                    if (newText.length( ) > 4) {
-                        Toast.makeText(Search.this,"Dependency Id is only 4 digits. Check once",Toast.LENGTH_LONG).show( );
+                    if (newText.length() > 4) {
+                        Toast.makeText(Search.this, "Dependency Id is only 4 digits. Check once", Toast.LENGTH_LONG).show();
                     }
                 }
 
-                if (newText.length( ) > 0) {
+                if (newText.length() > 0) {
                     count.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.VISIBLE);
                 }
 
-                if (newText.length( ) == 0 || newText.equals(" ")) {
+                if (newText.length() == 0 || newText.equals(" ")) {
                     count.setVisibility(View.INVISIBLE);
                     recyclerView.setVisibility(View.GONE);
-                    centretext.setVisibility(View.VISIBLE);
+                    centerText.setVisibility(View.VISIBLE);
                 }
 
                 filter(newText);
@@ -186,36 +182,32 @@ public class Search extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void filter(String text) {
-        ArrayList<Cardmodel> filteredlist = new ArrayList<>( );
+        ArrayList<CardModel> filteredList = new ArrayList<>();
 
-        for (Cardmodel item : cardsearch) {
+        for (CardModel item : cardSearch) {
 
-            if (item.getDependencyname( ).toLowerCase( ).contains(text.toLowerCase( )) || item.getDevelopername( ).toLowerCase( ).contains(text.toLowerCase( )) ||
-                    item.getId( ).toLowerCase( ).contains(text.toLowerCase( ))) {
-                count.setText(filteredlist.size( ) + 1 + " results found");
-                filteredlist.add(item);
+            if (item.getDependencyName().toLowerCase().contains(text.toLowerCase()) || item.getDeveloperName().toLowerCase().contains(text.toLowerCase()) ||
+                    item.getId().toLowerCase().contains(text.toLowerCase())) {
+                count.setText(filteredList.size() + 1 + " results found");
+                filteredList.add(item);
             }
         }
-        if (filteredlist.isEmpty( )) {
-            compoundIconTextView.setVisibility(View.VISIBLE);
+        if (filteredList.isEmpty()) {
             count.setVisibility(View.INVISIBLE);
-            notfound.setVisibility(View.VISIBLE);
-            submityourdependency.setVisibility(View.VISIBLE);
-            compoundIconTextView.setText(filteredlist.size( ) + " results found for \"" + text + "\"");
+            relativeLayout.setVisibility(View.VISIBLE);
+            compoundIconTextView.setText(filteredList.size() + " results found for \"" + text + "\"");
             recyclerView.setVisibility(View.GONE);
         } else {
-            compoundIconTextView.setVisibility(View.GONE);
-            notfound.setVisibility(View.GONE);
-            submityourdependency.setVisibility(View.GONE);
-            cardviewsearch.filterList(filteredlist);
+            relativeLayout.setVisibility(View.GONE);
+            cardViewSearch.filterList(filteredList);
         }
     }
 
-    private void buildcardview() {
-        cardviewsearch = new Searchadapter(cardsearch,Search.this);
+    private void buildCardView() {
+        cardViewSearch = new SearchAdapter(cardSearch, Search.this);
         linearLayoutManager = new LinearLayoutManager(Search.this);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(cardviewsearch);
+        recyclerView.setAdapter(cardViewSearch);
     }
 }

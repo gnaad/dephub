@@ -1,35 +1,35 @@
 package com.dephub.android.cardview;
 
-public class Cardmodel {
+public class CardModel {
 
-    private String dependencyname;
+    private String dependencyName;
 
-    private String developername;
+    private String developerName;
 
-    private String githublink;
+    private String githubLink;
 
-    private final String cardbackground;
+    private final String cardBackground;
 
-    private String youtubelink;
+    private String youtubeLink;
 
     private String id;
 
     private String license;
 
-    private String licenselink;
+    private String licenseLink;
 
-    private String fullname;
+    private String fullName;
 
-    public Cardmodel(String dependencyname,String developername,String githublink,String cardbackground,String youtubelink,String id,String license,String licenselink,String fullname) {
-        this.dependencyname = dependencyname;
-        this.developername = developername;
-        this.githublink = githublink;
-        this.cardbackground = cardbackground;
-        this.youtubelink = youtubelink;
+    public CardModel(String dependencyName, String developerName, String githubLink, String cardBackground, String youtubeLink, String id, String license, String licenseLink, String fullName) {
+        this.dependencyName = dependencyName;
+        this.developerName = developerName;
+        this.githubLink = githubLink;
+        this.cardBackground = cardBackground;
+        this.youtubeLink = youtubeLink;
         this.id = id;
         this.license = license;
-        this.licenselink = licenselink;
-        this.fullname = fullname;
+        this.licenseLink = licenseLink;
+        this.fullName = fullName;
     }
 
     public String getId() {
@@ -40,36 +40,36 @@ public class Cardmodel {
         this.id = id;
     }
 
-    public String getYoutubelink() {
-        return youtubelink;
+    public String getYoutubeLink() {
+        return youtubeLink;
     }
 
-    public void setYoutubelink(String youtubelink) {
-        this.youtubelink = youtubelink;
+    public void setYoutubeLink(String youtubeLink) {
+        this.youtubeLink = youtubeLink;
     }
 
-    public String getDependencyname() {
-        return dependencyname;
+    public String getDependencyName() {
+        return dependencyName;
     }
 
-    public void setDependencyname(String dependencyname) {
-        this.dependencyname = dependencyname;
+    public void setDependencyName(String dependencyName) {
+        this.dependencyName = dependencyName;
     }
 
-    public String getDevelopername() {
-        return developername;
+    public String getDeveloperName() {
+        return developerName;
     }
 
-    public void setDevelopername(String developername) {
-        this.developername = developername;
+    public void setDeveloperName(String developerName) {
+        this.developerName = developerName;
     }
 
-    public String getGithublink() {
-        return githublink;
+    public String getGithubLink() {
+        return githubLink;
     }
 
-    public void setGithublink(String githublink) {
-        this.githublink = githublink;
+    public void setGithubLink(String githubLink) {
+        this.githubLink = githubLink;
     }
 
     public String getLicense() {
@@ -80,19 +80,19 @@ public class Cardmodel {
         this.license = license;
     }
 
-    public String getLicenselink() {
-        return licenselink;
+    public String getLicenseLink() {
+        return licenseLink;
     }
 
-    public void setLicenselink(String licenselink) {
-        this.licenselink = licenselink;
+    public void setLicenseLink(String licenseLink) {
+        this.licenseLink = licenseLink;
     }
 
-    public String getFullname() {
-        return fullname;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 }

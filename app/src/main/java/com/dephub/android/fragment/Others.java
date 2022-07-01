@@ -18,8 +18,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.dephub.android.R;
-import com.dephub.android.cardview.Cardadapter;
-import com.dephub.android.cardview.Cardmodel;
+import com.dephub.android.cardview.CardAdapter;
+import com.dephub.android.cardview.CardModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,68 +30,72 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class Others extends Fragment {
-    public static final String url = "https://gnanendraprasadp.github.io/DepHub-Web/json/fragmentfollowedbyothers.json";
-    private RecyclerView cardrecyclerviewuncategorised;
-    private Cardadapter cardviewadapteruncategorised;
-    private ArrayList<Cardmodel> carduncategorised;
+    public static final String url = "https://gnanendraprasadp.github.io/DepHub-Web/json/data.json";
+    private RecyclerView cardRecyclerViewOthers;
+    private ArrayList<CardModel> cardOthers;
 
     @SuppressLint("SetJavaScriptEnabled")
 
     @Override
-    public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
 
-        View view = inflater.inflate(R.layout.activity_fragment_others,container,false);
+        View view = inflater.inflate(R.layout.activity_fragment_others, container, false);
 
-        cardrecyclerviewuncategorised = view.findViewById(R.id.uncategorisedfragment);
+        cardRecyclerViewOthers = view.findViewById(R.id.othersfragment);
 
-        carduncategorised = new ArrayList<>( );
+        cardOthers = new ArrayList<>();
 
-        getdependency( );
+        getDependency();
 
-        buildcardview( );
+        buildCardView();
+
         return view;
     }
 
-    private void getdependency() {
-        @SuppressWarnings("ConstantConditions") RequestQueue requestQueue = Volley.newRequestQueue(getContext( ));
+    private void getDependency() {
+        @SuppressWarnings("ConstantConditions") RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.getCache().clear();
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,url,null,new Response.Listener<JSONArray>( ) {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                for (int i = 0; i < response.length( ); i++) {
+                for (int i = 0; i < response.length(); i++) {
 
                     try {
                         JSONObject jsonObject = response.getJSONObject(i);
 
-                        String depname = jsonObject.getString("Dependency Name");
-                        String devname = jsonObject.getString("Developer Name");
-                        String fullname = jsonObject.getString("Full Name");
-                        String gitlink = jsonObject.getString("Github Link");
-                        @SuppressLint("ResourceType")
-                        String bg = getString(R.color.whitetoblack);
-                        String youtube = jsonObject.getString("YouTube Link");
-                        String id = jsonObject.getString("Id");
-                        String license = jsonObject.getString("License");
-                        String licenselink = jsonObject.getString("License Link");
-                        carduncategorised.add(new Cardmodel(depname,devname,gitlink,bg,youtube,id,license,licenselink,fullname));
+                        String type = jsonObject.getString("Type");
 
-                        Collections.sort(carduncategorised,new Comparator<Cardmodel>( ) {
-                            @Override
-                            public int compare(Cardmodel o1,Cardmodel o2) {
-                                return o1.getDependencyname( ).compareTo(o2.getDependencyname( ));
-                            }
-                        });
+                        if (type.equals("Others")) {
+                            String dependencyName = jsonObject.getString("Dependency Name");
+                            String developerName = jsonObject.getString("Developer Name");
+                            String fullName = jsonObject.getString("Full Name");
+                            String githubLink = jsonObject.getString("Github Link");
+                            @SuppressLint("ResourceType")
+                            String bg = getString(R.color.whitetoblack);
+                            String youtube = jsonObject.getString("YouTube Link");
+                            String id = jsonObject.getString("Id");
+                            String license = jsonObject.getString("License");
+                            String licenseLink = jsonObject.getString("License Link");
+                            cardOthers.add(new CardModel(dependencyName, developerName, githubLink, bg, youtube, id, license, licenseLink, fullName));
 
-                        buildcardview( );
+                            Collections.sort(cardOthers, new Comparator<CardModel>() {
+                                @Override
+                                public int compare(CardModel o1, CardModel o2) {
+                                    return o1.getDependencyName().compareTo(o2.getDependencyName());
+                                }
+                            });
+
+                            buildCardView();
+                        }
                     } catch (JSONException e) {
-                        e.printStackTrace( );
+                        e.printStackTrace();
                     }
                 }
             }
-        },new Response.ErrorListener( ) {
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
 
@@ -101,11 +105,11 @@ public class Others extends Fragment {
         requestQueue.add(jsonArrayRequest);
     }
 
-    private void buildcardview() {
-        cardviewadapteruncategorised = new Cardadapter(carduncategorised,getActivity( ));
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext( ));
-        cardrecyclerviewuncategorised.setHasFixedSize(true);
-        cardrecyclerviewuncategorised.setLayoutManager(linearLayoutManager);
-        cardrecyclerviewuncategorised.setAdapter(cardviewadapteruncategorised);
+    private void buildCardView() {
+        CardAdapter cardViewAdapterOthers = new CardAdapter(cardOthers, getActivity());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        cardRecyclerViewOthers.setHasFixedSize(true);
+        cardRecyclerViewOthers.setLayoutManager(linearLayoutManager);
+        cardRecyclerViewOthers.setAdapter(cardViewAdapterOthers);
     }
 }

@@ -10,7 +10,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/appbarcredits"
+        android:layout_below="@id/appbarCredits"
         android:background="@color/darktoggle"
         android:forceDarkAllowed="true"
         android:overScrollMode="never"
@@ -113,7 +113,7 @@
                 android:id="@+id/text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/appbarcredits"
+                android:layout_below="@id/appbarCredits"
                 android:layout_marginLeft="20sp"
                 android:layout_marginTop="15sp"
                 android:layout_marginRight="20sp"
@@ -127,14 +127,14 @@
     </ScrollView>
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbarcredits"
+        android:id="@+id/appbarCredits"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbarcredits"
+            android:id="@+id/toolbarCredits"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|enterAlways"

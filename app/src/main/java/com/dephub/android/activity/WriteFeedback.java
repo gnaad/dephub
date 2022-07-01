@@ -28,7 +28,6 @@ import java.util.Date;
 public class WriteFeedback extends AppCompatActivity {
 
     private EditText Problem;
-    private Button btnsubmit, btnmailus;
 
     @SuppressLint("ResourceAsColor")
     @Override
@@ -39,13 +38,11 @@ public class WriteFeedback extends AppCompatActivity {
 
         setContentView(R.layout.activity_writefeedback);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow( ).setNavigationBarColor(getResources( ).getColor(R.color.black));
-        }
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.black));
 
-        Toolbar toolbar = findViewById(R.id.toolbarwritefeedback);
+        Toolbar toolbar = findViewById(R.id.toolbarWriteFeedback);
         toolbar.setTitle("Write Feedback");
-        int nightModeFlags = getResources( ).getConfiguration( ).uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
             int white = Color.parseColor("#ffffff");
             toolbar.setTitleTextColor(white);
@@ -57,106 +54,81 @@ public class WriteFeedback extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
-        Problem = findViewById(R.id.nhwuprob);
-        btnsubmit = findViewById(R.id.nhwusubmit);
-        btnmailus = findViewById(R.id.mailus);
+        Problem = findViewById(R.id.userProb);
+        Button btnSubmit = findViewById(R.id.feedbackSubmit);
+        Button btnMailUs = findViewById(R.id.mailUs);
 
-        Date date = new Date( );
+        Date date = new Date();
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-        String formattedDate = df.format(date.getTime( ));
+        String formattedDate = df.format(date.getTime());
 
-        Calendar calander = Calendar.getInstance( );
+        Calendar calander = Calendar.getInstance();
         @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss a");
-        String time = simpleDateFormat.format(calander.getTime( ));
+        String time = simpleDateFormat.format(calander.getTime());
 
         String model = Build.MODEL;
         int version = Build.VERSION.SDK_INT;
         String versionRelease = Build.VERSION.RELEASE;
         String versionName = BuildConfig.VERSION_NAME;
         int versioncode = BuildConfig.VERSION_CODE;
-        int width = Resources.getSystem( ).getDisplayMetrics( ).widthPixels;
-        int height = Resources.getSystem( ).getDisplayMetrics( ).heightPixels;
+        int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+        int height = Resources.getSystem().getDisplayMetrics().heightPixels;
 
-        btnmailus.setOnClickListener(new View.OnClickListener( ) {
+        btnMailUs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 String[] mailto = {"mailtodephub@gmail.com"};
-                intent.putExtra(Intent.EXTRA_EMAIL,mailto);
-                intent.putExtra(Intent.EXTRA_SUBJECT,"Feedback for DepHub App submitted on " + formattedDate + " at " + time);
-                intent.putExtra(Intent.EXTRA_TEXT,"Model : " + model + "\nSDK Version : " + version + "\nAndroid Version : " + versionRelease + "\nVersion Name : " + versionName + "\nVersion Code : " + versioncode + "\nHeight : " + height + " pixels" + "\nWidth : " + width + " pixels\n\n-- Please don't edit anything above this line, it helps us to serve you better --" +
+                intent.putExtra(Intent.EXTRA_EMAIL, mailto);
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback for DepHub App submitted on " + formattedDate + " at " + time);
+                intent.putExtra(Intent.EXTRA_TEXT, "Model : " + model + "\nSDK Version : " + version + "\nAndroid Version : " + versionRelease + "\nVersion Name : " + versionName + "\nVersion Code : " + versioncode + "\nHeight : " + height + " pixels" + "\nWidth : " + width + " pixels\n\n-- Please don't edit anything above this line, it helps us to serve you better --" +
                         "\n\nHello\n\nI would like to say:\n");
                 intent.setType("message/rfc822");
-                startActivity(Intent.createChooser(intent,"Choose an email client"));
+                startActivity(Intent.createChooser(intent, "Choose an email client"));
             }
         });
 
-        btnsubmit.setOnClickListener(new View.OnClickListener( ) {
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String probleminput = Problem.getText( ).toString( ).trim( );
+                String problemInput = Problem.getText().toString().trim();
 
-                if (TextUtils.isEmpty(probleminput)) {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(WriteFeedback.this,R.style.CustomAlertDialog);
-
-                    alertDialogBuilder.setCancelable(true);
-                    alertDialogBuilder.setMessage("Please describe your problem");
-                    alertDialogBuilder.setPositiveButton("Ok",new DialogInterface.OnClickListener( ) {
-                        public void onClick(DialogInterface dialog,int id) {
-                            dialog.dismiss( );
-                        }
-                    });
-                    AlertDialog alertDialog = alertDialogBuilder.create( );
-                    alertDialog.show( );
-                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
-                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
+                if (TextUtils.isEmpty(problemInput)) {
+                    showAlertDialog("Please describe your problem");
                     return;
                 }
-                String[] wordcount = probleminput.split("\\s+");
-                if (wordcount.length < 10) {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(WriteFeedback.this,R.style.CustomAlertDialog);
-
-                    alertDialogBuilder.setCancelable(true);
-                    alertDialogBuilder.setMessage("Please describe your problem atleast using ten words.");
-                    alertDialogBuilder.setPositiveButton("Ok",new DialogInterface.OnClickListener( ) {
-                        public void onClick(DialogInterface dialog,int id) {
-                            dialog.dismiss( );
-                        }
-                    });
-                    AlertDialog alertDialog = alertDialogBuilder.create( );
-                    alertDialog.show( );
-                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
-                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
+                String[] wordCount = problemInput.split("\\s+");
+                if (wordCount.length < 10) {
+                    showAlertDialog("Please describe your problem atleast using ten words.");
                 } else {
-
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(WriteFeedback.this,R.style.CustomAlertDialog);
-
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(WriteFeedback.this, R.style.CustomAlertDialog);
                     alertDialogBuilder.setCancelable(true);
                     alertDialogBuilder.setMessage("Are you sure, You want to submit the feedback that you have entered?");
-                    alertDialogBuilder.setPositiveButton("Yes, Submit Now",new DialogInterface.OnClickListener( ) {
-                        public void onClick(DialogInterface dialog,int id) {
+                    alertDialogBuilder.setPositiveButton("Yes, Submit Now", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
 
                             Intent intent = new Intent(Intent.ACTION_SEND);
                             String[] mailto = {"mailtodephub@gmail.com"};
-                            intent.putExtra(Intent.EXTRA_EMAIL,mailto);
-                            intent.putExtra(Intent.EXTRA_SUBJECT,"Write Feedback");
-                            intent.putExtra(Intent.EXTRA_TEXT,"Model : " + model + "\nSDK Version : " + version + "\nAndroid Version : " + versionRelease + "\nVersion Name : " + versionName + "\nVersion Code : " + versioncode + "\nHeight : " + height + " pixels" + "\nWidth : " + width + " pixels\n\n-- Please don't edit anything above this line, it helps us to serve you better --" +
-                                    "\n\nHello\n\nI would like to say:\n\n" + probleminput);
+                            intent.putExtra(Intent.EXTRA_EMAIL, mailto);
+                            intent.putExtra(Intent.EXTRA_SUBJECT, "Write Feedback");
+                            intent.putExtra(Intent.EXTRA_TEXT, "Model : " + model + "\nSDK Version : " + version + "\nAndroid Version : " + versionRelease + "\nVersion Name : " + versionName + "\nVersion Code : " + versioncode + "\nHeight : " + height + " pixels" + "\nWidth : " + width + " pixels\n\n-- Please don't edit anything above this line, it helps us to serve you better --" +
+                                    "\n\nHello\n\nI would like to say:\n\n" + problemInput);
                             intent.setType("message/rfc822");
-                            startActivity(Intent.createChooser(intent,"Choose an email client"));
+                            startActivity(Intent.createChooser(intent, "Choose an email client"));
 
                         }
                     });
-                    alertDialogBuilder.setNegativeButton("No, I want to edit",new DialogInterface.OnClickListener( ) {
+                    alertDialogBuilder.setNegativeButton("No, I want to edit", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog,int which) {
-                            dialog.dismiss( );
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
                         }
                     });
-                    AlertDialog alertDialog = alertDialogBuilder.create( );
-                    alertDialog.show( );
-                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
-                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorAccent));
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorAccent));
                 }
             }
         });
@@ -164,58 +136,61 @@ public class WriteFeedback extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        String probleminput = Problem.getText( ).toString( ).trim( );
+        String problemInput = Problem.getText().toString().trim();
 
-        if (TextUtils.isEmpty(probleminput)) {
-            super.onBackPressed( );
+        if (TextUtils.isEmpty(problemInput)) {
+            super.onBackPressed();
         } else {
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(WriteFeedback.this,R.style.CustomAlertDialog);
-            alertDialogBuilder.setCancelable(true);
-            alertDialogBuilder.setMessage("Are you sure you want to go back?");
-            alertDialogBuilder.setPositiveButton("Yes",new DialogInterface.OnClickListener( ) {
-                public void onClick(DialogInterface dialog,int id) {
-                    WriteFeedback.super.onBackPressed( );
-                }
-            });
-            alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener( ) {
-                @Override
-                public void onClick(DialogInterface dialog,int which) {
-                    dialog.dismiss( );
-                }
-            });
-            AlertDialog alertDialog = alertDialogBuilder.create( );
-            alertDialog.show( );
-            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
-            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
+            backButtonPressed();
         }
     }
 
     @Override
     public boolean onSupportNavigateUp() {
-        String probleminput = Problem.getText( ).toString( ).trim( );
+        String problemInput = Problem.getText().toString().trim();
 
-        if (TextUtils.isEmpty(probleminput)) {
-            super.onBackPressed( );
+        if (TextUtils.isEmpty(problemInput)) {
+            super.onBackPressed();
         } else {
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(WriteFeedback.this,R.style.CustomAlertDialog);
-            alertDialogBuilder.setCancelable(true);
-            alertDialogBuilder.setMessage("Are you sure you want to go back?");
-            alertDialogBuilder.setPositiveButton("Yes",new DialogInterface.OnClickListener( ) {
-                public void onClick(DialogInterface dialog,int id) {
-                    WriteFeedback.super.onBackPressed( );
-                }
-            });
-            alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener( ) {
-                @Override
-                public void onClick(DialogInterface dialog,int which) {
-                    dialog.dismiss( );
-                }
-            });
-            AlertDialog alertDialog = alertDialogBuilder.create( );
-            alertDialog.show( );
-            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
-            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
+            backButtonPressed();
         }
         return false;
+    }
+
+    private void backButtonPressed() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(WriteFeedback.this, R.style.CustomAlertDialog);
+        alertDialogBuilder.setCancelable(true);
+        alertDialogBuilder.setMessage("Are you sure you want to go back?");
+        alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                WriteFeedback.super.onBackPressed();
+            }
+        });
+        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorAccent));
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorAccent));
+    }
+
+    private void showAlertDialog(String s) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(WriteFeedback.this, R.style.CustomAlertDialog);
+        alertDialogBuilder.setCancelable(true);
+        alertDialogBuilder.setMessage(s);
+        alertDialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorAccent));
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorAccent));
+        return;
     }
 }

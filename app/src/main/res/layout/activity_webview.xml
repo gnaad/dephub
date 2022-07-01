@@ -1,24 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/web_relativelayout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/web_relativelayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:visibility="visible"
-    android:background="@color/darktoggle">
+    android:background="@color/darktoggle"
+    android:visibility="visible">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbarWeb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:elevation="0dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarWeb"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            app:titleTextAppearance="@style/toolbartextentity" />
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swiperefreshxml"
+        android:id="@+id/swipeRefreshWeb"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/adweb"
-        android:layout_below="@id/appbarwv"
+        android:layout_above="@id/adWeb"
+        android:layout_below="@id/appbarWeb"
         android:visibility="visible"
         tools:ignore="WebViewLayout">
 
         <WebView
-            android:id="@+id/webviewactivty"
+            android:id="@+id/webViewActivity"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="never"
@@ -27,7 +44,7 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.github.aakira.compoundicontextview.CompoundIconTextView
-        android:id="@+id/nointernet"
+        android:id="@+id/noInternet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -46,46 +63,31 @@
         app:cit_iconHeight="350sp"
         app:cit_iconWidth="350sp" />
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbarwv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
-        app:elevation="0dp">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbarwv"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:navigationIcon="?attr/homeAsUpIndicator"
-            app:titleTextAppearance="@style/toolbartextentity" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/youtube"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginRight="25dp"
+        android:layout_marginEnd="25dp"
         android:layout_marginBottom="130dp"
         android:backgroundTint="@color/fabyoutube"
+        android:contentDescription="Youtube Button"
         android:src="@drawable/ic_youtubered"
         android:visibility="visible"
         app:borderWidth="0dp"
         app:fabSize="mini"
-        app:rippleColor="@color/fabyoutuberipple" />
+        app:rippleColor="@color/fabyoutuberipple"
+        tools:ignore="RelativeOverlap" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/github"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginRight="15dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="60sp"
         android:src="@drawable/ic_sourcecode"
         android:tooltipText="Open in GitHub App"
         android:visibility="visible"
@@ -94,11 +96,12 @@
         app:rippleColor="@color/fabsourceripple" />
 
     <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/adweb"
+        android:id="@+id/adWeb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:visibility="visible"
         ads:adSize="BANNER"
         ads:adUnitId="ca-app-pub-3037529522611130/3685707999" />
 

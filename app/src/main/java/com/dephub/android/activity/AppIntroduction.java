@@ -5,13 +5,18 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.WindowManager;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
 import com.dephub.android.R;
 import com.github.appintro.AppIntro2;
 import com.github.appintro.AppIntroFragment;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class AppIntroduction extends AppIntro2 {
 
@@ -119,18 +124,19 @@ public class AppIntroduction extends AppIntro2 {
     }
 
     @Override
-    public void onSkipPressed(Fragment currentFragment) {
-        super.onSkipPressed(currentFragment);
-
-        Intent intent = new Intent(AppIntroduction.this, SplashScreen.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
-    }
-
-    @Override
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
+
+        FirebaseMessaging.getInstance().subscribeToTopic("dev").addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                String message = "🖥";
+                if (!task.isSuccessful()) {
+                    message = "";
+                }
+                Toast.makeText(AppIntroduction.this, "Happy Coding " + message, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         Intent intent = new Intent(AppIntroduction.this, SplashScreen.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

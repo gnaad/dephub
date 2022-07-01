@@ -37,44 +37,44 @@ public class URL extends AppCompatActivity {
         setContentView(R.layout.activity_url);
 
         progressBar = findViewById(R.id.progress);
-        textView = findViewById(R.id.textview);
-        home = findViewById(R.id.gotohome);
+        textView = findViewById(R.id.loading);
+        home = findViewById(R.id.goToHome);
 
-        home.setOnClickListener(new View.OnClickListener( ) {
+        home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(URL.this,MainActivity.class);
+                Intent intent = new Intent(URL.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             }
         });
 
-        SharedPreferences prefs = getSharedPreferences("policy",MODE_PRIVATE);
-        boolean firstStart = prefs.getBoolean("agreed",false);
+        SharedPreferences prefs = getSharedPreferences("policy", MODE_PRIVATE);
+        boolean firstStart = prefs.getBoolean("agreed", false);
 
         if (firstStart) {
-            Uri uri = getIntent( ).getData( );
+            Uri uri = getIntent().getData();
             if (uri != null) {
-                String parameters = uri.getLastPathSegment( );
+                String parameters = uri.getLastPathSegment();
                 if (parameters == null) {
                     textView.setText("URL doesn't exist");
                     progressBar.setVisibility(View.INVISIBLE);
                     home.setVisibility(View.VISIBLE);
                 } else {
-                    if (parameters.equals("") || parameters.isEmpty( ) || parameters.length( ) == 0) {
+                    if (parameters.equals("") || parameters.isEmpty() || parameters.length() == 0) {
                         textView.setText("Dependency parameters is missing");
                         progressBar.setVisibility(View.INVISIBLE);
                         home.setVisibility(View.VISIBLE);
                     } else {
                         if (TextUtils.isDigitsOnly(parameters)) {
-                            if (parameters.length( ) == 4 || parameters.length( ) == 3) {
-                                RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext( ));
-                                requestQueue.getCache( ).clear( );
-                                JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,"https://gnanendraprasadp.github.io/DepHub-Web/json/search.json",null,new Response.Listener<JSONArray>( ) {
+                            if (parameters.length() == 4 || parameters.length() == 3) {
+                                RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                                requestQueue.getCache().clear();
+                                JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, "https://gnanendraprasadp.github.io/DepHub-Web/json/search.json", null, new Response.Listener<JSONArray>() {
 
                                     @Override
                                     public void onResponse(JSONArray response) {
-                                        for (int i = 0; i < response.length( ); i++) {
+                                        for (int i = 0; i < response.length(); i++) {
                                             try {
                                                 textView.setText("Loading");
                                                 progressBar.setVisibility(View.VISIBLE);
@@ -85,21 +85,21 @@ public class URL extends AppCompatActivity {
 
                                                 if (id.equals(parameters)) {
 
-                                                    String title = jsonObject.getString("Dependency Name");
-                                                    String devname = jsonObject.getString("Developer Name");
-                                                    String weblink = jsonObject.getString("Github Link");
-                                                    String youtubelink = jsonObject.getString("YouTube Link");
+                                                    String dependencyName = jsonObject.getString("Dependency Name");
+                                                    String developerName = jsonObject.getString("Developer Name");
+                                                    String githubLink = jsonObject.getString("Github Link");
+                                                    String youtubeLink = jsonObject.getString("YouTube Link");
                                                     String license = jsonObject.getString("License");
-                                                    String licenselink = jsonObject.getString("License Link");
+                                                    String licenseLink = jsonObject.getString("License Link");
 
-                                                    Intent intent = new Intent(URL.this,Web.class);
-                                                    intent.putExtra("id",id);
-                                                    intent.putExtra("title",title);
-                                                    intent.putExtra("devname",devname);
-                                                    intent.putExtra("link",weblink);
-                                                    intent.putExtra("ylink",youtubelink);
-                                                    intent.putExtra("license",license);
-                                                    intent.putExtra("licenselink",licenselink);
+                                                    Intent intent = new Intent(URL.this, Web.class);
+                                                    intent.putExtra("id", id);
+                                                    intent.putExtra("dependencyName", dependencyName);
+                                                    intent.putExtra("developerName", developerName);
+                                                    intent.putExtra("githubLink", githubLink);
+                                                    intent.putExtra("youtubeLink", youtubeLink);
+                                                    intent.putExtra("license", license);
+                                                    intent.putExtra("licenseLink", licenseLink);
                                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                                     }
@@ -115,11 +115,11 @@ public class URL extends AppCompatActivity {
                                                 textView.setText("Loading");
                                                 progressBar.setVisibility(View.VISIBLE);
                                                 home.setVisibility(View.GONE);
-                                                e.printStackTrace( );
+                                                e.printStackTrace();
                                             }
                                         }
                                     }
-                                },new Response.ErrorListener( ) {
+                                }, new Response.ErrorListener() {
                                     @Override
                                     public void onErrorResponse(VolleyError error) {
                                         textView.setText("There is some error while loading Dependency");
@@ -147,14 +147,14 @@ public class URL extends AppCompatActivity {
                 home.setVisibility(View.VISIBLE);
             }
         } else {
-            startActivity(new Intent(URL.this,Login.class));
-            finish( );
+            startActivity(new Intent(URL.this, Login.class));
+            finish();
         }
     }
 
     @Override
     protected void onDestroy() {
-        getCacheDir( ).delete( );
-        super.onDestroy( );
+        getCacheDir().delete();
+        super.onDestroy();
     }
 }

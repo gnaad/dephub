@@ -7,14 +7,14 @@
     android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbarfav"
+        android:id="@+id/appbarFavorites"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbarfav"
+            android:id="@+id/toolbarFavorites"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|enterAlways"
@@ -24,17 +24,17 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/favoriterv"
+        android:id="@+id/favoriteRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/appbarfav"
+        android:layout_below="@id/appbarFavorites"
         android:clipToPadding="false"
         android:overScrollMode="never"
         android:paddingTop="14dp"
         android:visibility="visible" />
 
     <com.github.aakira.compoundicontextview.CompoundIconTextView
-        android:id="@+id/nodependencyfav"
+        android:id="@+id/noDependencyFavorites"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -52,10 +52,10 @@
         app:cit_iconWidth="350sp" />
 
     <TextView
-        android:id="@+id/favtext"
+        android:id="@+id/favoritesText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/nodependencyfav"
+        android:layout_below="@id/noDependencyFavorites"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10sp"
         android:text="@string/fav_desc"

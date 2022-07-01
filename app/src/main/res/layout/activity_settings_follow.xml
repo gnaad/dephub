@@ -7,16 +7,16 @@
     android:orientation="vertical">
 
     <ListView
-        android:id="@+id/listview2"
+        android:id="@+id/favoriteListview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/appbarfollow"
-        android:layout_above="@id/adfollow"
+        android:layout_below="@id/appbarFollow"
+        android:layout_above="@id/adFollow"
         android:listSelector="@android:color/transparent"
         android:overScrollMode="never" />
 
     <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/adfollow"
+        android:id="@+id/adFollow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -25,14 +25,14 @@
         ads:adUnitId="ca-app-pub-3037529522611130/2556459152" />
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbarfollow"
+        android:id="@+id/appbarFollow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbarfollow"
+            android:id="@+id/toolbarFollow"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|enterAlways"

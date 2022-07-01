@@ -1,5 +1,6 @@
 package com.dephub.android.firebase;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -29,24 +30,31 @@ public class Messaging extends FirebaseMessagingService {
 
         super.onMessageReceived(remoteMessage);
 
-        Log.d(TAG,"From: " + remoteMessage.getFrom( ));
-        if (remoteMessage.getData( ).size( ) > 0) {
-            Log.d(TAG,"Message data payload: " + remoteMessage.getData( ));
-            if (remoteMessage.getNotification( ) != null) {
-                Log.d(TAG,"Message Notification Body: " + remoteMessage.getNotification( ).getBody( ));
+        Log.d(TAG, "From: " + remoteMessage.getFrom());
+        if (remoteMessage.getData().size() > 0) {
+            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
+            if (remoteMessage.getNotification() != null) {
+                Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
             }
         }
         //noinspection ConstantConditions
-        sendNotification(remoteMessage.getNotification( ).getTitle( ),remoteMessage.getNotification( ).getBody( ),remoteMessage.getNotification( ).getClickAction( ));
+        sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody(), remoteMessage.getNotification().getClickAction());
     }
 
-    private void sendNotification(String title,String messageBody,String click) {
-        Intent intent = new Intent(this,SplashScreen.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_ONE_SHOT);
+    private void sendNotification(String title, String messageBody, String click) {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("General", "General", NotificationManager.IMPORTANCE_DEFAULT);
+            notificationManager.createNotificationChannel(channel);
+        }
 
-        Bitmap icon = BitmapFactory.decodeResource(getResources( ),R.mipmap.ic_launcher_round);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this,"General")
+        Intent intent = new Intent(this, SplashScreen.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        @SuppressLint("UnspecifiedImmutableFlag")
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "General")
                 .setSmallIcon(R.mipmap.ic_logowithoutbackground)
                 .setLargeIcon(icon)
                 .setDefaults(Notification.DEFAULT_VIBRATE)
@@ -54,18 +62,13 @@ public class Messaging extends FirebaseMessagingService {
                 .setContentTitle(title)
                 .setDefaults(Notification.DEFAULT_SOUND)
                 .setContentText(messageBody)
-                .setColor(ContextCompat.getColor(this,R.color.blue))
+                .setColor(ContextCompat.getColor(this, R.color.blue))
                 .setAutoCancel(true)
-                .setLights(getResources( ).getColor(R.color.blue),500,500)
+                .setLights(getResources().getColor(R.color.blue), 500, 500)
                 .setGroup("Unread Notification")
                 .setGroupSummary(true)
                 .setContentIntent(pendingIntent);
 
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("General","General",NotificationManager.IMPORTANCE_DEFAULT);
-            notificationManager.createNotificationChannel(channel);
-        }
-        notificationManager.notify(0,notificationBuilder.build( ));
+        notificationManager.notify(0, notificationBuilder.build());
     }
 }

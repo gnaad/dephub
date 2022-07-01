@@ -20,7 +20,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.browser.customtabs.CustomTabsIntent;
@@ -28,95 +27,72 @@ import androidx.core.content.ContextCompat;
 
 import com.dephub.android.R;
 
-
 public class Login extends AppCompatActivity {
-    public static final String pp = "https://gnanendraprasadp.github.io/DepHub-Web/privacypolicy";
-    public static final String tos = "https://gnanendraprasadp.github.io/DepHub-Web/termsofservice";
-    public TextView textView;
-    public Button signInButton;
+    public static final String privacyPolicy = "https://gnanendraprasadp.github.io/DepHub-Web/privacypolicy";
+    public static final String termsOfService = "https://gnanendraprasadp.github.io/DepHub-Web/termsofservice";
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow( ).setFlags(LayoutParams.FLAG_FULLSCREEN,LayoutParams.FLAG_FULLSCREEN);
-        getWindow( ).addFlags(LayoutParams.FLAG_FULLSCREEN);
+        this.getWindow().setFlags(LayoutParams.FLAG_FULLSCREEN, LayoutParams.FLAG_FULLSCREEN);
+        getWindow().addFlags(LayoutParams.FLAG_FULLSCREEN);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            getWindow( ).getAttributes( ).layoutInDisplayCutoutMode = LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+            getWindow().getAttributes().layoutInDisplayCutoutMode = LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
 
         }
-        getSupportActionBar( ).hide( );
+        getSupportActionBar().hide();
 
         setContentView(R.layout.activity_login);
 
-        textView = findViewById(R.id.tnc);
+        TextView termsAndCondition = findViewById(R.id.footer);
 
-        String text1 = "By continuing you agree to DepHub's Terms of Service and Privacy Policy.";
-        textView.setText(text1);
+        String footer = "By continuing you agree to DepHub's Terms of Service and Privacy Policy.";
+        termsAndCondition.setText(footer);
 
-        SpannableString ss1 = new SpannableString(text1);
+        SpannableString spannableStringFooter = new SpannableString(footer);
 
-        ClickableSpan clickableSpan1 = new ClickableSpan( ) {
+        ClickableSpan clickableSpanTerms = new ClickableSpan() {
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.setUnderlineText(false);    // this remove the underline
+                ds.setUnderlineText(false);
             }
 
             @Override
             public void onClick(@NonNull View widget) {
-                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder( );
-
-                builder.setToolbarColor(ContextCompat.getColor(Login.this,R.color.colorPrimary));
-                builder.setShowTitle(true);
-                builder.addDefaultShareMenuItem( );
-                builder.setUrlBarHidingEnabled(false);
-                builder.setStartAnimations(Login.this,R.anim.slide_up,R.anim.trans);
-                builder.setExitAnimations(Login.this,R.anim.trans,R.anim.slide_down);
-                CustomTabsIntent customTabsIntent = builder.build( );
-                customTabsIntent.launchUrl(Login.this,Uri.parse(pp));
+                openCustomTabs(privacyPolicy);
             }
         };
 
-        ClickableSpan clickableSpan2 = new ClickableSpan( ) {
+        ClickableSpan clickableSpanPolicy = new ClickableSpan() {
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.setUnderlineText(false);    // this remove the underline
+                ds.setUnderlineText(false);
             }
 
             @Override
             public void onClick(@NonNull View widget) {
-                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder( );
-
-                builder.setToolbarColor(ContextCompat.getColor(Login.this,R.color.colorPrimary));
-                builder.setShowTitle(true);
-                builder.addDefaultShareMenuItem( );
-                builder.setUrlBarHidingEnabled(false);
-                builder.setStartAnimations(Login.this,R.anim.slide_up,R.anim.trans);
-                builder.setExitAnimations(Login.this,R.anim.trans,R.anim.slide_down);
-                CustomTabsIntent customTabsIntent = builder.build( );
-                customTabsIntent.launchUrl(Login.this,Uri.parse(tos));
+                openCustomTabs(termsOfService);
             }
         };
 
-        ss1.setSpan(clickableSpan2,36,52,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss1.setSpan(clickableSpan1,57,71,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableStringFooter.setSpan(clickableSpanPolicy, 36, 52, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableStringFooter.setSpan(clickableSpanTerms, 57, 71, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        ForegroundColorSpan fcsRed1 = new ForegroundColorSpan(getColor(R.color.colorAccent));
-        ForegroundColorSpan fcsRed2 = new ForegroundColorSpan(getColor(R.color.colorAccent));
+        ForegroundColorSpan fcsTerms = new ForegroundColorSpan(getColor(R.color.colorAccent));
+        ForegroundColorSpan fcsPolicy = new ForegroundColorSpan(getColor(R.color.colorAccent));
 
-        ss1.setSpan(fcsRed1,36,52,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss1.setSpan(fcsRed2,57,71,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableStringFooter.setSpan(fcsTerms, 36, 52, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableStringFooter.setSpan(fcsPolicy, 57, 71, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        textView.setText(ss1);
-        textView.setMovementMethod(LinkMovementMethod.getInstance( ));
+        termsAndCondition.setText(spannableStringFooter);
+        termsAndCondition.setMovementMethod(LinkMovementMethod.getInstance());
 
-        View decorView = getWindow( ).getDecorView( );
+        View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -127,30 +103,38 @@ public class Login extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_IMMERSIVE
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 
-        signInButton = findViewById(R.id.sign_in);
+        Button signInButton = findViewById(R.id.sign_in);
 
-        SharedPreferences prefs = getSharedPreferences("policy",MODE_PRIVATE);
-        boolean firstStart = prefs.getBoolean("agreed",false);
+        SharedPreferences prefs = getSharedPreferences("policy", MODE_PRIVATE);
+        boolean firstStart = prefs.getBoolean("agreed", false);
 
         if (firstStart) {
-            startActivity(new Intent(Login.this,SplashScreen.class));
-            finish( );
+            startActivity(new Intent(Login.this, SplashScreen.class));
+            finish();
         }
 
-        signInButton.setOnClickListener(new View.OnClickListener( ) {
-            @Override
-            public void onClick(View view) {
-                SharedPreferences prefs = getSharedPreferences("policy",MODE_PRIVATE);
-                SharedPreferences.Editor editor = prefs.edit( );
-                editor.putBoolean("agreed",true);
-                editor.apply( );
+        signInButton.setOnClickListener(view -> {
+            SharedPreferences prefs1 = getSharedPreferences("policy", MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs1.edit();
+            editor.putBoolean("agreed", true);
+            editor.apply();
 
-                Intent intent = new Intent(Login.this, AppIntroduction.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish( );
-            }
+            Intent intent = new Intent(Login.this, AppIntroduction.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
         });
     }
-}
 
+    private void openCustomTabs(String url) {
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        builder.setToolbarColor(ContextCompat.getColor(Login.this, R.color.colorPrimary));
+        builder.setShowTitle(true);
+        builder.addDefaultShareMenuItem();
+        builder.setUrlBarHidingEnabled(false);
+        builder.setStartAnimations(Login.this, R.anim.slide_up, R.anim.trans);
+        builder.setExitAnimations(Login.this, R.anim.trans, R.anim.slide_down);
+        CustomTabsIntent customTabsIntent = builder.build();
+        customTabsIntent.launchUrl(Login.this, Uri.parse(url));
+    }
+}

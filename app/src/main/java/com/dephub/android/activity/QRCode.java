@@ -49,11 +49,11 @@ import androidmads.library.qrgenearator.QRGEncoder;
 
 public class QRCode extends AppCompatActivity {
     RelativeLayout relativeLayout;
-    private Resources mResources;
-    private AdView mAdView;
-    private InterstitialAd interstitialAdqrcode;
+    private InterstitialAd qrCodeInterstitialAd;
+    Button download;
+    Boolean goBack;
 
-    @SuppressLint({"WrongThread","ResourceAsColor"})
+    @SuppressLint({"WrongThread", "ResourceAsColor", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,41 +61,40 @@ public class QRCode extends AppCompatActivity {
 
         setContentView(R.layout.activity_qrcode);
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,WindowManager.LayoutParams.FLAG_SECURE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 
-        String qrlinkrec = getIntent( ).getExtras( ).getString("qrcodelink");
-        String qrlinktitle = getIntent( ).getExtras( ).getString("qrcodetitle");
-        String qrlinkid = getIntent( ).getExtras( ).getString("qrcodeid");
-        String devname = getIntent( ).getExtras( ).getString("devname");
+        String qrCodeLink = getIntent().getExtras().getString("qrCodeLink");
+        String qrCodeTitle = getIntent().getExtras().getString("qrCodeTitle");
+        String qrCodeId = getIntent().getExtras().getString("qrCodeId");
+        String devName = getIntent().getExtras().getString("developerName");
 
-        ImageView compoundIconTextView = findViewById(R.id.dephublogo);
+        ImageView logo = findViewById(R.id.dephubLogo);
 
-        TextView textView = findViewById(R.id.qrcodetitle);
-        textView.setText("Dependency : " + qrlinktitle);
+        TextView title = findViewById(R.id.qrCodeTitle);
+        title.setText("Dependency : " + qrCodeTitle);
 
-        textView.setOnLongClickListener(new View.OnLongClickListener( ) {
+        title.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText(QRCode.this,"Dependency Id : " + qrlinkid,Toast.LENGTH_SHORT).show( );
+                Toast.makeText(QRCode.this, "Dependency Id : " + qrCodeId, Toast.LENGTH_SHORT).show();
                 return false;
             }
         });
 
-        TextView textView1 = findViewById(R.id.qrcodedeveloper);
-        textView1.setText("Developer : " + devname);
+        TextView developerName = findViewById(R.id.qrCodeDeveloper);
+        developerName.setText("Developer : " + devName);
 
-        //
-        MobileAds.initialize(this,new OnInitializationCompleteListener( ) {
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
             }
         });
 
-        mAdView = findViewById(R.id.adqrcode);
-        AdRequest adRequest = new AdRequest.Builder( ).build( );
-        mAdView.loadAd(adRequest);
+        AdView qrCodeAdView = findViewById(R.id.adQrCode);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        qrCodeAdView.loadAd(adRequest);
 
-        mAdView.setAdListener(new AdListener( ) {
+        qrCodeAdView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
             }
@@ -120,14 +119,14 @@ public class QRCode extends AppCompatActivity {
         //
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow( ).setNavigationBarColor(getResources( ).getColor(R.color.black));
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.black));
         }
 
-        Toolbar toolbar = findViewById(R.id.toolbarqrcode);
+        Toolbar toolbar = findViewById(R.id.toolbarQrCode);
         toolbar.setTitle("QR Code");
         toolbar.setNavigationIcon(R.drawable.ic_back);
 
-        int nightModeFlags = getResources( ).getConfiguration( ).uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
             int white = Color.parseColor("#ffffff");
             toolbar.setTitleTextColor(white);
@@ -138,155 +137,149 @@ public class QRCode extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
-        ImageView imageView = findViewById(R.id.qrcode);
+        ImageView imageView = findViewById(R.id.qrCode);
+        QRGEncoder qrCodeCreate = new QRGEncoder("https://dephub.co/app/" + qrCodeId, null, QRGContents.Type.TEXT, 650);
+        qrCodeCreate.setColorBlack(Color.BLACK);
+        qrCodeCreate.setColorWhite(Color.WHITE);
 
-        QRGEncoder qrEncoder = new QRGEncoder("https://dephub.co/app/" + qrlinkid,null,QRGContents.Type.TEXT,650);
-        qrEncoder.setColorBlack(Color.BLACK);
-        qrEncoder.setColorWhite(Color.WHITE);
+        Bitmap bitmap = qrCodeCreate.getBitmap();
 
-        Bitmap bitmap = qrEncoder.getBitmap( );
-
-        mResources = getResources( );
+        Resources mResources = getResources();
 
         float cornerRadius = 50.0f;
-        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(mResources,bitmap);
+        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(mResources, bitmap);
         roundedBitmapDrawable.setCornerRadius(cornerRadius);
         roundedBitmapDrawable.setAntiAlias(true);
-
         imageView.setImageDrawable(roundedBitmapDrawable);
 
         relativeLayout = findViewById(R.id.relativelayout);
 
         // Interstitial Ad start
-        MobileAds.initialize(this,new OnInitializationCompleteListener( ) {
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
             }
         });
 
-
-        AdRequest adRequest1 = new AdRequest.Builder( ).build( );
+        AdRequest qrCodeAd = new AdRequest.Builder().build();
 
         InterstitialAd.load
-                (this,"ca-app-pub-3037529522611130/4061112510",adRequest1,new InterstitialAdLoadCallback( ) {
+                (QRCode.this, "ca-app-pub-3037529522611130/4061112510", qrCodeAd, new InterstitialAdLoadCallback() {
                     @Override
                     public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-                        interstitialAdqrcode = interstitialAd;
+                        qrCodeInterstitialAd = interstitialAd;
 
-                        interstitialAdqrcode.setFullScreenContentCallback(new FullScreenContentCallback( ) {
+                        interstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
                             @Override
                             public void onAdShowedFullScreenContent() {
                             }
 
                             @Override
                             public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
-                                compoundIconTextView.setVisibility(View.VISIBLE);
-                                Bitmap image = getBitmapFromView(relativeLayout);
-
-                                try {
-
-                                    File cachePath = new File(getApplicationContext( ).getCacheDir( ),"qrcode");
-                                    //noinspection ResultOfMethodCallIgnored
-                                    cachePath.mkdirs( );
-                                    FileOutputStream stream = new FileOutputStream(cachePath + "/qrcode.png");
-                                    image.compress(Bitmap.CompressFormat.PNG,100,stream);
-                                    stream.close( );
-
-                                } catch (IOException e) {
-                                    e.printStackTrace( );
-                                }
-
-                                File imagePath = new File(getApplicationContext( ).getCacheDir( ),"qrcode");
-                                File newFile = new File(imagePath,"/qrcode.png");
-                                Uri contentUri = FileProvider.getUriForFile(getApplicationContext( ),"com.dephub.android.fileprovider",newFile);
-
-                                if (contentUri != null) {
-                                    String text = "Dependency Name : " + qrlinktitle + "\nDependency Link : " + qrlinkrec + "\n\nIn-App link : https://dephub.co/app/" + qrlinkid + "\n\nInformation Delivered by : DepHub\nInformation Provided by : GitHub\n\nDownload our Android App : https://bit.ly/installdephubapp\n\nThank You\nLet's code for a better tomorrow";
-                                    String subject = "QR Code of " + qrlinktitle;
-                                    Intent shareIntent = new Intent( );
-                                    shareIntent.setAction(Intent.ACTION_SEND);
-                                    shareIntent.setType("image/jpeg");
-                                    shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,subject);
-                                    shareIntent.putExtra(android.content.Intent.EXTRA_TEXT,text);
-                                    shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                                    shareIntent.setDataAndType(contentUri,getContentResolver( ).getType(contentUri));
-                                    shareIntent.putExtra(Intent.EXTRA_STREAM,contentUri);
-                                    startActivity(Intent.createChooser(shareIntent,"Share using"));
+                                if (goBack) {
+                                    QRCode.super.onBackPressed();
+                                } else {
                                 }
                             }
 
                             @Override
                             public void onAdDismissedFullScreenContent() {
-                                compoundIconTextView.setVisibility(View.VISIBLE);
-                                Bitmap image = getBitmapFromView(relativeLayout);
-
-                                try {
-
-                                    File cachePath = new File(getApplicationContext( ).getCacheDir( ),"qrcode");
-                                    //noinspection ResultOfMethodCallIgnored
-                                    cachePath.mkdirs( );
-                                    FileOutputStream stream = new FileOutputStream(cachePath + "/qrcode.png");
-                                    image.compress(Bitmap.CompressFormat.PNG,100,stream);
-                                    stream.close( );
-
-                                } catch (IOException e) {
-                                    e.printStackTrace( );
-                                }
-
-                                File imagePath = new File(getApplicationContext( ).getCacheDir( ),"qrcode");
-                                File newFile = new File(imagePath,"/qrcode.png");
-                                Uri contentUri = FileProvider.getUriForFile(getApplicationContext( ),"com.dephub.android.fileprovider",newFile);
-
-                                if (contentUri != null) {
-                                    String text = "Dependency Name : " + qrlinktitle + "\nDependency Link : " + qrlinkrec + "\n\nIn-App link : https://dephub.co/app/" + qrlinkid + "\n\nInformation Delivered by : DepHub\nInformation Provided by : GitHub\n\nDownload our Android App : https://bit.ly/installdephubapp\n\nThank You\nLet's code for a better tomorrow";
-                                    String subject = "QR Code of " + qrlinktitle;
-                                    Intent shareIntent = new Intent( );
-                                    shareIntent.setAction(Intent.ACTION_SEND);
-                                    shareIntent.setType("image/jpeg");
-                                    shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,subject);
-                                    shareIntent.putExtra(android.content.Intent.EXTRA_TEXT,text);
-                                    shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                                    shareIntent.setDataAndType(contentUri,getContentResolver( ).getType(contentUri));
-                                    shareIntent.putExtra(Intent.EXTRA_STREAM,contentUri);
-                                    startActivity(Intent.createChooser(shareIntent,"Share using"));
+                                if (goBack) {
+                                    QRCode.super.onBackPressed();
+                                } else {
                                 }
                             }
                         });
-
                     }
 
                     @Override
                     public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                        // Handle the error
-                        interstitialAdqrcode = null;
+
                     }
                 });
 
+
         // Interstitial Ad End
 
-        Button qrdownload = findViewById(R.id.download);
-
-        qrdownload.setOnClickListener(new View.OnClickListener( ) {
+        download = findViewById(R.id.download);
+        download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (interstitialAdqrcode != null) {
-                    interstitialAdqrcode.show(QRCode.this);
-                } else {
-                    Toast.makeText(QRCode.this,"Oh No! Something went wrong while capturing QR Code. Tap Share button again to Recapture QR Code.",Toast.LENGTH_LONG).show( );
+                logo.setVisibility(View.VISIBLE);
+                Bitmap image = getBitmapFromView(relativeLayout);
+
+                try {
+                    File cachePath = new File(getApplicationContext().getCacheDir(), "qrcode");
+                    cachePath.mkdirs();
+                    FileOutputStream stream = new FileOutputStream(cachePath + "/qrcode.png");
+                    image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    stream.close();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                File imagePath = new File(getApplicationContext().getCacheDir(), "qrcode");
+                File newFile = new File(imagePath, "/qrcode.png");
+                Uri contentUri = FileProvider.getUriForFile(getApplicationContext(), "com.dephub.android.fileprovider", newFile);
+
+                if (contentUri != null) {
+                    String text = "Dependency Name : " + qrCodeTitle + "\nDependency Link : " + qrCodeLink + "\n\nIn-App link : https://dephub.co/app/" + qrCodeId + "\n\nInformation Delivered by : DepHub\nInformation Provided by : GitHub\n\nDownload our Android App : https://bit.ly/installdephubapp\n\nThank You\nLet's code for a better tomorrow";
+                    String subject = "QR Code of " + qrCodeTitle;
+                    Intent shareIntent = new Intent();
+                    shareIntent.setAction(Intent.ACTION_SEND);
+                    shareIntent.setType("image/png");
+                    shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);
+                    shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, text);
+                    shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    shareIntent.setDataAndType(contentUri, getContentResolver().getType(contentUri));
+                    shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+                    startActivity(Intent.createChooser(shareIntent, "Share using"));
                 }
             }
         });
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        if (qrCodeInterstitialAd != null) {
+            goBack = true;
+            qrCodeInterstitialAd.show(QRCode.this);
+        } else {
+            super.onBackPressed();
+        }
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (qrCodeInterstitialAd != null) {
+            goBack = true;
+            qrCodeInterstitialAd.show(QRCode.this);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        if (qrCodeInterstitialAd != null) {
+            goBack = false;
+            qrCodeInterstitialAd.show(QRCode.this);
+        } else {
+        }
+        super.onResume();
+    }
+
     @SuppressLint("ResourceAsColor")
     private Bitmap getBitmapFromView(View view) {
-        Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth( ),view.getHeight( ),Bitmap.Config.ARGB_8888);
+        Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(returnedBitmap);
-        Drawable bgDrawable = view.getBackground( );
+        Drawable bgDrawable = view.getBackground();
         if (bgDrawable != null) {
             bgDrawable.draw(canvas);
         } else {
-            int nightModeFlags = getResources( ).getConfiguration( ).uiMode & Configuration.UI_MODE_NIGHT_MASK;
+            int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
             if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
                 int black = Color.parseColor("#000000");
 
@@ -299,11 +292,5 @@ public class QRCode extends AppCompatActivity {
         }
         view.draw(canvas);
         return returnedBitmap;
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed( );
-        return true;
     }
 }

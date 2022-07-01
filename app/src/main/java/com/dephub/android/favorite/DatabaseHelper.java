@@ -26,7 +26,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     SQLiteDatabase sqLiteDatabase;
 
     public DatabaseHelper(Context context) {
-        super(context,DATABASE_NAME,null,DATABASE_VERSION);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
@@ -46,26 +46,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db,int oldVersion,int newVersion) {
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(" DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
-        db.close( );
+        db.close();
     }
 
-    public boolean insertData(String depid,String dependencyname,String developername,String githublink,String cardbackground,String fullname,String license,String licenselink,String youtubelink) {
-        sqLiteDatabase = this.getWritableDatabase( );
-        ContentValues values = new ContentValues( );
-        values.put(KEY_DEPID,depid);
-        values.put(KEY_DEPENDENCYNAME,dependencyname);
-        values.put(KEY_DEVELOPERNAME,developername);
-        values.put(KEY_GITHUBLINK,githublink);
-        values.put(KEY_FULLNAME,fullname);
-        values.put(KEY_LICENSE,license);
-        values.put(KEY_LICENSELINK,licenselink);
-        values.put(KEY_CARDBACKGROUND,cardbackground);
-        values.put(KEY_YOUTUBELINK,youtubelink);
-        long result = sqLiteDatabase.insert(TABLE_NAME,null,values);
-        sqLiteDatabase.close( );
+    public boolean insertData(String depid, String dependencyname, String developername, String githublink, String cardbackground, String fullname, String license, String licenselink, String youtubelink) {
+        sqLiteDatabase = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_DEPID, depid);
+        values.put(KEY_DEPENDENCYNAME, dependencyname);
+        values.put(KEY_DEVELOPERNAME, developername);
+        values.put(KEY_GITHUBLINK, githublink);
+        values.put(KEY_FULLNAME, fullname);
+        values.put(KEY_LICENSE, license);
+        values.put(KEY_LICENSELINK, licenselink);
+        values.put(KEY_CARDBACKGROUND, cardbackground);
+        values.put(KEY_YOUTUBELINK, youtubelink);
+        long result = sqLiteDatabase.insert(TABLE_NAME, null, values);
+        sqLiteDatabase.close();
         if (result == -1) {
             return false;
         } else {
@@ -74,12 +74,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Cursor getFavorite() {
-        sqLiteDatabase = this.getWritableDatabase( );
-        return sqLiteDatabase.rawQuery(" SELECT * FROM " + TABLE_NAME,null);
+        sqLiteDatabase = this.getWritableDatabase();
+        return sqLiteDatabase.rawQuery(" SELECT * FROM " + TABLE_NAME, null);
     }
 
     public Integer deleteFavorite(String depid) {
-        sqLiteDatabase = this.getWritableDatabase( );
-        return sqLiteDatabase.delete(TABLE_NAME,"depid=?",new String[]{depid});
+        sqLiteDatabase = this.getWritableDatabase();
+        return sqLiteDatabase.delete(TABLE_NAME, "depid=?", new String[]{depid});
     }
 }

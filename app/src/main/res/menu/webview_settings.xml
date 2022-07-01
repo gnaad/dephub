@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/qrcode"
+        android:id="@+id/qrCode"
         android:icon="@drawable/ic_qr"
         android:title="Show QR Code"
         app:showAsAction="ifRoom" />

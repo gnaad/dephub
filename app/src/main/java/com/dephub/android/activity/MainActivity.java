@@ -8,7 +8,6 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.Menu;
@@ -41,6 +40,15 @@ import com.dephub.android.fragment.Others;
 import com.dephub.android.fragment.Text;
 import com.dephub.android.fragment.Widget;
 import com.dephub.android.settings.Options;
+import com.google.android.gms.ads.AdError;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
@@ -52,13 +60,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    String remoteversioncode;
+    private String remoteVersionCode;
     ProgressDialog progressDialog;
-    private FirebaseRemoteConfig mFirebaseRemoteConfig;
+    private FirebaseRemoteConfig remoteValue;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private InterstitialAd MainActivityInterstitialAd;
+    private Boolean goBack;
 
-    @SuppressLint({"ResourceAsColor","UseCompatLoadingForDrawables","RestrictedApi"})
+    @SuppressLint({"ResourceAsColor", "UseCompatLoadingForDrawables", "RestrictedApi"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,20 +79,18 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_mainactivity);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow( ).setNavigationBarColor(getResources( ).getColor(R.color.black));
-        }
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.black));
 
         int limit = 10;
-        tabLayout = findViewById(R.id.tabsma);
-        viewPager = findViewById(R.id.viewpagerma);
+        tabLayout = findViewById(R.id.tabsMainActivity);
+        viewPager = findViewById(R.id.viewPagerMainActivity);
         viewPager.setOffscreenPageLimit(limit);
 
-        Toolbar toolbar = findViewById(R.id.toolbarma);
-        AppBarLayout appBarLayout = findViewById(R.id.appbarma);
+        Toolbar toolbar = findViewById(R.id.toolbarMainActivity);
+        AppBarLayout appBarLayout = findViewById(R.id.appbarMainActivity);
         toolbar.setTitle("DepHub");
 
-        int nightModeFlags = getResources( ).getConfiguration( ).uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
             int white = Color.parseColor("#ffffff");
             toolbar.setTitleTextColor(white);
@@ -93,119 +101,161 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
-        progressDialog = new ProgressDialog(MainActivity.this,R.style.CustomAlertDialog);
+        progressDialog = new ProgressDialog(MainActivity.this, R.style.CustomAlertDialog);
         progressDialog.setMessage("Loading");
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(false);
 
-        Drawable drawable = toolbar.getOverflowIcon( );
+        Drawable drawable = toolbar.getOverflowIcon();
         //noinspection ConstantConditions
-        DrawableCompat.setTint(drawable.mutate( ),getResources( ).getColor(R.color.toolbaricon));
+        DrawableCompat.setTint(drawable.mutate(), getResources().getColor(R.color.toolbaricon));
         toolbar.setOverflowIcon(drawable);
 
         //noinspection ConstantConditions
-        getSupportActionBar( ).setElevation(0);
+        getSupportActionBar().setElevation(0);
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
 
-        mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance( );
-        mFirebaseRemoteConfig.fetch(0);
-        FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder( )
+        remoteValue = FirebaseRemoteConfig.getInstance();
+        remoteValue.fetch(0);
+        FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
                 .setMinimumFetchIntervalInSeconds(0)
-                .build( );
+                .build();
 
-        mFirebaseRemoteConfig.setDefaultsAsync(R.xml.default_map);
+        remoteValue.setDefaultsAsync(R.xml.default_map);
 
-        mFirebaseRemoteConfig.fetchAndActivate( ).addOnCompleteListener(this,new OnCompleteListener<Boolean>( ) {
+        remoteValue.fetchAndActivate().addOnCompleteListener(this, new OnCompleteListener<Boolean>() {
             @Override
             public void onComplete(@NonNull Task<Boolean> task) {
-                if (task.isSuccessful( )) {
-
+                if (task.isSuccessful()) {
                     int versionName = BuildConfig.VERSION_CODE;
-                    remoteversioncode = mFirebaseRemoteConfig.getString("version_code");
-                    if (Integer.parseInt(remoteversioncode) == versionName) {
+                    remoteVersionCode = remoteValue.getString("version_code");
+                    if (Integer.parseInt(remoteVersionCode) == versionName) {
 
                     } else {
-                        update("com.dephub.android");
+                        update();
                     }
                 }
             }
         });
 
-        mFirebaseRemoteConfig.fetchAndActivate( ).addOnCompleteListener(this,new OnCompleteListener<Boolean>( ) {
+        remoteValue.fetchAndActivate().addOnCompleteListener(this, new OnCompleteListener<Boolean>() {
             @Override
             public void onComplete(@NonNull Task<Boolean> task) {
-                if (task.isSuccessful( )) {
-                    final String visibility = mFirebaseRemoteConfig.getString("visibility");
+                if (task.isSuccessful()) {
+                    final String visibility = remoteValue.getString("visibility");
 
                     //noinspection StatementWithEmptyBody
                     if (visibility.equals("visible")) {
 
                     } else {
-                        invisible( );
+                        invisible();
                     }
                 }
             }
         });
 
-        mFirebaseRemoteConfig.fetchAndActivate( ).addOnCompleteListener(this,new OnCompleteListener<Boolean>( ) {
+        remoteValue.fetchAndActivate().addOnCompleteListener(this, new OnCompleteListener<Boolean>() {
             @Override
             public void onComplete(@NonNull Task<Boolean> task) {
-                if (task.isSuccessful( )) {
-                    final String server_busy = mFirebaseRemoteConfig.getString("server_busy");
-
+                if (task.isSuccessful()) {
+                    final String server_busy = remoteValue.getString("server_busy");
                     if (server_busy.equals("yes")) {
-                        serverbusy( );
+                        serverBusy();
                     }
                 }
             }
         });
+
+        // Interstitial Ad start
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+
+        AdRequest MainActivityAdRequest = new AdRequest.Builder().build();
+
+        InterstitialAd.load
+                (this, "ca-app-pub-3037529522611130/2378062737", MainActivityAdRequest, new InterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                        MainActivityInterstitialAd = interstitialAd;
+
+                        interstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                            @Override
+                            public void onAdShowedFullScreenContent() {
+                            }
+
+                            @Override
+                            public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                                if (goBack) {
+                                    MainActivity.super.onBackPressed();
+                                } else {
+                                }
+                            }
+
+                            @Override
+                            public void onAdDismissedFullScreenContent() {
+                                if (goBack) {
+                                    MainActivity.super.onBackPressed();
+                                } else {
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+
+                    }
+                });
+        // Interstitial Ad End
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager( ));
-        adapter.addFragment(new Text( ),"Text");
-        adapter.addFragment(new Button( ),"Button");
-        adapter.addFragment(new Widget( ),"Widgets");
-        adapter.addFragment(new Layout( ),"Layout");
-        adapter.addFragment(new Container( ),"Container");
-        adapter.addFragment(new Helper( ),"Helper");
-        adapter.addFragment(new Google( ),"Google");
-        adapter.addFragment(new Legacy( ),"Legacy");
-        adapter.addFragment(new Others( ),"Others");
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new Text(), "Text");
+        adapter.addFragment(new Button(), "Button");
+        adapter.addFragment(new Widget(), "Widgets");
+        adapter.addFragment(new Layout(), "Layout");
+        adapter.addFragment(new Container(), "Container");
+        adapter.addFragment(new Helper(), "Helper");
+        adapter.addFragment(new Google(), "Google");
+        adapter.addFragment(new Legacy(), "Legacy");
+        adapter.addFragment(new Others(), "Others");
         viewPager.setAdapter(adapter);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater( );
-        menuInflater.inflate(R.menu.mainactivity_settings,menu);
-
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.mainactivity_settings, menu);
         return true;
     }
 
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId( )) {
+        switch (item.getItemId()) {
             case R.id.settings_news:
-                Intent intent1 = new Intent(this,News.class);
+                Intent intent1 = new Intent(this, News.class);
                 this.startActivity(intent1);
                 break;
             case R.id.action_search:
-                Intent intent2 = new Intent(this,Search.class);
+                Intent intent2 = new Intent(this, Search.class);
                 this.startActivity(intent2);
                 break;
             case R.id.settings_submityourdependency:
-                Intent intent3 = new Intent(this,SubmitDependency.class);
+                Intent intent3 = new Intent(this, SubmitDependency.class);
                 this.startActivity(intent3);
                 break;
             case R.id.settings:
-                Intent intent5 = new Intent(this,Options.class);
+                Intent intent5 = new Intent(this, Options.class);
                 this.startActivity(intent5);
                 break;
             case R.id.favactivity:
-                Intent intent6 = new Intent(this,Favorite.class);
+                Intent intent6 = new Intent(this, Favorite.class);
                 this.startActivity(intent6);
                 break;
             default:
@@ -217,109 +267,117 @@ public class MainActivity extends AppCompatActivity {
     private void invisible() {
         tabLayout.setVisibility(View.INVISIBLE);
         viewPager.setVisibility(View.INVISIBLE);
-        final AlertDialog dialog = new AlertDialog.Builder(this,R.style.CustomAlertDialog)
+        final AlertDialog dialog = new AlertDialog.Builder(this, R.style.CustomAlertDialog)
                 .setCancelable(false)
                 .setMessage(Html.fromHtml("<font color='#000000'>Please come back after some time.<br/><br/>If you have any query Mail Us.</font>"))
-                .setPositiveButton("Ok",new DialogInterface.OnClickListener( ) {
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog,int which) {
-                        finish( );
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
                     }
                 })
-                .setNegativeButton("Mail Us",new DialogInterface.OnClickListener( ) {
+                .setNegativeButton("Mail Us", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog,int which) {
-                        finish( );
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
                         Intent intent = new Intent(Intent.ACTION_SEND);
-                        String[] stringto = {"mailtodephub@gmail.com"};
-                        intent.putExtra(Intent.EXTRA_EMAIL,stringto);
-                        intent.putExtra(Intent.EXTRA_SUBJECT,"About DepHub App");
-                        intent.putExtra(Intent.EXTRA_TEXT,"Hello\n\nI would like to say:\n");
+                        String[] mailTo = {"mailtodephub@gmail.com"};
+                        intent.putExtra(Intent.EXTRA_EMAIL, mailTo);
+                        intent.putExtra(Intent.EXTRA_SUBJECT, "About DepHub App");
+                        intent.putExtra(Intent.EXTRA_TEXT, "Hello\n\nI would like to say:\n");
                         intent.setType("message/rfc822");
-                        // intent.setPackage("com.google.android.gm");
-                        startActivity(Intent.createChooser(intent,"Choose an email client"));
+                        startActivity(Intent.createChooser(intent, "Choose an email client"));
                     }
                 })
-                .create( );
-        dialog.show( );
-        android.widget.Button buttonPositive = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        buttonPositive.setTextColor(ContextCompat.getColor(this,R.color.colorAccent));
-        android.widget.Button buttonNegative = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-        buttonNegative.setTextColor(ContextCompat.getColor(this,R.color.colorAccent));
+                .create();
+        dialog.show();
+        alertDialogButton(dialog);
     }
 
-    private void serverbusy() {
+    private void serverBusy() {
         tabLayout.setVisibility(View.INVISIBLE);
         viewPager.setVisibility(View.INVISIBLE);
-        final AlertDialog dialog = new AlertDialog.Builder(this,R.style.CustomAlertDialog)
+        final AlertDialog dialog = new AlertDialog.Builder(this, R.style.CustomAlertDialog)
                 .setCancelable(false)
                 .setMessage(Html.fromHtml("<font color='#000000'>Our Server is under Maintenance<br/><br/>Our Server is under maintenance. But we will be back within few minutes.<br/><br/>We are Improving DepHub to provide you more information about Dependencies.<br/><br/>Thanks for your patience.<br/>We apologize for the inconvenience caused.<br/><br/>Regards<br/>DepHub<br/><br/>We will send you notification once its ready.</font>"))
-                .setPositiveButton("Close",new DialogInterface.OnClickListener( ) {
+                .setPositiveButton("Close", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog,int which) {
-                        finish( );
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
                     }
                 })
-                .create( );
-        dialog.show( );
-        android.widget.Button buttonPositive = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        buttonPositive.setTextColor(ContextCompat.getColor(this,R.color.colorAccent));
-        android.widget.Button buttonNegative = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-        buttonNegative.setTextColor(ContextCompat.getColor(this,R.color.colorAccent));
+                .create();
+        dialog.show();
+        alertDialogButton(dialog);
     }
 
-    private void update(final String appPackageName) {
+    private void update() {
         tabLayout.setVisibility(View.INVISIBLE);
         viewPager.setVisibility(View.INVISIBLE);
-        final AlertDialog dialog = new AlertDialog.Builder(this,R.style.CustomAlertDialog)
-
+        final AlertDialog dialog = new AlertDialog.Builder(this, R.style.CustomAlertDialog)
                 .setCancelable(false)
                 .setMessage(Html.fromHtml("<font color='#000000'>Update Available<br/><br/>New version of this app is available now. Please update to get more features.<br/><br/>Get it on Google PlayStore</font>"))
-                .setPositiveButton("Update Now",new DialogInterface.OnClickListener( ) {
+                .setPositiveButton("Update Now", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog,int which) {
-
-                        Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse("https://play.google.com/store/apps/details?id=com.dephub.android"));
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.dephub.android"));
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
-                        finish( );
+                        finish();
                     }
                 })
-                .setNegativeButton("No,Thanks",new DialogInterface.OnClickListener( ) {
+                .setNegativeButton("No,Thanks", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog,int which) {
+                    public void onClick(DialogInterface dialog, int which) {
                         tabLayout.setVisibility(View.VISIBLE);
                         viewPager.setVisibility(View.VISIBLE);
-                        dialog.dismiss( );
+                        dialog.dismiss();
                     }
                 })
-                .create( );
-        dialog.show( );
+                .create();
+        dialog.show();
+        alertDialogButton(dialog);
+    }
 
-        android.widget.Button buttonPositive = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        buttonPositive.setTextColor(ContextCompat.getColor(this,R.color.colorAccent));
-        android.widget.Button buttonNegative = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-        buttonNegative.setTextColor(ContextCompat.getColor(this,R.color.colorAccent));
+    private void alertDialogButton(AlertDialog dialog) {
+        android.widget.Button PositiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        PositiveButton.setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+        android.widget.Button NegativeButton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        NegativeButton.setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
     }
 
     @Override
     public void onBackPressed() {
-        if (viewPager.getCurrentItem( ) == 0) {
-            getCacheDir( ).delete( );
-            super.onBackPressed( );
+        if (viewPager.getCurrentItem() == 0) {
+            getCacheDir().delete();
+            if (MainActivityInterstitialAd != null) {
+                goBack = true;
+                MainActivityInterstitialAd.show(MainActivity.this);
+            }
         } else {
             viewPager.setCurrentItem(0);
         }
     }
 
+    @Override
+    protected void onResume() {
+        if (MainActivityInterstitialAd != null) {
+            goBack = false;
+            MainActivityInterstitialAd.show(MainActivity.this);
+        } else {
+        }
+        super.onResume();
+    }
+
     static class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>( );
-        private final List<String> mFragmentTitleList = new ArrayList<>( );
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
 
         public ViewPagerAdapter(FragmentManager manager) {
             super(manager);
         }
 
+        @NonNull
         @Override
         public Fragment getItem(int position) {
             return mFragmentList.get(position);
@@ -327,10 +385,10 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return mFragmentList.size( );
+            return mFragmentList.size();
         }
 
-        public void addFragment(Fragment fragment,String title) {
+        public void addFragment(Fragment fragment, String title) {
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
         }

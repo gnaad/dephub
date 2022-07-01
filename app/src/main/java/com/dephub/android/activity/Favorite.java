@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dephub.android.R;
-import com.dephub.android.cardview.Cardadapter;
-import com.dephub.android.cardview.Cardmodel;
+import com.dephub.android.cardview.CardAdapter;
+import com.dephub.android.cardview.CardModel;
 import com.dephub.android.favorite.DatabaseHelper;
 import com.github.aakira.compoundicontextview.CompoundIconTextView;
 
@@ -26,28 +26,27 @@ public class Favorite extends AppCompatActivity {
     LinearLayoutManager linearLayoutManager;
     CompoundIconTextView compoundIconTextView;
     private RecyclerView recyclerView;
-    private ArrayList<Cardmodel> cardfavorite;
-    private Cardadapter cardadapter;
+    private ArrayList<CardModel> cardFavorite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite);
 
-        recyclerView = findViewById(R.id.favoriterv);
+        recyclerView = findViewById(R.id.favoriteRecyclerView);
 
-        compoundIconTextView = findViewById(R.id.nodependencyfav);
+        compoundIconTextView = findViewById(R.id.noDependencyFavorites);
 
         databaseHelper = new DatabaseHelper(Favorite.this);
 
-        cardfavorite = new ArrayList<>( );
+        cardFavorite = new ArrayList<>();
 
-        buildcardview( );
+        buildCardView();
 
-        Toolbar toolbar = findViewById(R.id.toolbarfav);
+        Toolbar toolbar = findViewById(R.id.toolbarFavorites);
         toolbar.setTitle("My Favorites");
         toolbar.setNavigationIcon(R.drawable.ic_back);
-        int nightModeFlags = getResources( ).getConfiguration( ).uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
             int white = Color.parseColor("#ffffff");
             toolbar.setTitleTextColor(white);
@@ -57,14 +56,14 @@ public class Favorite extends AppCompatActivity {
         }
         setSupportActionBar(toolbar);
 
-        TextView textView = findViewById(R.id.favtext);
+        TextView textView = findViewById(R.id.favoritesText);
 
-        Cursor cursor = databaseHelper.getFavorite( );
-        if (cursor != null && cursor.getCount( ) > 0) {
+        Cursor cursor = databaseHelper.getFavorite();
+        if (cursor != null && cursor.getCount() > 0) {
 
-            while (cursor.moveToNext( )) {
+            while (cursor.moveToNext()) {
                 @SuppressLint("ResourceType") String bg = getString(R.color.whitetoblack);
-                cardfavorite.add(new Cardmodel(
+                cardFavorite.add(new CardModel(
                         cursor.getString(2),
                         cursor.getString(3),
                         cursor.getString(4),
@@ -85,15 +84,15 @@ public class Favorite extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         databaseHelper.close();
-        super.onDestroy( );
+        super.onDestroy();
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void buildcardview() {
-        cardadapter = new Cardadapter(cardfavorite,Favorite.this);
+    private void buildCardView() {
+        CardAdapter cardAdapter = new CardAdapter(cardFavorite, Favorite.this);
         linearLayoutManager = new LinearLayoutManager(Favorite.this);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(cardadapter);
+        recyclerView.setAdapter(cardAdapter);
     }
 }

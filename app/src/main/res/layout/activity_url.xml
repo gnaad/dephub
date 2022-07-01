@@ -5,7 +5,7 @@
     android:background="@color/darktoggle">
 
     <TextView
-        android:id="@+id/textview"
+        android:id="@+id/loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -23,15 +23,15 @@
         android:id="@+id/progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textview"
+        android:layout_below="@id/loading"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15sp" />
 
     <TextView
-        android:id="@+id/gotohome"
+        android:id="@+id/goToHome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textview"
+        android:layout_below="@id/loading"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="16sp"
         android:layout_marginTop="15sp"

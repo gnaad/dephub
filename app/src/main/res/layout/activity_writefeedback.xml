@@ -9,7 +9,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/appbarfeedback"
+        android:layout_below="@id/appbarFeedback"
         android:background="@color/darktoggle"
         android:overScrollMode="never">
 
@@ -19,17 +19,17 @@
             android:orientation="vertical">
 
             <RelativeLayout
-                android:id="@+id/yourfeedback"
+                android:id="@+id/userFeedback"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pleasewrite"
+                android:layout_below="@id/feedbackDescription"
                 android:layout_marginTop="25sp">
 
                 <Button
-                    android:id="@+id/nhwusubmit"
+                    android:id="@+id/feedbackSubmit"
                     android:layout_width="150sp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/nhwuprob"
+                    android:layout_below="@+id/userProb"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="25sp"
                     android:background="@drawable/roundedcorner"
@@ -42,10 +42,10 @@
                     app:cornerRadius="30sp" />
 
                 <Button
-                    android:id="@+id/mailus"
+                    android:id="@+id/mailUs"
                     android:layout_width="200sp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/ifanyimage"
+                    android:layout_below="@+id/imageAttachment"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="15sp"
                     android:layout_marginBottom="25sp"
@@ -60,7 +60,7 @@
                     app:cornerRadius="30sp" />
 
                 <EditText
-                    android:id="@+id/nhwuprob"
+                    android:id="@+id/userProb"
                     android:layout_width="match_parent"
                     android:layout_height="200sp"
                     android:layout_alignParentTop="true"
@@ -86,10 +86,10 @@
                     android:windowSoftInputMode="adjustResize" />
 
                 <TextView
-                    android:id="@+id/ifanyimage"
+                    android:id="@+id/imageAttachment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/nhwusubmit"
+                    android:layout_below="@+id/feedbackSubmit"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="15dp"
                     android:fontFamily="@font/sans"
@@ -112,7 +112,7 @@
             </RelativeLayout>
 
             <TextView
-                android:id="@+id/pleasewrite"
+                android:id="@+id/feedbackDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20sp"
@@ -129,14 +129,14 @@
     </ScrollView>
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbarfeedback"
+        android:id="@+id/appbarFeedback"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbarwritefeedback"
+            android:id="@+id/toolbarWriteFeedback"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|enterAlways"

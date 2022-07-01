@@ -9,16 +9,16 @@
     android:visibility="visible">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swiperefreshxml"
+        android:id="@+id/swipeRefreshWeb"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/adweb"
-        android:layout_below="@id/appbarwv"
+        android:layout_above="@id/adWeb"
+        android:layout_below="@id/appbarWeb"
         android:visibility="visible"
         tools:ignore="WebViewLayout">
 
         <WebView
-            android:id="@+id/webviewactivty"
+            android:id="@+id/webViewActivity"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="never"
@@ -27,7 +27,7 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.github.aakira.compoundicontextview.CompoundIconTextView
-        android:id="@+id/nointernet"
+        android:id="@+id/noInternet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -47,14 +47,14 @@
         app:cit_iconWidth="280sp" />
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbarwv"
+        android:id="@+id/appbarWeb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbarwv"
+            android:id="@+id/toolbarWeb"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|enterAlways"
@@ -94,7 +94,7 @@
         app:rippleColor="@color/fabsourceripple" />
 
     <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/adweb"
+        android:id="@+id/adWeb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

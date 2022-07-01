@@ -1,32 +1,33 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/mainma"
+    android:id="@+id/layoutMainActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/MainActivity">
 
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/viewpagerma"
+        android:id="@+id/viewPagerMainActivity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="visible"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbarma"
+        android:id="@+id/appbarMainActivity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbarma"
+            android:id="@+id/toolbarMainActivity"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|enterAlways"
             app:titleTextAppearance="@style/toolbartextentity" />
 
         <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabsma"
+            android:id="@+id/tabsMainActivity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"

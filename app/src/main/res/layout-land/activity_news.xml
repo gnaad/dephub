@@ -11,7 +11,7 @@
         android:layout_height="match_parent">
 
         <com.github.aakira.compoundicontextview.CompoundIconTextView
-            android:id="@+id/nointernetnews"
+            android:id="@+id/noInternetNews"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -29,14 +29,14 @@
     </RelativeLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipenewsrefresh"
+        android:id="@+id/swipeNewsRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/appbarnews"
+        android:layout_below="@id/appbarNews"
         android:visibility="visible">
 
         <WebView
-            android:id="@+id/news"
+            android:id="@+id/webviewNews"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="never"
@@ -45,14 +45,14 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbarnews"
+        android:id="@+id/appbarNews"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbarnews"
+            android:id="@+id/toolbarNews"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|enterAlways"

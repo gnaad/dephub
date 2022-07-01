@@ -25,39 +25,39 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!isNetworkAvailable( )) {
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SplashScreen.this,R.style.CustomAlertDialog);
+        if (!isNetworkAvailable()) {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SplashScreen.this, R.style.CustomAlertDialog);
             alertDialogBuilder
                     .setCancelable(false)
                     .setMessage("Internet Problem\n\nPlease check your Internet Connectivity or WiFi Connection")
-                    .setPositiveButton("Close",new DialogInterface.OnClickListener( ) {
+                    .setPositiveButton("Close", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog,int which) {
-                            finish( );
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
                         }
 
                     })
-                    .setNegativeButton("Retry",new DialogInterface.OnClickListener( ) {
+                    .setNegativeButton("Retry", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog,int which) {
-                            finish( );
-                            startActivity(getIntent( ));
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                            startActivity(getIntent());
                         }
                     });
-            AlertDialog alertDialog = alertDialogBuilder.create( );
-            alertDialog.show( );
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
 
-            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
-            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorAccent));
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorAccent));
 
         } else {
-            new Handler( ).postDelayed(new Runnable( ) {
+            new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    startActivity(new Intent(SplashScreen.this,MainActivity.class));
-                    finish( );
+                    startActivity(new Intent(SplashScreen.this, MainActivity.class));
+                    finish();
                 }
-            },500);
+            }, 500);
         }
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
@@ -65,7 +65,7 @@ public class SplashScreen extends AppCompatActivity {
         setContentView(R.layout.activity_splashscreen);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel("Notifications","Notifications",NotificationManager.IMPORTANCE_HIGH);
+            NotificationChannel notificationChannel = new NotificationChannel("Notifications", "Notifications", NotificationManager.IMPORTANCE_HIGH);
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(notificationChannel);
         }
@@ -73,8 +73,8 @@ public class SplashScreen extends AppCompatActivity {
 
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo( );
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected( );
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
 

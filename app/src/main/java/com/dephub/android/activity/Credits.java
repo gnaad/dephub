@@ -3,7 +3,6 @@ package com.dephub.android.activity;
 import android.annotation.SuppressLint;
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,14 +22,12 @@ public class Credits extends AppCompatActivity {
 
         setContentView(R.layout.activity_credits);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow( ).setNavigationBarColor(getResources( ).getColor(R.color.black));
-        }
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.black));
 
-        Toolbar toolbar = findViewById(R.id.toolbarcredits);
+        Toolbar toolbar = findViewById(R.id.toolbarCredits);
         toolbar.setTitle("Credits");
         toolbar.setNavigationIcon(R.drawable.ic_back);
-        int nightModeFlags = getResources( ).getConfiguration( ).uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
             int white = Color.parseColor("#ffffff");
             toolbar.setTitleTextColor(white);

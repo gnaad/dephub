@@ -18,8 +18,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.dephub.android.R;
-import com.dephub.android.cardview.Cardadapter;
-import com.dephub.android.cardview.Cardmodel;
+import com.dephub.android.cardview.CardAdapter;
+import com.dephub.android.cardview.CardModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,69 +30,72 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class Legacy extends Fragment {
-    public static final String url = "https://gnanendraprasadp.github.io/DepHub-Web/json/fragmentfollowedbylegacy.json";
-    private RecyclerView cardrecyclerviewlegacy;
-    private Cardadapter cardviewadapterlegacy;
-    private ArrayList<Cardmodel> cardlegacy;
+    public static final String url = "https://gnanendraprasadp.github.io/DepHub-Web/json/data.json";
+    private RecyclerView cardRecyclerViewLegacy;
+    private ArrayList<CardModel> cardLegacy;
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
-    public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
 
-        View view = inflater.inflate(R.layout.activity_fragment_legacy,container,false);
+        View view = inflater.inflate(R.layout.activity_fragment_legacy, container, false);
 
-        cardrecyclerviewlegacy = view.findViewById(R.id.legacyfragment);
+        cardRecyclerViewLegacy = view.findViewById(R.id.legacyfragment);
         setRetainInstance(true);
 
-        cardlegacy = new ArrayList<>( );
+        cardLegacy = new ArrayList<>();
 
-        getdependency( );
+        getDependency();
 
-        buildcardview( );
+        buildCardView();
 
         return view;
     }
 
-    private void getdependency() {
-        @SuppressWarnings("ConstantConditions") RequestQueue requestQueue = Volley.newRequestQueue(getContext( ));
+    private void getDependency() {
+        @SuppressWarnings("ConstantConditions") RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.getCache().clear();
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,url,null,new Response.Listener<JSONArray>( ) {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                for (int i = 0; i < response.length( ); i++) {
+                for (int i = 0; i < response.length(); i++) {
 
                     try {
                         JSONObject jsonObject = response.getJSONObject(i);
 
-                        String depname = jsonObject.getString("Dependency Name");
-                        String devname = jsonObject.getString("Developer Name");
-                        String fullname = jsonObject.getString("Full Name");
-                        String gitlink = jsonObject.getString("Github Link");
-                        @SuppressLint("ResourceType")
-                        String bg = getString(R.color.whitetoblack);
-                        String youtube = jsonObject.getString("YouTube Link");
-                        String id = jsonObject.getString("Id");
-                        String license = jsonObject.getString("License");
-                        String licenselink = jsonObject.getString("License Link");
-                        cardlegacy.add(new Cardmodel(depname,devname,gitlink,bg,youtube,id,license,licenselink,fullname));
+                        String type = jsonObject.getString("Type");
 
-                        Collections.sort(cardlegacy,new Comparator<Cardmodel>( ) {
-                            @Override
-                            public int compare(Cardmodel o1,Cardmodel o2) {
-                                return o1.getDependencyname( ).compareTo(o2.getDependencyname( ));
-                            }
-                        });
+                        if (type.equals("Legacy")) {
+                            String dependencyName = jsonObject.getString("Dependency Name");
+                            String developerName = jsonObject.getString("Developer Name");
+                            String fullName = jsonObject.getString("Full Name");
+                            String githubLink = jsonObject.getString("Github Link");
+                            @SuppressLint("ResourceType")
+                            String bg = getString(R.color.whitetoblack);
+                            String youtube = jsonObject.getString("YouTube Link");
+                            String id = jsonObject.getString("Id");
+                            String license = jsonObject.getString("License");
+                            String licenseLink = jsonObject.getString("License Link");
+                            cardLegacy.add(new CardModel(dependencyName, developerName, githubLink, bg, youtube, id, license, licenseLink, fullName));
 
-                        buildcardview( );
+                            Collections.sort(cardLegacy, new Comparator<CardModel>() {
+                                @Override
+                                public int compare(CardModel o1, CardModel o2) {
+                                    return o1.getDependencyName().compareTo(o2.getDependencyName());
+                                }
+                            });
+
+                            buildCardView();
+                        }
                     } catch (JSONException e) {
-                        e.printStackTrace( );
+                        e.printStackTrace();
                     }
                 }
             }
-        },new Response.ErrorListener( ) {
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
 
@@ -102,11 +105,11 @@ public class Legacy extends Fragment {
         requestQueue.add(jsonArrayRequest);
     }
 
-    private void buildcardview() {
-        cardviewadapterlegacy = new Cardadapter(cardlegacy,getActivity( ));
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext( ));
-        cardrecyclerviewlegacy.setHasFixedSize(true);
-        cardrecyclerviewlegacy.setLayoutManager(linearLayoutManager);
-        cardrecyclerviewlegacy.setAdapter(cardviewadapterlegacy);
+    private void buildCardView() {
+        CardAdapter cardViewAdapterLegacy = new CardAdapter(cardLegacy, getActivity());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        cardRecyclerViewLegacy.setHasFixedSize(true);
+        cardRecyclerViewLegacy.setLayoutManager(linearLayoutManager);
+        cardRecyclerViewLegacy.setAdapter(cardViewAdapterLegacy);
     }
 }

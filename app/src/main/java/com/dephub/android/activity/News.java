@@ -38,7 +38,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class News extends AppCompatActivity {
-    public static final String url = "https://gnanendraprasadp.github.io/DepHub-Web/news";
+    public static final String newsURL = "https://gnanendraprasadp.github.io/DepHub-Web/news";
     ProgressDialog progressDialog;
     Activity activity;
     CompoundIconTextView compoundIconTextView;
@@ -47,7 +47,7 @@ public class News extends AppCompatActivity {
     WebView webview;
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
-    @SuppressLint("ResourceAsColor")
+    @SuppressLint({"ResourceAsColor", "SetJavaScriptEnabled"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,14 +56,12 @@ public class News extends AppCompatActivity {
 
         setContentView(R.layout.activity_news);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow( ).setNavigationBarColor(getResources( ).getColor(R.color.black));
-        }
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.black));
 
-        Toolbar toolbar = findViewById(R.id.toolbarnews);
+        Toolbar toolbar = findViewById(R.id.toolbarNews);
         toolbar.setTitle("News");
         toolbar.setNavigationIcon(R.drawable.ic_back);
-        int nightModeFlags = getResources( ).getConfiguration( ).uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
             int white = Color.parseColor("#ffffff");
             toolbar.setTitleTextColor(white);
@@ -73,205 +71,191 @@ public class News extends AppCompatActivity {
         }
         setSupportActionBar(toolbar);
 
-        Drawable drawable = toolbar.getOverflowIcon( );
-        //noinspection ConstantConditions
-        DrawableCompat.setTint(drawable.mutate( ),getResources( ).getColor(R.color.toolbaricon));
+        Drawable drawable = toolbar.getOverflowIcon();
+        assert drawable != null;
+        DrawableCompat.setTint(drawable.mutate(), getResources().getColor(R.color.toolbaricon));
         toolbar.setOverflowIcon(drawable);
 
-        compoundIconTextView = findViewById(R.id.nointernetnews);
+        compoundIconTextView = findViewById(R.id.noInternetNews);
 
         DatabaseReference ref;
-        ref = FirebaseDatabase.getInstance( ).getReference( ).child("Dependency Count");
-        ref.addValueEventListener(new ValueEventListener( ) {
+        ref = FirebaseDatabase.getInstance().getReference().child("Dependency Count");
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //noinspection ConstantConditions
-                button = snapshot.child("Button").getValue( ).toString( );
-                //noinspection ConstantConditions
-                container = snapshot.child("Container").getValue( ).toString( );
-                //noinspection ConstantConditions
-                google = snapshot.child("Google").getValue( ).toString( );
-                //noinspection ConstantConditions
-                helper = snapshot.child("Helper").getValue( ).toString( );
-                //noinspection ConstantConditions
-                layout = snapshot.child("Layout").getValue( ).toString( );
-                //noinspection ConstantConditions
-                legacy = snapshot.child("Legacy").getValue( ).toString( );
-                //noinspection ConstantConditions
-                others = snapshot.child("Others").getValue( ).toString( );
-                //noinspection ConstantConditions
-                text = snapshot.child("Text").getValue( ).toString( );
-                //noinspection ConstantConditions
-                widget = snapshot.child("Widget").getValue( ).toString( );
+                button = snapshot.child("Button").getValue().toString();
+                container = snapshot.child("Container").getValue().toString();
+                google = snapshot.child("Google").getValue().toString();
+                helper = snapshot.child("Helper").getValue().toString();
+                layout = snapshot.child("Layout").getValue().toString();
+                legacy = snapshot.child("Legacy").getValue().toString();
+                others = snapshot.child("Others").getValue().toString();
+                text = snapshot.child("Text").getValue().toString();
+                widget = snapshot.child("Widget").getValue().toString();
+                date = snapshot.child("Date").getValue().toString();
 
-                date = snapshot.child("Date").getValue( ).toString( );
-
-                one = Integer.valueOf(button);
-                two = Integer.valueOf(container);
-                three = Integer.valueOf(google);
-                four = Integer.valueOf(helper);
-                five = Integer.valueOf(layout);
-                six = Integer.valueOf(legacy);
-                seven = Integer.valueOf(others);
-                eight = Integer.valueOf(text);
-                nine = Integer.valueOf(widget);
+                one = Integer.parseInt(button);
+                two = Integer.parseInt(container);
+                three = Integer.parseInt(google);
+                four = Integer.parseInt(helper);
+                five = Integer.parseInt(layout);
+                six = Integer.parseInt(legacy);
+                seven = Integer.parseInt(others);
+                eight = Integer.parseInt(text);
+                nine = Integer.parseInt(widget);
 
                 total = one + two + three + four + five + six + seven + eight + nine;
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getApplicationContext( ),error.toString( ),Toast.LENGTH_SHORT).show( );
+                Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
             }
         });
 
         activity = this;
 
-        progressDialog = new ProgressDialog(News.this,R.style.CustomAlertDialog);
+        progressDialog = new ProgressDialog(News.this, R.style.CustomAlertDialog);
         progressDialog.setMessage("Loading");
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(false);
-        progressDialog.show( );
+        progressDialog.show();
 
-        webview = findViewById(R.id.news);
-        webview.getSettings( ).setJavaScriptEnabled(true);
+        webview = findViewById(R.id.webviewNews);
+        webview.getSettings().setJavaScriptEnabled(true);
         webview.setLongClickable(false);
-        webview.getSettings( ).setLoadWithOverviewMode(true);
-        webview.getSettings( ).setCacheMode(WebSettings.LOAD_NO_CACHE);
+        webview.getSettings().setLoadWithOverviewMode(true);
+        webview.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
 
         if (Build.VERSION.SDK_INT >= 19) {
-            webview.setLayerType(View.LAYER_TYPE_HARDWARE,null);
+            webview.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         } else {
-            webview.setLayerType(View.LAYER_TYPE_SOFTWARE,null);
+            webview.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
 
         if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
-            webview.getSettings( ).setForceDark(WebSettings.FORCE_DARK_ON);
+            webview.getSettings().setForceDark(WebSettings.FORCE_DARK_ON);
         }
 
-        SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.swipenewsrefresh);
+        SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.swipeNewsRefresh);
         swipeRefreshLayout.setColorSchemeResources(R.color.blacktowhite);
 
-        webview.setWebViewClient(new WebViewClient( ) {
+        webview.setWebViewClient(new WebViewClient() {
             @Override
-            public boolean shouldOverrideUrlLoading(WebView view,String url) {
-                progressDialog.show( );
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                progressDialog.show();
                 return false;
             }
 
             @Override
-            public void onReceivedError(WebView view,int errorCode,String description,String failingUrl) {
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 swipeRefreshLayout.setVisibility(View.INVISIBLE);
-                progressDialog.cancel( );
+                progressDialog.cancel();
                 webview.setVisibility(View.INVISIBLE);
                 compoundIconTextView.setVisibility(View.VISIBLE);
                 webview.setBackgroundColor(Color.WHITE);
-                swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener( ) {
+                swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-                        new Handler( ).postDelayed(new Runnable( ) {
+                        new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 compoundIconTextView.setVisibility(View.INVISIBLE);
                                 webview.setVisibility(View.VISIBLE);
                                 swipeRefreshLayout.setRefreshing(false);
-                                webview.reload( );
+                                webview.reload();
                             }
-                        },3000);
+                        }, 3000);
                     }
                 });
             }
 
             @Override
-            public void onPageFinished(WebView view,String url) {
-                progressDialog.cancel( );
+            public void onPageFinished(WebView view, String url) {
+                progressDialog.cancel();
             }
         });
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener( ) {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new Handler( ).postDelayed(new Runnable( ) {
+                new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         swipeRefreshLayout.setRefreshing(false);
-                        webview.reload( );
+                        webview.reload();
                     }
-                },3000);
+                }, 3000);
             }
         });
-        webview.loadUrl(url);
+        webview.loadUrl(newsURL);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater( );
-        menuInflater.inflate(R.menu.news_settings,menu);
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.news_settings, menu);
         return true;
     }
 
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId( )) {
-            case R.id.count:
+        if (item.getItemId() == R.id.count) {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(News.this, R.style.CustomAlertDialog);
 
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(News.this,R.style.CustomAlertDialog);
-
-                alertDialogBuilder.setCancelable(true);
-                alertDialogBuilder.setMessage("Dependency Count\n\nText : " + text + "\nButton : " + button + "\nWidget : " + widget + "\nLayout : " + layout + "" +
-                        "\nContainer : " + container + "\nHelper : " + helper + "\nGoogle : " + google + "\nLegacy : " + legacy + "\nOthers : " + others + "\n\nTotal : " + total + " Dependencies\n\nLast Modified : " + date);
-                alertDialogBuilder.setPositiveButton("Close",new DialogInterface.OnClickListener( ) {
-                    public void onClick(DialogInterface dialog,int id) {
-                        dialog.dismiss( );
-                    }
-                });
-                AlertDialog alertDialog = alertDialogBuilder.create( );
-                alertDialog.show( );
-                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
-                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources( ).getColor(R.color.colorAccent));
-                break;
-            default:
-                return super.onOptionsItemSelected(item);
+            alertDialogBuilder.setCancelable(true);
+            alertDialogBuilder.setMessage("Dependency Count\n\nText : " + text + "\nButton : " + button + "\nWidget : " + widget + "\nLayout : " + layout + "" +
+                    "\nContainer : " + container + "\nHelper : " + helper + "\nGoogle : " + google + "\nLegacy : " + legacy + "\nOthers : " + others + "\n\nTotal : " + total + " Dependencies\n\nLast Modified : " + date);
+            alertDialogBuilder.setPositiveButton("Close", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.dismiss();
+                }
+            });
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorAccent));
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorAccent));
+        } else {
+            return super.onOptionsItemSelected(item);
         }
         return true;
     }
 
     @Override
     public boolean onSupportNavigateUp() {
-        if (webview.canGoBack( )) {
-            webview.goBack( );
+        if (webview.canGoBack()) {
+            webview.goBack();
         } else {
             webview.clearCache(true);
-            super.onBackPressed( );
+            super.onBackPressed();
         }
         return false;
     }
 
     @Override
     public void onBackPressed() {
-        if (webview.canGoBack( )) {
-            webview.goBack( );
+        if (webview.canGoBack()) {
+            webview.goBack();
         } else {
             webview.clearCache(true);
-            super.onBackPressed( );
+            super.onBackPressed();
         }
     }
 
     @Override
-    public boolean onKeyDown(int keyCode,KeyEvent event) {
-        if (event.getAction( ) == KeyEvent.ACTION_DOWN) {
-            switch (keyCode) {
-                case KeyEvent.KEYCODE_BACK:
-                    WebView webview = findViewById(R.id.news);
-                    if (webview.canGoBack( )) {
-                        webview.goBack( );
-                    } else {
-                        finish( );
-                    }
-                    return true;
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                WebView webview = findViewById(R.id.webviewNews);
+                if (webview.canGoBack()) {
+                    webview.goBack();
+                } else {
+                    finish();
+                }
+                return true;
             }
         }
-        return super.onKeyDown(keyCode,event);
+        return super.onKeyDown(keyCode, event);
     }
 }

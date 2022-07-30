@@ -2,6 +2,7 @@ package com.dephub.android.fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -30,9 +32,10 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class Google extends Fragment {
-    public static final String url = "https://gnanendraprasadp.github.io/DepHub-Web/json/data.json";
+    public static final String url = "https://gnanendraprasadp.github.io/DepHub-Web/json/dependency.json";
     private RecyclerView cardRecyclerViewGoogle;
     private ArrayList<CardModel> cardGoogle;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -42,13 +45,26 @@ public class Google extends Fragment {
 
         View view = inflater.inflate(R.layout.activity_fragment_google, container, false);
 
-        cardRecyclerViewGoogle = view.findViewById(R.id.googlefragment);
+        cardRecyclerViewGoogle = view.findViewById(R.id.googleFragment);
         setRetainInstance(true);
 
         cardGoogle = new ArrayList<>();
 
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshGoogleFragment);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        cardGoogle.clear();
+                        swipeRefreshLayout.setRefreshing(false);
+                        getDependency();
+                    }
+                }, 3000);
+            }
+        });
         getDependency();
-
         buildCardView();
 
         return view;
@@ -66,19 +82,19 @@ public class Google extends Fragment {
                     try {
                         JSONObject jsonObject = response.getJSONObject(i);
 
-                        String type = jsonObject.getString("Type");
+                        String type = jsonObject.getString("type");
 
                         if (type.equals("Google")) {
-                            String dependencyName = jsonObject.getString("Dependency Name");
-                            String developerName = jsonObject.getString("Developer Name");
-                            String fullName = jsonObject.getString("Full Name");
-                            String githubLink = jsonObject.getString("Github Link");
+                            String dependencyName = jsonObject.getString("dependency_name");
+                            String developerName = jsonObject.getString("developer_name");
+                            String fullName = jsonObject.getString("full_name");
+                            String githubLink = jsonObject.getString("github_link");
                             @SuppressLint("ResourceType")
                             String bg = getString(R.color.whitetoblack);
-                            String youtube = jsonObject.getString("YouTube Link");
-                            String id = jsonObject.getString("Id");
-                            String license = jsonObject.getString("License");
-                            String licenseLink = jsonObject.getString("License Link");
+                            String youtube = jsonObject.getString("youtube_link");
+                            String id = jsonObject.getString("id");
+                            String license = jsonObject.getString("license");
+                            String licenseLink = jsonObject.getString("license_link");
                             cardGoogle.add(new CardModel(dependencyName, developerName, githubLink, bg, youtube, id, license, licenseLink, fullName));
 
                             Collections.sort(cardGoogle, new Comparator<CardModel>() {

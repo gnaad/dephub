@@ -42,8 +42,8 @@ public class News extends AppCompatActivity {
     ProgressDialog progressDialog;
     Activity activity;
     CompoundIconTextView compoundIconTextView;
-    String button, container, google, helper, layout, legacy, others, text, widget, date;
-    int one, two, three, four, five, six, seven, eight, nine, total;
+    String button_db_value, container_db_value, google_db_value, helper_db_value, layout_db_value, legacy_db_value, others_db_value, text_db_value, widget_db_value, date_db_value;
+    int button, container, google, helper, layout, legacy, others, text, widget, total;
     WebView webview;
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
@@ -83,28 +83,28 @@ public class News extends AppCompatActivity {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                button = snapshot.child("Button").getValue().toString();
-                container = snapshot.child("Container").getValue().toString();
-                google = snapshot.child("Google").getValue().toString();
-                helper = snapshot.child("Helper").getValue().toString();
-                layout = snapshot.child("Layout").getValue().toString();
-                legacy = snapshot.child("Legacy").getValue().toString();
-                others = snapshot.child("Others").getValue().toString();
-                text = snapshot.child("Text").getValue().toString();
-                widget = snapshot.child("Widget").getValue().toString();
-                date = snapshot.child("Date").getValue().toString();
+                button_db_value = snapshot.child("Button").getValue().toString();
+                container_db_value = snapshot.child("Container").getValue().toString();
+                google_db_value = snapshot.child("Google").getValue().toString();
+                helper_db_value = snapshot.child("Helper").getValue().toString();
+                layout_db_value = snapshot.child("Layout").getValue().toString();
+                legacy_db_value = snapshot.child("Legacy").getValue().toString();
+                others_db_value = snapshot.child("Others").getValue().toString();
+                text_db_value = snapshot.child("Text").getValue().toString();
+                widget_db_value = snapshot.child("Widget").getValue().toString();
+                date_db_value = snapshot.child("Date").getValue().toString();
 
-                one = Integer.parseInt(button);
-                two = Integer.parseInt(container);
-                three = Integer.parseInt(google);
-                four = Integer.parseInt(helper);
-                five = Integer.parseInt(layout);
-                six = Integer.parseInt(legacy);
-                seven = Integer.parseInt(others);
-                eight = Integer.parseInt(text);
-                nine = Integer.parseInt(widget);
+                button = Integer.parseInt(button_db_value);
+                container = Integer.parseInt(container_db_value);
+                google = Integer.parseInt(google_db_value);
+                helper = Integer.parseInt(helper_db_value);
+                layout = Integer.parseInt(layout_db_value);
+                legacy = Integer.parseInt(legacy_db_value);
+                others = Integer.parseInt(others_db_value);
+                text = Integer.parseInt(text_db_value);
+                widget = Integer.parseInt(widget_db_value);
 
-                total = one + two + three + four + five + six + seven + eight + nine;
+                total = button + container + google + helper + layout + legacy + others + text + widget;
             }
 
             @Override
@@ -205,8 +205,8 @@ public class News extends AppCompatActivity {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(News.this, R.style.CustomAlertDialog);
 
             alertDialogBuilder.setCancelable(true);
-            alertDialogBuilder.setMessage("Dependency Count\n\nText : " + text + "\nButton : " + button + "\nWidget : " + widget + "\nLayout : " + layout + "" +
-                    "\nContainer : " + container + "\nHelper : " + helper + "\nGoogle : " + google + "\nLegacy : " + legacy + "\nOthers : " + others + "\n\nTotal : " + total + " Dependencies\n\nLast Modified : " + date);
+            alertDialogBuilder.setMessage("Dependency Count\n\nText : " + text_db_value + "\nButton : " + button_db_value + "\nWidget : " + widget_db_value + "\nLayout : " + layout_db_value + "" +
+                    "\nContainer : " + container_db_value + "\nHelper : " + helper_db_value + "\nGoogle : " + google_db_value + "\nLegacy : " + legacy_db_value + "\nOthers : " + others_db_value + "\n\nTotal : " + total + " Dependencies\n\nLast Modified : " + date_db_value);
             alertDialogBuilder.setPositiveButton("Close", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     dialog.dismiss();

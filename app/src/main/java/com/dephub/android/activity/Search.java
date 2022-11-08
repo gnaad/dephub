@@ -3,8 +3,6 @@ package com.dephub.android.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -14,7 +12,6 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -22,18 +19,13 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
 import com.dephub.android.R;
 import com.dephub.android.cardview.CardModel;
 import com.dephub.android.cardview.SearchAdapter;
+import com.dephub.android.common.Component;
+import com.dephub.android.common.Snippet;
 import com.github.aakira.compoundicontextview.CompoundIconTextView;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -47,7 +39,7 @@ public class Search extends AppCompatActivity {
     Button submitYourDependency;
     LinearLayoutManager linearLayoutManager;
     CompoundIconTextView compoundIconTextView;
-    String url = "https://gnanendraprasadp.github.io/DepHub-Web/json/data.json";
+    public static final String url = "https://gnanendraprasadp.github.io/DepHub-Web/json/dependency.json";
     SearchAdapter cardViewSearch;
     private ArrayList<CardModel> cardSearch;
     RelativeLayout relativeLayout;
@@ -56,7 +48,10 @@ public class Search extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Snippet.followNightModeInSystem();
         setContentView(R.layout.activity_searchview);
+
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.black));
 
         searchview = findViewById(R.id.search);
         recyclerView = findViewById(R.id.searchRecyclerView);
@@ -69,18 +64,10 @@ public class Search extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbarSearch);
         toolbar.setNavigationIcon(R.drawable.ic_back);
-        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-        if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
-            int white = Color.parseColor("#ffffff");
-            toolbar.setTitleTextColor(white);
-        } else {
-            int black = Color.parseColor("#000000");
-            toolbar.setTitleTextColor(black);
-        }
+        Snippet.toolbar(Search.this, toolbar);
         setSupportActionBar(toolbar);
 
         Drawable drawable = toolbar.getOverflowIcon();
-
         DrawableCompat.setTint(drawable.mutate(), getResources().getColor(R.color.toolbaricon));
         toolbar.setOverflowIcon(drawable);
 
@@ -98,42 +85,34 @@ public class Search extends AppCompatActivity {
 
         centerText.setText("Type Dependency name or Developer Name or Id\nTap 🔍\n\nHint : Long Hold on Dependency Name to know Id");
 
-        RequestQueue requestQueue = Volley.newRequestQueue(Search.this);
-        requestQueue.getCache().clear();
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                for (int i = 0; i < response.length(); i++) {
-                    try {
-                        JSONObject jsonObject = response.getJSONObject(i);
-
-                        dependencyName = jsonObject.getString("Dependency Name");
-                        devName = jsonObject.getString("Developer Name");
-                        fullName = jsonObject.getString("Full Name");
-                        githubLink = jsonObject.getString("Github Link");
-                        @SuppressLint("ResourceType")
-                        String bg = getString(R.color.whitetoblack);
-                        cardBackground = bg;
-                        youtube = jsonObject.getString("YouTube Link");
-                        id = jsonObject.getString("Id");
-                        license = jsonObject.getString("License");
-                        licenseLink = jsonObject.getString("License Link");
-                        cardSearch.add(new CardModel(dependencyName, devName, githubLink, cardBackground, youtube, id, license, licenseLink, fullName));
-                        buildCardView();
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+        Snippet.dependencyArray(
+                Search.this,
+                url,
+                response -> {
+                    for (int i = 0; i < response.length(); i++) {
+                        try {
+                            JSONObject jsonObject = response.getJSONObject(i);
+                            dependencyName = jsonObject.getString("dependency_name");
+                            devName = jsonObject.getString("developer_name");
+                            fullName = jsonObject.getString("full_name");
+                            githubLink = jsonObject.getString("github_link");
+                            @SuppressLint("ResourceType")
+                            String bg = getString(R.color.whitetoblack);
+                            cardBackground = bg;
+                            youtube = jsonObject.getString("youtube_link");
+                            id = jsonObject.getString("id");
+                            license = jsonObject.getString("license");
+                            licenseLink = jsonObject.getString("license_link");
+                            cardSearch.add(new CardModel(dependencyName, devName, githubLink, cardBackground, youtube, id, license, licenseLink, fullName));
+                            buildSearchCardView();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                },
+                error -> {
 
-            }
-        });
-        jsonArrayRequest.setShouldCache(false);
-        requestQueue.add(jsonArrayRequest);
+                });
 
         searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -154,7 +133,7 @@ public class Search extends AppCompatActivity {
 
                 if (TextUtils.isDigitsOnly(newText)) {
                     if (newText.length() > 4) {
-                        Toast.makeText(Search.this, "Dependency Id is only 4 digits. Check once", Toast.LENGTH_LONG).show();
+                        Component.Toast(Search.this, "Dependency Id is only 4 digits. Check once");
                     }
                 }
 
@@ -203,7 +182,7 @@ public class Search extends AppCompatActivity {
         }
     }
 
-    private void buildCardView() {
+    private void buildSearchCardView() {
         cardViewSearch = new SearchAdapter(cardSearch, Search.this);
         linearLayoutManager = new LinearLayoutManager(Search.this);
         recyclerView.setHasFixedSize(true);

@@ -4,16 +4,16 @@ plugins {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.dephub.android"
         minSdkVersion 23
-        targetSdkVersion 32
+        targetSdkVersion 33
         multiDexEnabled true
-        versionCode 10122
-        versionName "1.0.22"
+        versionCode 10125
+        versionName "1.0.25"
     }
 
     buildTypes {
@@ -44,33 +44,27 @@ android {
 }
 
 dependencies {
-    //noinspection GradleCompatible
-    implementation 'com.android.support:cardview-v7:28.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.android.volley:volley:1.2.1'
-    //noinspection GradleCompatible
-    implementation 'com.android.support:design:28.0.0'
-    //noinspection GradleCompatible
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    //noinspection GradleCompatible
-    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.google.android.material:material:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
 
-    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'androidx.viewpager:viewpager:1.0.0'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'androidx.browser:browser:1.4.0'
 
-    implementation 'com.google.firebase:firebase-analytics:21.1.0'
-    implementation 'com.google.firebase:firebase-database:20.0.5'
-    implementation 'com.google.firebase:firebase-config:21.1.1'
-    implementation 'com.google.android.material:material:1.6.1'
-    implementation 'com.google.firebase:firebase-messaging:23.0.6'
+    implementation 'com.google.firebase:firebase-analytics:21.2.0'
+    implementation 'com.google.firebase:firebase-database:20.1.0'
+    implementation 'com.google.firebase:firebase-config:21.2.0'
+    implementation 'com.google.android.material:material:1.7.0'
+    implementation 'com.google.firebase:firebase-messaging:23.1.0'
     implementation 'com.google.zxing:core:3.5.0'
 
-    //noinspection GradleCompatible
     implementation 'com.github.aakira:compound-icon-textview:1.2.1@aar'
     implementation 'com.github.AppIntro:AppIntro:6.2.0'
 
     implementation 'androidmads.library.qrgenearator:QRGenearator:1.0.4'
 
-    implementation 'com.google.android.gms:play-services-ads:21.1.0'
+    implementation 'com.google.android.gms:play-services-ads:21.3.0'
 }

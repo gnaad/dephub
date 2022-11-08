@@ -11,8 +11,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "favouritetable";
     private static final String TABLE_NAME = "favoritetable";
-    private static final String KEY_ID = "id";
 
+    private static final String KEY_ID = "id";
     private static final String KEY_DEPID = "depid";
     private static final String KEY_DEPENDENCYNAME = "name";
     private static final String KEY_DEVELOPERNAME = "devname";

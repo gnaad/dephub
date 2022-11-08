@@ -2,7 +2,6 @@ package com.dephub.android.activity;
 
 import android.annotation.SuppressLint;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.dephub.android.R;
+import com.dephub.android.common.Snippet;
 
 public class OpenSource extends AppCompatActivity {
 
@@ -22,6 +22,7 @@ public class OpenSource extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Snippet.followNightModeInSystem();
         setContentView(R.layout.activity_opensource);
 
         getWindow().setNavigationBarColor(getResources().getColor(R.color.black));
@@ -29,14 +30,7 @@ public class OpenSource extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbarOpenSource);
         toolbar.setTitle("Open Source Licenses");
         toolbar.setNavigationIcon(R.drawable.ic_back);
-        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-        if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
-            int white = Color.parseColor("#ffffff");
-            toolbar.setTitleTextColor(white);
-        } else {
-            int black = Color.parseColor("#000000");
-            toolbar.setTitleTextColor(black);
-        }
+        Snippet.toolbar(OpenSource.this, toolbar);
         setSupportActionBar(toolbar);
 
         WebView webView = findViewById(R.id.osWeb);
@@ -50,6 +44,7 @@ public class OpenSource extends AppCompatActivity {
             webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
 
+        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
             webView.getSettings().setForceDark(WebSettings.FORCE_DARK_ON);
         }
@@ -70,5 +65,11 @@ public class OpenSource extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        super.onBackPressed();
+        return false;
     }
 }

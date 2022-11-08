@@ -2,34 +2,25 @@ package com.dephub.android.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.WindowManager;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
 import com.dephub.android.R;
+import com.dephub.android.common.Component;
+import com.dephub.android.common.Snippet;
 import com.github.appintro.AppIntro2;
 import com.github.appintro.AppIntroFragment;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 public class AppIntroduction extends AppIntro2 {
 
-    @SuppressLint("ResourceType")
+    @SuppressLint("ResourceAsColor")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            getWindow().getAttributes().layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
-        }
+        Snippet.followNightModeInSystem();
+        Snippet.layoutInDisplayCutoutMode(AppIntroduction.this);
 
         addSlide(AppIntroFragment.createInstance(
                 "How Dependencies are divided",
@@ -127,15 +118,12 @@ public class AppIntroduction extends AppIntro2 {
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
 
-        FirebaseMessaging.getInstance().subscribeToTopic("dev").addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                String message = "🖥";
-                if (!task.isSuccessful()) {
-                    message = "";
-                }
-                Toast.makeText(AppIntroduction.this, "Happy Coding " + message, Toast.LENGTH_SHORT).show();
+        FirebaseMessaging.getInstance().subscribeToTopic("dev").addOnCompleteListener(task -> {
+            String message = "🖥";
+            if (!task.isSuccessful()) {
+                message = "";
             }
+            Component.Toast(AppIntroduction.this, "Happy Coding " + message);
         });
 
         Intent intent = new Intent(AppIntroduction.this, SplashScreen.class);

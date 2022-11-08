@@ -1,9 +1,7 @@
 package com.dephub.android.activity;
 
 import android.annotation.SuppressLint;
-import android.content.res.Configuration;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -16,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dephub.android.R;
 import com.dephub.android.cardview.CardAdapter;
 import com.dephub.android.cardview.CardModel;
+import com.dephub.android.common.Snippet;
 import com.dephub.android.favorite.DatabaseHelper;
 import com.github.aakira.compoundicontextview.CompoundIconTextView;
 
@@ -31,14 +30,14 @@ public class Favorite extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Snippet.followNightModeInSystem();
         setContentView(R.layout.activity_favorite);
 
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.black));
+
         recyclerView = findViewById(R.id.favoriteRecyclerView);
-
         compoundIconTextView = findViewById(R.id.noDependencyFavorites);
-
         databaseHelper = new DatabaseHelper(Favorite.this);
-
         cardFavorite = new ArrayList<>();
 
         buildCardView();
@@ -46,14 +45,7 @@ public class Favorite extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbarFavorites);
         toolbar.setTitle("My Favorites");
         toolbar.setNavigationIcon(R.drawable.ic_back);
-        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-        if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
-            int white = Color.parseColor("#ffffff");
-            toolbar.setTitleTextColor(white);
-        } else {
-            int black = Color.parseColor("#000000");
-            toolbar.setTitleTextColor(black);
-        }
+        Snippet.toolbar(Favorite.this, toolbar);
         setSupportActionBar(toolbar);
 
         TextView textView = findViewById(R.id.favoritesText);
@@ -62,12 +54,12 @@ public class Favorite extends AppCompatActivity {
         if (cursor != null && cursor.getCount() > 0) {
 
             while (cursor.moveToNext()) {
-                @SuppressLint("ResourceType") String bg = getString(R.color.whitetoblack);
+                @SuppressLint("ResourceType") String backgroundColor = getString(R.color.whitetoblack);
                 cardFavorite.add(new CardModel(
                         cursor.getString(2),
                         cursor.getString(3),
                         cursor.getString(4),
-                        bg,
+                        backgroundColor,
                         cursor.getString(9),
                         cursor.getString(1),
                         cursor.getString(6),
@@ -87,7 +79,6 @@ public class Favorite extends AppCompatActivity {
         super.onDestroy();
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private void buildCardView() {
         CardAdapter cardAdapter = new CardAdapter(cardFavorite, Favorite.this);
         linearLayoutManager = new LinearLayoutManager(Favorite.this);

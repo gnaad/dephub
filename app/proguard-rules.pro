@@ -1,5 +1,4 @@
     -keep class com.dephub.android.cardview.CardAdapter { *; }
     -keep class com.dephub.android.cardview.CardModel { *; }
     -keep class com.dephub.android.firebase.OfflineSync { *; }
-    -keep class com.dephub.android.activity.Introduction { *; }
     -keep class com.dephub.android.firebase.Messaging { *; }

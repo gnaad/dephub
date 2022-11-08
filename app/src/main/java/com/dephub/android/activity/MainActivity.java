@@ -2,14 +2,10 @@ package com.dephub.android.activity;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,11 +13,8 @@ import android.view.View;
 import android.view.Window;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -30,6 +23,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.dephub.android.BuildConfig;
 import com.dephub.android.R;
+import com.dephub.android.common.Component;
+import com.dephub.android.common.Snippet;
 import com.dephub.android.fragment.Button;
 import com.dephub.android.fragment.Container;
 import com.dephub.android.fragment.Google;
@@ -39,7 +34,7 @@ import com.dephub.android.fragment.Legacy;
 import com.dephub.android.fragment.Others;
 import com.dephub.android.fragment.Text;
 import com.dephub.android.fragment.Widget;
-import com.dephub.android.settings.Options;
+import com.dephub.android.settings.Main;
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.FullScreenContentCallback;
@@ -72,11 +67,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-
+        Snippet.followNightModeInSystem();
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-
         setContentView(R.layout.activity_mainactivity);
 
         getWindow().setNavigationBarColor(getResources().getColor(R.color.black));
@@ -89,17 +81,9 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbarMainActivity);
         AppBarLayout appBarLayout = findViewById(R.id.appbarMainActivity);
         toolbar.setTitle("DepHub");
-
-        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-        if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
-            int white = Color.parseColor("#ffffff");
-            toolbar.setTitleTextColor(white);
-        } else {
-            int black = Color.parseColor("#000000");
-            toolbar.setTitleTextColor(black);
-        }
-
+        Snippet.toolbar(MainActivity.this, toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setElevation(0);
 
         progressDialog = new ProgressDialog(MainActivity.this, R.style.CustomAlertDialog);
         progressDialog.setMessage("Loading");
@@ -107,12 +91,8 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
 
         Drawable drawable = toolbar.getOverflowIcon();
-        //noinspection ConstantConditions
         DrawableCompat.setTint(drawable.mutate(), getResources().getColor(R.color.toolbaricon));
         toolbar.setOverflowIcon(drawable);
-
-        //noinspection ConstantConditions
-        getSupportActionBar().setElevation(0);
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
 
@@ -121,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
         FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
                 .setMinimumFetchIntervalInSeconds(0)
                 .build();
-
         remoteValue.setDefaultsAsync(R.xml.default_map);
 
         remoteValue.fetchAndActivate().addOnCompleteListener(this, new OnCompleteListener<Boolean>() {
@@ -130,9 +109,7 @@ public class MainActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     int versionName = BuildConfig.VERSION_CODE;
                     remoteVersionCode = remoteValue.getString("version_code");
-                    if (Integer.parseInt(remoteVersionCode) == versionName) {
-
-                    } else {
+                    if (Integer.parseInt(remoteVersionCode) != versionName) {
                         update();
                     }
                 }
@@ -144,11 +121,7 @@ public class MainActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Boolean> task) {
                 if (task.isSuccessful()) {
                     final String visibility = remoteValue.getString("visibility");
-
-                    //noinspection StatementWithEmptyBody
-                    if (visibility.equals("visible")) {
-
-                    } else {
+                    if (!visibility.equals("visible")) {
                         invisible();
                     }
                 }
@@ -168,48 +141,42 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Interstitial Ad start
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
-        });
-
+        Snippet.initializeInterstitialAd(MainActivity.this);
         AdRequest MainActivityAdRequest = new AdRequest.Builder().build();
 
         InterstitialAd.load
-                (this, "ca-app-pub-3037529522611130/2378062737", MainActivityAdRequest, new InterstitialAdLoadCallback() {
-                    @Override
-                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-                        MainActivityInterstitialAd = interstitialAd;
-
-                        interstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                (this,
+                        "ca-app-pub-3037529522611130/2378062737",
+                        MainActivityAdRequest, new InterstitialAdLoadCallback() {
                             @Override
-                            public void onAdShowedFullScreenContent() {
+                            public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                                MainActivityInterstitialAd = interstitialAd;
+
+                                interstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                                    @Override
+                                    public void onAdShowedFullScreenContent() {
+                                    }
+
+                                    @Override
+                                    public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                                        if (goBack) {
+                                            MainActivity.super.onBackPressed();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onAdDismissedFullScreenContent() {
+                                        if (goBack) {
+                                            MainActivity.super.onBackPressed();
+                                        }
+                                    }
+                                });
                             }
 
                             @Override
-                            public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
-                                if (goBack) {
-                                    MainActivity.super.onBackPressed();
-                                } else {
-                                }
-                            }
-
-                            @Override
-                            public void onAdDismissedFullScreenContent() {
-                                if (goBack) {
-                                    MainActivity.super.onBackPressed();
-                                } else {
-                                }
+                            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                             }
                         });
-                    }
-
-                    @Override
-                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-
-                    }
-                });
         // Interstitial Ad End
     }
 
@@ -251,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
                 this.startActivity(intent3);
                 break;
             case R.id.settings:
-                Intent intent5 = new Intent(this, Options.class);
+                Intent intent5 = new Intent(this, Main.class);
                 this.startActivity(intent5);
                 break;
             case R.id.favactivity:
@@ -267,83 +234,61 @@ public class MainActivity extends AppCompatActivity {
     private void invisible() {
         tabLayout.setVisibility(View.INVISIBLE);
         viewPager.setVisibility(View.INVISIBLE);
-        final AlertDialog dialog = new AlertDialog.Builder(this, R.style.CustomAlertDialog)
-                .setCancelable(false)
-                .setMessage(Html.fromHtml("<font color='#000000'>Please come back after some time.<br/><br/>If you have any query Mail Us.</font>"))
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                })
-                .setNegativeButton("Mail Us", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                        Intent intent = new Intent(Intent.ACTION_SEND);
-                        String[] mailTo = {"mailtodephub@gmail.com"};
-                        intent.putExtra(Intent.EXTRA_EMAIL, mailTo);
-                        intent.putExtra(Intent.EXTRA_SUBJECT, "About DepHub App");
-                        intent.putExtra(Intent.EXTRA_TEXT, "Hello\n\nI would like to say:\n");
-                        intent.setType("message/rfc822");
-                        startActivity(Intent.createChooser(intent, "Choose an email client"));
-                    }
-                })
-                .create();
-        dialog.show();
-        alertDialogButton(dialog);
+        Component.alertDialog(MainActivity.this,
+                false,
+                "Please come back after some time.\n\nIf you have any query Mail Us.",
+                "Ok",
+                "Mail Us",
+                (dialog, which) -> {
+                    finish();
+                },
+                (dialog, which) -> {
+                    finish();
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    String[] mailTo = {"mailtodephub@gmail.com"};
+                    intent.putExtra(Intent.EXTRA_EMAIL, mailTo);
+                    intent.putExtra(Intent.EXTRA_SUBJECT, "About DepHub App");
+                    intent.putExtra(Intent.EXTRA_TEXT, "Hello\n\nI would like to say:\n");
+                    intent.setType("message/rfc822");
+                    startActivity(Intent.createChooser(intent, "Choose an email client"));
+                }
+        );
     }
 
     private void serverBusy() {
         tabLayout.setVisibility(View.INVISIBLE);
         viewPager.setVisibility(View.INVISIBLE);
-        final AlertDialog dialog = new AlertDialog.Builder(this, R.style.CustomAlertDialog)
-                .setCancelable(false)
-                .setMessage(Html.fromHtml("<font color='#000000'>Our Server is under Maintenance<br/><br/>Our Server is under maintenance. But we will be back within few minutes.<br/><br/>We are Improving DepHub to provide you more information about Dependencies.<br/><br/>Thanks for your patience.<br/>We apologize for the inconvenience caused.<br/><br/>Regards<br/>DepHub<br/><br/>We will send you notification once its ready.</font>"))
-                .setPositiveButton("Close", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                })
-                .create();
-        dialog.show();
-        alertDialogButton(dialog);
+        Component.alertDialog(MainActivity.this,
+                false,
+                "Our Server is under Maintenance\n\nOur Server is under maintenance. But we will be back within few minutes.\n\nWe are Improving DepHub to provide you more information about Dependencies.\n\nThanks for your patience.\nWe apologize for the inconvenience caused.\n\nRegards\nDepHub\n\nWe will send you notification once its ready.",
+                "Close",
+                null,
+                (dialog, which) -> {
+                    finish();
+                }, null
+        );
     }
 
     private void update() {
         tabLayout.setVisibility(View.INVISIBLE);
         viewPager.setVisibility(View.INVISIBLE);
-        final AlertDialog dialog = new AlertDialog.Builder(this, R.style.CustomAlertDialog)
-                .setCancelable(false)
-                .setMessage(Html.fromHtml("<font color='#000000'>Update Available<br/><br/>New version of this app is available now. Please update to get more features.<br/><br/>Get it on Google PlayStore</font>"))
-                .setPositiveButton("Update Now", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.dephub.android"));
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                        finish();
-                    }
-                })
-                .setNegativeButton("No,Thanks", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        tabLayout.setVisibility(View.VISIBLE);
-                        viewPager.setVisibility(View.VISIBLE);
-                        dialog.dismiss();
-                    }
-                })
-                .create();
-        dialog.show();
-        alertDialogButton(dialog);
-    }
-
-    private void alertDialogButton(AlertDialog dialog) {
-        android.widget.Button PositiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        PositiveButton.setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
-        android.widget.Button NegativeButton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-        NegativeButton.setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+        Component.alertDialog(MainActivity.this,
+                false,
+                "Update Available\n\nNew version of this app is available now. Please update to get more features.\n\nGet it on Google PlayStore",
+                "Update Now",
+                "No,Thanks",
+                (dialog, which) -> {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.dephub.android"));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
+                },
+                (dialog, which) -> {
+                    tabLayout.setVisibility(View.VISIBLE);
+                    viewPager.setVisibility(View.VISIBLE);
+                    dialog.dismiss();
+                }
+        );
     }
 
     @Override
@@ -364,14 +309,13 @@ public class MainActivity extends AppCompatActivity {
         if (MainActivityInterstitialAd != null) {
             goBack = false;
             MainActivityInterstitialAd.show(MainActivity.this);
-        } else {
         }
         super.onResume();
     }
 
     static class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
+        private final List<Fragment> FragmentList = new ArrayList<>();
+        private final List<String> FragmentTitleList = new ArrayList<>();
 
         public ViewPagerAdapter(FragmentManager manager) {
             super(manager);
@@ -380,22 +324,22 @@ public class MainActivity extends AppCompatActivity {
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            return mFragmentList.get(position);
+            return FragmentList.get(position);
         }
 
         @Override
         public int getCount() {
-            return mFragmentList.size();
+            return FragmentList.size();
         }
 
         public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
+            FragmentList.add(fragment);
+            FragmentTitleList.add(title);
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
+            return FragmentTitleList.get(position);
         }
     }
 }

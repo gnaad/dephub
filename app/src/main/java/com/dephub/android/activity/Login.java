@@ -3,8 +3,6 @@ package com.dephub.android.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -14,18 +12,15 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.browser.customtabs.CustomTabsIntent;
-import androidx.core.content.ContextCompat;
 
 import com.dephub.android.R;
+import com.dephub.android.common.Component;
+import com.dephub.android.common.Snippet;
 
 public class Login extends AppCompatActivity {
     public static final String privacyPolicy = "https://gnanendraprasadp.github.io/DepHub-Web/privacypolicy";
@@ -35,48 +30,40 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        Snippet.followNightModeInSystem();
+        Snippet.layoutInDisplayCutoutMode(Login.this);
+        Snippet.loginFullScreen(Login.this);
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(LayoutParams.FLAG_FULLSCREEN, LayoutParams.FLAG_FULLSCREEN);
-        getWindow().addFlags(LayoutParams.FLAG_FULLSCREEN);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            getWindow().getAttributes().layoutInDisplayCutoutMode = LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
-
-        }
         getSupportActionBar().hide();
 
         setContentView(R.layout.activity_login);
 
         TextView termsAndCondition = findViewById(R.id.footer);
-
         String footer = "By continuing you agree to DepHub's Terms of Service and Privacy Policy.";
         termsAndCondition.setText(footer);
 
         SpannableString spannableStringFooter = new SpannableString(footer);
-
         ClickableSpan clickableSpanTerms = new ClickableSpan() {
             @Override
-            public void updateDrawState(TextPaint ds) {
-                ds.setUnderlineText(false);
+            public void updateDrawState(TextPaint textPaint) {
+                textPaint.setUnderlineText(false);
             }
 
             @Override
             public void onClick(@NonNull View widget) {
-                openCustomTabs(privacyPolicy);
+                Component.openInBrowser(Login.this, privacyPolicy);
             }
         };
 
         ClickableSpan clickableSpanPolicy = new ClickableSpan() {
             @Override
-            public void updateDrawState(TextPaint ds) {
-                ds.setUnderlineText(false);
+            public void updateDrawState(TextPaint textPaint) {
+                textPaint.setUnderlineText(false);
             }
 
             @Override
             public void onClick(@NonNull View widget) {
-                openCustomTabs(termsOfService);
+                Component.openInBrowser(Login.this, termsOfService);
             }
         };
 
@@ -92,16 +79,7 @@ public class Login extends AppCompatActivity {
         termsAndCondition.setText(spannableStringFooter);
         termsAndCondition.setMovementMethod(LinkMovementMethod.getInstance());
 
-        View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        Snippet.uiVisibility(Login.this);
 
         Button signInButton = findViewById(R.id.sign_in);
 
@@ -124,17 +102,5 @@ public class Login extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
-    }
-
-    private void openCustomTabs(String url) {
-        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-        builder.setToolbarColor(ContextCompat.getColor(Login.this, R.color.colorPrimary));
-        builder.setShowTitle(true);
-        builder.addDefaultShareMenuItem();
-        builder.setUrlBarHidingEnabled(false);
-        builder.setStartAnimations(Login.this, R.anim.slide_up, R.anim.trans);
-        builder.setExitAnimations(Login.this, R.anim.trans, R.anim.slide_down);
-        CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.launchUrl(Login.this, Uri.parse(url));
     }
 }

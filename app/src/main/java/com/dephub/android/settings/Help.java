@@ -1,39 +1,30 @@
 package com.dephub.android.settings;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
-import androidx.browser.customtabs.CustomTabsIntent;
-import androidx.core.content.ContextCompat;
 
 import com.dephub.android.BuildConfig;
 import com.dephub.android.R;
 import com.dephub.android.activity.Credits;
 import com.dephub.android.activity.OpenSource;
 import com.dephub.android.activity.WriteFeedback;
+import com.dephub.android.common.Component;
+import com.dephub.android.common.Snippet;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -108,16 +99,10 @@ public class Help extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-
+        Snippet.followNightModeInSystem();
         setContentView(R.layout.activity_settings_help);
 
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
-            }
-        });
+        Snippet.initializeInterstitialAd(Help.this);
 
         AdView helpAdView = findViewById(R.id.adHelp);
         AdRequest adRequest = new AdRequest.Builder().build();
@@ -150,14 +135,7 @@ public class Help extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbarHelp);
         toolbar.setTitle("Help");
         toolbar.setNavigationIcon(R.drawable.ic_back);
-        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-        if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
-            int white = Color.parseColor("#ffffff");
-            toolbar.setTitleTextColor(white);
-        } else {
-            int black = Color.parseColor("#000000");
-            toolbar.setTitleTextColor(black);
-        }
+        Snippet.toolbar(Help.this, toolbar);
         setSupportActionBar(toolbar);
 
         List<HashMap<String, String>> hashMapArrayList = new ArrayList<HashMap<String, String>>();
@@ -193,10 +171,10 @@ public class Help extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
-                    openCustomTabs(Help.this, tos);
+                    Component.openInBrowser(Help.this, tos);
                 }
                 if (position == 1) {
-                    openCustomTabs(Help.this, pp);
+                    Component.openInBrowser(Help.this, pp);
                 }
                 if (position == 2) {
                     Intent intent = new Intent(view.getContext(), WriteFeedback.class);
@@ -221,77 +199,54 @@ public class Help extends AppCompatActivity {
                 }
 
                 if (position == 6) {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Help.this, R.style.CustomAlertDialog);
-                    alertDialogBuilder.setCancelable(true);
-                    alertDialogBuilder.setMessage("Are you sure want to clear cache?\n\nNote: Please don't clear cache until or unless DepHub is running slow.");
-                    alertDialogBuilder.setPositiveButton("Clear Cache", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            deleteCache(getApplicationContext());
-                            Toast.makeText(Help.this, "Cache cleared successfully.", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-                    alertDialog.show();
-                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorAccent));
-                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorAccent));
+                    Component.alertDialog(Help.this,
+                            true,
+                            "Are you sure want to clear cache?\n\nNote: Please don't clear cache until or unless DepHub is running slow.",
+                            "Clear Cache",
+                            "Cancel",
+                            (dialog, which) -> {
+                                deleteCache(getApplicationContext());
+                                Component.Toast(Help.this, "Cache cleared successfully.");
+                            },
+                            (dialog, which) -> {
+                                dialog.dismiss();
+                            });
                 }
                 if (position == 7) {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.dephub.android"));
                     startActivity(intent);
                 }
                 if (position == 8) {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Help.this, R.style.CustomAlertDialog);
                     String versionName = BuildConfig.VERSION_NAME;
                     int versionCode = BuildConfig.VERSION_CODE;
-
                     String installer = "";
 
                     if (!verifyInstaller(getApplicationContext())) {
                         installer = "•Not Installed from Google Play";
                     }
 
+                    @SuppressLint("SimpleDateFormat")
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
                     if (BuildConfig.DEBUG) {
-                        @SuppressLint("SimpleDateFormat")
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
-
-                        alertDialogBuilder.setCancelable(true);
-                        alertDialogBuilder.setMessage("DepHub\nVersion v" + versionName + " (" + versionCode + ")\n•Development Version\n" + installer + "\n\nCopyright \u00a9 2020-" + simpleDateFormat.format(new Date()) + " DepHub");
-                        AlertDialog alertDialog = alertDialogBuilder.create();
-                        alertDialog.show();
-                        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorAccent));
-                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorAccent));
+                        Component.alertDialog(Help.this,
+                                true,
+                                "DepHub\nVersion v" + versionName + " (" + versionCode + ")\n•Development Version\n" + installer + "\n\nCopyright \u00a9 2020-" + simpleDateFormat.format(new Date()) + " DepHub",
+                                null,
+                                null,
+                                null,
+                                null);
                     } else {
-                        @SuppressLint("SimpleDateFormat")
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
-
-                        alertDialogBuilder.setCancelable(true);
-                        alertDialogBuilder.setMessage("DepHub\nVersion v" + versionName + " (" + versionCode + ")\n" + installer + "\nCopyright \u00A9 2020-" + simpleDateFormat.format(new Date()) + " DepHub");
-                        AlertDialog alertDialog = alertDialogBuilder.create();
-                        alertDialog.show();
-                        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorAccent));
-                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorAccent));
+                        Component.alertDialog(Help.this,
+                                true,
+                                "DepHub\nVersion v" + versionName + " (" + versionCode + ")\n" + installer + "\nCopyright \u00A9 2020-" + simpleDateFormat.format(new Date()) + " DepHub",
+                                null,
+                                null,
+                                null,
+                                null);
                     }
                 }
             }
         });
-    }
-
-    private void openCustomTabs(Context applicationContext, String tos) {
-        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-        builder.setToolbarColor(ContextCompat.getColor(applicationContext, R.color.colorPrimary));
-        builder.setShowTitle(true);
-        builder.addDefaultShareMenuItem();
-        builder.setUrlBarHidingEnabled(true);
-        builder.setStartAnimations(Help.this, R.anim.slide_up, R.anim.trans);
-        builder.setExitAnimations(Help.this, R.anim.trans, R.anim.slide_down);
-        CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.launchUrl(Help.this, Uri.parse(tos));
     }
 
     boolean verifyInstaller(Context context) {

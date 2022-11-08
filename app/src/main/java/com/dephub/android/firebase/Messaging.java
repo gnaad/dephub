@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -22,26 +21,20 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 public class Messaging extends FirebaseMessagingService {
-
     private static final String TAG = "General";
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
-
         super.onMessageReceived(remoteMessage);
 
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
-        if (remoteMessage.getData().size() > 0) {
-            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
-            if (remoteMessage.getNotification() != null) {
-                Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-            }
+        if (remoteMessage.getNotification() != null) {
+            String title = remoteMessage.getNotification().getTitle();
+            String body = remoteMessage.getNotification().getBody();
+            sendNotification(title, body);
         }
-        //noinspection ConstantConditions
-        sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody(), remoteMessage.getNotification().getClickAction());
     }
 
-    private void sendNotification(String title, String messageBody, String click) {
+    private void sendNotification(String title, String messageBody) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel("General", "General", NotificationManager.IMPORTANCE_DEFAULT);
@@ -68,7 +61,6 @@ public class Messaging extends FirebaseMessagingService {
                 .setGroup("Unread Notification")
                 .setGroupSummary(true)
                 .setContentIntent(pendingIntent);
-
         notificationManager.notify(0, notificationBuilder.build());
     }
 }

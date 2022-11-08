@@ -2,9 +2,7 @@ package com.dephub.android.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -19,17 +17,17 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.dephub.android.R;
+import com.dephub.android.common.Component;
+import com.dephub.android.common.Snippet;
 import com.github.aakira.compoundicontextview.CompoundIconTextView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -51,9 +49,7 @@ public class News extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-
+        Snippet.followNightModeInSystem();
         setContentView(R.layout.activity_news);
 
         getWindow().setNavigationBarColor(getResources().getColor(R.color.black));
@@ -61,14 +57,7 @@ public class News extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbarNews);
         toolbar.setTitle("News");
         toolbar.setNavigationIcon(R.drawable.ic_back);
-        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-        if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
-            int white = Color.parseColor("#ffffff");
-            toolbar.setTitleTextColor(white);
-        } else {
-            int black = Color.parseColor("#000000");
-            toolbar.setTitleTextColor(black);
-        }
+        Snippet.toolbar(News.this, toolbar);
         setSupportActionBar(toolbar);
 
         Drawable drawable = toolbar.getOverflowIcon();
@@ -109,7 +98,7 @@ public class News extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
+                Component.Toast(News.this, error.toString());
             }
         });
 
@@ -133,6 +122,7 @@ public class News extends AppCompatActivity {
             webview.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
 
+        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
             webview.getSettings().setForceDark(WebSettings.FORCE_DARK_ON);
         }
@@ -202,20 +192,17 @@ public class News extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.count) {
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(News.this, R.style.CustomAlertDialog);
-
-            alertDialogBuilder.setCancelable(true);
-            alertDialogBuilder.setMessage("Dependency Count\n\nText : " + text_db_value + "\nButton : " + button_db_value + "\nWidget : " + widget_db_value + "\nLayout : " + layout_db_value + "" +
-                    "\nContainer : " + container_db_value + "\nHelper : " + helper_db_value + "\nGoogle : " + google_db_value + "\nLegacy : " + legacy_db_value + "\nOthers : " + others_db_value + "\n\nTotal : " + total + " Dependencies\n\nLast Modified : " + date_db_value);
-            alertDialogBuilder.setPositiveButton("Close", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    dialog.dismiss();
-                }
-            });
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.show();
-            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorAccent));
-            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorAccent));
+            Component.alertDialog(
+                    News.this,
+                    true,
+                    "Dependency Count\n\nText : " + text_db_value + "\nButton : " + button_db_value + "\nWidget : " + widget_db_value + "\nLayout : " + layout_db_value + "" +
+                            "\nContainer : " + container_db_value + "\nHelper : " + helper_db_value + "\nGoogle : " + google_db_value + "\nLegacy : " + legacy_db_value + "\nOthers : " + others_db_value + "\n\nTotal : " + total + " Dependencies\n\nLast Modified : " + date_db_value,
+                    "Close",
+                    null,
+                    (dialog, which) -> {
+                        dialog.dismiss();
+                    }, null
+            );
         } else {
             return super.onOptionsItemSelected(item);
         }

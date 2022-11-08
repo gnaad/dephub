@@ -7,46 +7,34 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
 import com.dephub.android.R;
 import com.dephub.android.cardview.CardAdapter;
 import com.dephub.android.cardview.CardModel;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.dephub.android.common.Snippet;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 public class Others extends Fragment {
     public static final String url = "https://gnanendraprasadp.github.io/DepHub-Web/json/dependency.json";
     private RecyclerView cardRecyclerViewOthers;
     private ArrayList<CardModel> cardOthers;
     private SwipeRefreshLayout swipeRefreshLayout;
-
-    @SuppressLint("SetJavaScriptEnabled")
+    LinearLayoutManager linearLayoutManager;
+    private CardAdapter cardViewAdapterOthers;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-
+        Snippet.followNightModeInSystem();
         View view = inflater.inflate(R.layout.activity_fragment_others, container, false);
 
         cardRecyclerViewOthers = view.findViewById(R.id.othersfragment);
+        setRetainInstance(true);
 
         cardOthers = new ArrayList<>();
 
@@ -55,9 +43,11 @@ public class Others extends Fragment {
             @Override
             public void onRefresh() {
                 new Handler().postDelayed(new Runnable() {
+                    @SuppressLint("NotifyDataSetChanged")
                     @Override
                     public void run() {
                         cardOthers.clear();
+                        cardViewAdapterOthers.notifyDataSetChanged();
                         swipeRefreshLayout.setRefreshing(false);
                         getDependency();
                     }
@@ -66,64 +56,23 @@ public class Others extends Fragment {
         });
         getDependency();
         buildCardView();
-
         return view;
     }
 
     private void getDependency() {
-        @SuppressWarnings("ConstantConditions") RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-        requestQueue.getCache().clear();
-
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                for (int i = 0; i < response.length(); i++) {
-
-                    try {
-                        JSONObject jsonObject = response.getJSONObject(i);
-
-                        String type = jsonObject.getString("type");
-
-                        if (type.equals("Others")) {
-                            String dependencyName = jsonObject.getString("dependency_name");
-                            String developerName = jsonObject.getString("developer_name");
-                            String fullName = jsonObject.getString("full_name");
-                            String githubLink = jsonObject.getString("github_link");
-                            @SuppressLint("ResourceType")
-                            String bg = getString(R.color.whitetoblack);
-                            String youtube = jsonObject.getString("youtube_link");
-                            String id = jsonObject.getString("id");
-                            String license = jsonObject.getString("license");
-                            String licenseLink = jsonObject.getString("license_link");
-                            cardOthers.add(new CardModel(dependencyName, developerName, githubLink, bg, youtube, id, license, licenseLink, fullName));
-
-                            Collections.sort(cardOthers, new Comparator<CardModel>() {
-                                @Override
-                                public int compare(CardModel o1, CardModel o2) {
-                                    return o1.getDependencyName().compareTo(o2.getDependencyName());
-                                }
-                            });
-
-                            buildCardView();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+        Snippet.dependencyArray(getContext(),
+                url,
+                response -> {
+                    Snippet.fetchDependency("Others", getContext(), response, cardOthers, null);
+                    buildCardView();
+                }, error -> {
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-        jsonArrayRequest.setShouldCache(false);
-        requestQueue.add(jsonArrayRequest);
+        );
     }
 
     private void buildCardView() {
-        CardAdapter cardViewAdapterOthers = new CardAdapter(cardOthers, getActivity());
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        cardViewAdapterOthers = new CardAdapter(cardOthers, getActivity());
+        linearLayoutManager = new LinearLayoutManager(getContext());
         cardRecyclerViewOthers.setHasFixedSize(true);
         cardRecyclerViewOthers.setLayoutManager(linearLayoutManager);
         cardRecyclerViewOthers.setAdapter(cardViewAdapterOthers);

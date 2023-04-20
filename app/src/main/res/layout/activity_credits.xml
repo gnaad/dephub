@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/darktoggle"
+    android:background="@color/dark_toggle"
     android:overScrollMode="never">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/appbarCredits"
-        android:background="@color/darktoggle"
+        android:background="@color/dark_toggle"
         android:forceDarkAllowed="true"
         android:overScrollMode="never"
         tools:ignore="NotSibling,ScrollViewCount">
@@ -44,7 +44,7 @@
                     android:layout_marginRight="20sp"
                     android:fontFamily="@font/sans"
                     android:text="@string/credits_github"
-                    android:textColor="@color/blacktowhite"
+                    android:textColor="@color/black_to_white"
                     android:textSize="16dp"
                     android:textStyle="normal" />
 
@@ -74,7 +74,7 @@
                     android:layout_marginStart="20sp"
                     android:fontFamily="@font/sans"
                     android:text="@string/credits_flaticon"
-                    android:textColor="@color/blacktowhite"
+                    android:textColor="@color/black_to_white"
                     android:textSize="16dp"
                     android:textStyle="normal" />
 
@@ -103,7 +103,7 @@
                     android:layout_marginStart="20sp"
                     android:fontFamily="@font/sans"
                     android:text="@string/credits_storyset"
-                    android:textColor="@color/blacktowhite"
+                    android:textColor="@color/black_to_white"
                     android:textSize="16dp"
                     android:textStyle="normal" />
 
@@ -119,7 +119,7 @@
                 android:layout_marginRight="20sp"
                 android:fontFamily="@font/sans"
                 android:text="@string/credits_title"
-                android:textColor="@color/blacktowhite"
+                android:textColor="@color/black_to_white"
                 android:textSize="18dp"
                 android:textStyle="normal" />
         </RelativeLayout>
@@ -139,7 +139,7 @@
             android:layout_height="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|enterAlways"
             app:navigationIcon="?attr/homeAsUpIndicator"
-            app:titleTextAppearance="@style/toolbartextentity" />
+            app:titleTextAppearance="@style/toolbarTextEntity" />
     </com.google.android.material.appbar.AppBarLayout>
 
 </RelativeLayout>

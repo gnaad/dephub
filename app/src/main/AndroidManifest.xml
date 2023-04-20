@@ -9,13 +9,13 @@
         android:smallScreens="false"
         android:xlargeScreens="false" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage"
@@ -37,12 +37,6 @@
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppIntro" />
-        <activity
-            android:name=".activity.Favorite"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:exported="false"
-            android:parentActivityName=".activity.MainActivity"
-            android:theme="@style/MainActivityTheme" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
@@ -62,32 +56,13 @@
             android:parentActivityName=".settings.Help"
             android:theme="@style/MainActivityTheme" />
         <activity
-            android:name=".activity.QRCode"
-            android:exported="false"
-            android:hardwareAccelerated="true"
-            android:parentActivityName=".activity.Web"
-            android:screenOrientation="portrait"
-            android:theme="@style/MainActivityTheme" />
-        <activity
             android:name=".settings.Help"
-            android:exported="false"
-            android:parentActivityName=".settings.Main"
-            android:theme="@style/MainActivityTheme" />
-        <activity
-            android:name=".settings.Follow"
             android:exported="false"
             android:parentActivityName=".settings.Main"
             android:theme="@style/MainActivityTheme" />
         <activity
             android:name=".settings.Main"
             android:exported="false"
-            android:parentActivityName=".activity.MainActivity"
-            android:theme="@style/MainActivityTheme" />
-        <activity
-            android:name=".activity.News"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:exported="false"
-            android:launchMode="singleTask"
             android:parentActivityName=".activity.MainActivity"
             android:theme="@style/MainActivityTheme" />
         <activity
@@ -113,14 +88,6 @@
             android:name=".activity.Credits"
             android:exported="false"
             android:parentActivityName=".settings.Help"
-            android:theme="@style/MainActivityTheme" />
-        <activity
-            android:name=".activity.Web"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:exported="false"
-            android:hardwareAccelerated="true"
-            android:launchMode="singleTask"
-            android:parentActivityName=".activity.MainActivity"
             android:theme="@style/MainActivityTheme" />
         <activity
             android:name=".activity.SplashScreen"
@@ -168,7 +135,7 @@
             android:value="@string/notification" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/notificationblue" />
+            android:resource="@color/notification_blue" />
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

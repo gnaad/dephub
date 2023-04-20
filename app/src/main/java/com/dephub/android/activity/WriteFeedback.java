@@ -10,13 +10,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.dephub.android.BuildConfig;
 import com.dephub.android.R;
-import com.dephub.android.common.Component;
-import com.dephub.android.common.Snippet;
+import com.dephub.android.utility.Snippet;
+import com.dephub.android.utility.Widget;
+import com.google.android.gms.ads.AdError;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -24,7 +31,8 @@ import java.util.Date;
 
 public class WriteFeedback extends AppCompatActivity {
 
-    private EditText Problem;
+    private EditText Issue;
+    private InterstitialAd WriteFeedbackInterstitialAd;
 
     @SuppressLint("ResourceAsColor")
     @Override
@@ -41,7 +49,7 @@ public class WriteFeedback extends AppCompatActivity {
         toolbar.setNavigationIcon(R.drawable.ic_back);
         setSupportActionBar(toolbar);
 
-        Problem = findViewById(R.id.userProb);
+        Issue = findViewById(R.id.userProb);
         Button btnSubmit = findViewById(R.id.feedbackSubmit);
         Button btnMailUs = findViewById(R.id.mailUs);
 
@@ -79,7 +87,7 @@ public class WriteFeedback extends AppCompatActivity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String problemInput = Problem.getText().toString().trim();
+                String problemInput = Issue.getText().toString().trim();
                 String[] wordCount = problemInput.split("\\s+");
 
                 if (TextUtils.isEmpty(problemInput)) {
@@ -87,7 +95,7 @@ public class WriteFeedback extends AppCompatActivity {
                 } else if (wordCount.length < 10) {
                     showAlertDialog("Please describe your problem atleast using ten words.");
                 } else {
-                    Component.alertDialog(WriteFeedback.this,
+                    Widget.alertDialog(WriteFeedback.this,
                             true,
                             "Are you sure, You want to submit the feedback that you have entered?",
                             "Yes, Submit Now",
@@ -108,13 +116,44 @@ public class WriteFeedback extends AppCompatActivity {
                 }
             }
         });
+
+        Snippet.initializeInterstitialAd(WriteFeedback.this);
+        AdRequest writeFeedbackAdRequest = new AdRequest.Builder().build();
+
+        Widget.showInterstitialAd(this, "ca-app-pub-3037529522611130/3494136300", writeFeedbackAdRequest, new InterstitialAdLoadCallback() {
+            @Override
+            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                WriteFeedback.super.onBackPressed();
+            }
+
+            @Override
+            public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                WriteFeedbackInterstitialAd = interstitialAd;
+
+                interstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                    @Override
+                    public void onAdDismissedFullScreenContent() {
+                        WriteFeedback.super.onBackPressed();
+                    }
+
+                    @Override
+                    public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                        WriteFeedback.super.onBackPressed();
+                    }
+                });
+            }
+        });
     }
 
     @Override
     public void onBackPressed() {
-        String problemInput = Problem.getText().toString().trim();
+        String problemInput = Issue.getText().toString().trim();
         if (TextUtils.isEmpty(problemInput)) {
-            super.onBackPressed();
+            if (WriteFeedbackInterstitialAd != null) {
+                WriteFeedbackInterstitialAd.show(WriteFeedback.this);
+            } else {
+                super.onBackPressed();
+            }
         } else {
             backButtonPressed();
         }
@@ -122,9 +161,13 @@ public class WriteFeedback extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        String problemInput = Problem.getText().toString().trim();
+        String problemInput = Issue.getText().toString().trim();
         if (TextUtils.isEmpty(problemInput)) {
-            super.onBackPressed();
+            if (WriteFeedbackInterstitialAd != null) {
+                WriteFeedbackInterstitialAd.show(WriteFeedback.this);
+            } else {
+                super.onBackPressed();
+            }
         } else {
             backButtonPressed();
         }
@@ -132,7 +175,7 @@ public class WriteFeedback extends AppCompatActivity {
     }
 
     private void backButtonPressed() {
-        Component.alertDialog(WriteFeedback.this,
+        Widget.alertDialog(WriteFeedback.this,
                 true,
                 "Are you sure you want to go back?",
                 "Yes",
@@ -146,7 +189,7 @@ public class WriteFeedback extends AppCompatActivity {
     }
 
     private void showAlertDialog(String message) {
-        Component.alertDialog(WriteFeedback.this,
+        Widget.alertDialog(WriteFeedback.this,
                 true,
                 message,
                 "Ok",

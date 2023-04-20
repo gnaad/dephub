@@ -14,8 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.dephub.android.R;
-import com.dephub.android.common.Component;
-import com.dephub.android.common.Snippet;
+import com.dephub.android.utility.Widget;
+import com.dephub.android.utility.Snippet;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -32,24 +32,20 @@ import java.util.List;
 public class Main extends AppCompatActivity {
     String[] ListViewTitle = new String[]{
             "Help",
-            "Follow Us On",
             "View Website",
             "Invite a Friend"};
 
     String[] ListViewDescription = new String[]{
             "Feedback, Policies, App Info",
-            "Instagram",
             "View our official website",
             "Tell them about DepHub"};
 
     int[] images = new int[]{
             R.drawable.ic_help,
-            R.drawable.ic_network,
             R.drawable.ic_website,
             R.drawable.ic_invite};
 
     int[] external = new int[]{
-            R.drawable.ic_external,
             R.drawable.ic_external,
             R.drawable.ic_external,
             R.drawable.ic_external};
@@ -105,11 +101,11 @@ public class Main extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<String> task) {
                             if (!task.isSuccessful()) {
-                                Component.Toast(Main.this, "You haven't subscribed to Notifications." + task.getException());
+                                Widget.Toast(Main.this, "You haven't subscribed to Notifications." + task.getException());
                             }
                             String token = task.getResult();
                             Snippet.vibrate(Main.this, token);
-                            Component.Toast(Main.this, "You have subscribed to Notifications.");
+                            Widget.Toast(Main.this, "You have subscribed to Notifications.");
                         }
                     });
                 }
@@ -132,7 +128,7 @@ public class Main extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         List<HashMap<String, String>> hashMapArrayList = new ArrayList<HashMap<String, String>>();
-        for (int x = 0; x <= 3; x++) {
+        for (int x = 0; x <= 2; x++) {
             HashMap<String, String> hashMap = new HashMap<String, String>();
             hashMap.put("ListTitle", ListViewTitle[x]);
             hashMap.put("ListDescription", ListViewDescription[x]);
@@ -164,14 +160,10 @@ public class Main extends AppCompatActivity {
                     startActivity(intent);
                 }
                 if (position == 1) {
-                    Intent intent = new Intent(view.getContext(), Follow.class);
-                    startActivity(intent);
+                    String website = "https://gnanendraprasadp.github.io/dephub";
+                    Widget.openInBrowser(Main.this, website);
                 }
                 if (position == 2) {
-                    String website = "https://gnanendraprasadp.github.io/DepHub-Web";
-                    Component.openInBrowser(Main.this, website);
-                }
-                if (position == 3) {
                     Intent intent52 = new Intent(Intent.ACTION_SEND);
                     intent52.setType("text/plain");
                     String shareBody2 = "About DepHub App";

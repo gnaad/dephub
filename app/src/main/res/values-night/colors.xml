@@ -5,51 +5,49 @@
     <color name="colorAccent">#0027FF</color>
     <color name="blue">#0027FF</color>
 
-    <color name="indicatorcolor">#0027FF</color>
+    <color name="indicator_color">#0027FF</color>
     <color name="MainActivity">#121212</color>
-    <color name="mainpageviewerwhite">#121212</color>
-    <color name="darktoggle">#121212</color>
-    <color name="whiteappintro">#ffffff</color>
+    <color name="main_page_viewer_white">#121212</color>
+    <color name="dark_toggle">#121212</color>
+    <color name="app_intro_white">#ffffff</color>
 
-    <color name="lightblue">#E9ECFF</color>
+    <color name="light_blue">#E9ECFF</color>
 
-    <color name="listtext">#ffffff</color>
-    <color name="settingscolor">#ffffff</color>
+    <color name="list_text">#ffffff</color>
+    <color name="settings_color">#ffffff</color>
 
-    <color name="textcolor">#121212</color>
+    <color name="text_color">#121212</color>
 
-    <color name="settingname">#ffffff</color>
-    <color name="settingsubname">#ffffff</color>
+    <color name="settings_name">#ffffff</color>
+    <color name="settings_sub_name">#ffffff</color>
 
-    <color name="toolbaricon">#ffffff</color>
+    <color name="toolbar_icon">#ffffff</color>
 
-    <color name="tabTextColorother">#bfffffff</color>
-    <color name="tabTextColormain">#717171</color>
+    <color name="tab_text_color_other">#bfffffff</color>
+    <color name="tab_text_color_main">#717171</color>
 
-    <color name="notificationblue">#ffffff</color>
+    <color name="notification_blue">#ffffff</color>
 
-    <color name="introwhite">#121212</color>
-    <color name="introblack">#ffffff</color>
-    <color name="introblue">#0027FF</color>
-    <color name="introunselected">#ada19e</color>
+    <color name="intro_white">#121212</color>
+    <color name="intro_black">#ffffff</color>
+    <color name="intro_blue">#0027FF</color>
+    <color name="intro_unselected">#ada19e</color>
 
-    <color name="splashblue">#ffffff</color>
-    <color name="splashblack">#ffffff</color>
+    <color name="splash_blue">#ffffff</color>
+    <color name="splash_black">#ffffff</color>
 
     <color name="edittext">#ffffff</color>
-    <color name="edittexthint">#616161</color>
+    <color name="edittext_hint">#616161</color>
 
-    <color name="dialogroundcorner">#1b1b1b</color>
+    <color name="dialog_rounded_corner">#1b1b1b</color>
 
-    <color name="whitetoblack">#121212</color>
-    <color name="blacktowhite">#ffffff</color>
-    <color name="bluetowhite">#ffffff</color>
+    <color name="white_to_black">#121212</color>
+    <color name="black_to_white">#ffffff</color>
+    <color name="blue_to_white">#ffffff</color>
 
-    <color name="selectedtextcolor">#ffffff</color>
+    <color name="selected_text_color">#ffffff</color>
     <color name="progressbar">#0027ff</color>
-    <color name="cardwhite">#ffffff</color>
-    <color name="fabyoutube">#ff0000</color>
-    <color name="fabyoutuberipple">#ff9999</color>
-    <color name="fabsource">#252729</color>
-    <color name="fabsourceripple">#dddddd</color>
+    <color name="card_white">#ffffff</color>
+    <color name="fab_source">#252729</color>
+    <color name="fab_source_ripple">#dddddd</color>
 </resources>

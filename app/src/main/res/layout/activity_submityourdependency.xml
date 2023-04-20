@@ -2,14 +2,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/darktoggle"
+    android:background="@color/dark_toggle"
     android:overScrollMode="never">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/appbarSubmiyYourDep"
-        android:background="@color/whitetoblack"
+        android:background="@color/white_to_black"
         android:overScrollMode="never">
 
         <RelativeLayout
@@ -33,7 +33,7 @@
                     android:layout_marginLeft="25sp"
                     android:layout_marginTop="35sp"
                     android:layout_marginRight="25sp"
-                    android:background="@drawable/formedittextbg"
+                    android:background="@drawable/ic_form_input"
                     android:elevation="20sp"
                     android:ems="10"
                     android:fontFamily="@font/sans"
@@ -42,7 +42,7 @@
                     android:paddingStart="25sp"
                     android:paddingEnd="25sp"
                     android:textColor="@color/edittext"
-                    android:textColorHint="@color/edittexthint"
+                    android:textColorHint="@color/edittext_hint"
                     android:windowSoftInputMode="adjustResize" />
 
                 <TextView
@@ -51,7 +51,7 @@
                     android:layout_marginLeft="25sp"
                     android:fontFamily="@font/sans"
                     android:text="@string/submit_dependency_name"
-                    android:textColor="@color/blacktowhite"
+                    android:textColor="@color/black_to_white"
                     android:textSize="16.5sp"
                     android:textStyle="bold" />
 
@@ -73,7 +73,7 @@
                     android:layout_marginLeft="25sp"
                     android:layout_marginTop="35sp"
                     android:layout_marginRight="25sp"
-                    android:background="@drawable/formedittextbg"
+                    android:background="@drawable/ic_form_input"
                     android:elevation="20sp"
                     android:ems="10"
                     android:fontFamily="@font/sans"
@@ -82,7 +82,7 @@
                     android:paddingStart="25sp"
                     android:paddingEnd="25sp"
                     android:textColor="@color/edittext"
-                    android:textColorHint="@color/edittexthint"
+                    android:textColorHint="@color/edittext_hint"
                     android:windowSoftInputMode="adjustResize" />
 
                 <TextView
@@ -91,7 +91,7 @@
                     android:layout_marginLeft="25sp"
                     android:fontFamily="@font/sans"
                     android:text="@string/submit_dependency_url"
-                    android:textColor="@color/blacktowhite"
+                    android:textColor="@color/black_to_white"
                     android:textSize="16.5sp"
                     android:textStyle="bold" />
 
@@ -112,7 +112,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="25sp"
                     android:layout_marginBottom="25sp"
-                    android:background="@drawable/roundedcorner"
+                    android:background="@drawable/ic_button_rounded"
                     android:elevation="12dp"
                     android:fontFamily="@font/sans"
                     android:text="@string/submit_submit_btn"
@@ -130,7 +130,7 @@
                     android:layout_marginLeft="25sp"
                     android:layout_marginTop="35sp"
                     android:layout_marginRight="25sp"
-                    android:background="@drawable/formedittextbg"
+                    android:background="@drawable/ic_form_input"
                     android:elevation="20sp"
                     android:ems="10"
                     android:fontFamily="@font/sans"
@@ -144,7 +144,7 @@
                     android:scrollbarStyle="insideInset"
                     android:scrollbars="vertical"
                     android:textColor="@color/edittext"
-                    android:textColorHint="@color/edittexthint"
+                    android:textColorHint="@color/edittext_hint"
                     android:windowSoftInputMode="adjustResize" />
 
                 <TextView
@@ -153,7 +153,7 @@
                     android:layout_marginLeft="25sp"
                     android:fontFamily="@font/sans"
                     android:text="@string/submit_dependency_description"
-                    android:textColor="@color/blacktowhite"
+                    android:textColor="@color/black_to_white"
                     android:textSize="16.5sp"
                     android:textStyle="bold" />
 
@@ -168,7 +168,7 @@
                 android:layout_marginRight="20sp"
                 android:fontFamily="@font/sans"
                 android:text="@string/submit_desc"
-                android:textColor="@color/blacktowhite"
+                android:textColor="@color/black_to_white"
                 android:textSize="16sp"
                 android:textStyle="normal" />
 
@@ -189,7 +189,7 @@
             android:layout_height="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|enterAlways"
             app:navigationIcon="?attr/homeAsUpIndicator"
-            app:titleTextAppearance="@style/toolbartextentity" />
+            app:titleTextAppearance="@style/toolbarTextEntity" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

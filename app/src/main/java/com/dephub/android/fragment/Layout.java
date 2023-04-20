@@ -13,19 +13,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.dephub.android.R;
-import com.dephub.android.cardview.CardAdapter;
-import com.dephub.android.cardview.CardModel;
-import com.dephub.android.common.Snippet;
+import com.dephub.android.cardview.DependencyAdapter;
+import com.dephub.android.cardview.DependencyModel;
+import com.dephub.android.utility.Snippet;
 
 import java.util.ArrayList;
 
 public class Layout extends Fragment {
-    public static final String url = "https://gnanendraprasadp.github.io/DepHub-Web/json/dependency.json";
+    public static final String url = "https://gnanendraprasadp.github.io/dephub/json/dependency.json";
     private RecyclerView cardRecyclerViewLayout;
-    private ArrayList<CardModel> cardLayout;
+    private ArrayList<DependencyModel> cardLayout;
     private SwipeRefreshLayout swipeRefreshLayout;
     LinearLayoutManager linearLayoutManager;
-    private CardAdapter cardViewAdapterLayout;
+    private DependencyAdapter cardViewAdapterLayout;
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -72,7 +72,7 @@ public class Layout extends Fragment {
     }
 
     private void buildCardView() {
-        cardViewAdapterLayout = new CardAdapter(cardLayout, getActivity());
+        cardViewAdapterLayout = new DependencyAdapter(cardLayout, getActivity());
         linearLayoutManager = new LinearLayoutManager(getContext());
         cardRecyclerViewLayout.setHasFixedSize(true);
         cardRecyclerViewLayout.setLayoutManager(linearLayoutManager);

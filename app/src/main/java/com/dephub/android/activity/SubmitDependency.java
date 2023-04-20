@@ -9,16 +9,24 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.dephub.android.R;
-import com.dephub.android.common.Component;
-import com.dephub.android.common.Snippet;
+import com.dephub.android.utility.Snippet;
+import com.dephub.android.utility.Widget;
+import com.google.android.gms.ads.AdError;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 
 public class SubmitDependency extends AppCompatActivity {
     EditText dependencyDeveloperName, dependencyURL, dependencyDescription;
     Button SubmitNow;
+    private InterstitialAd submitDependencyInterstitialAd;
 
     @SuppressLint("ResourceAsColor")
     @Override
@@ -56,7 +64,7 @@ public class SubmitDependency extends AppCompatActivity {
                 } else if (!(dependencyUrl.startsWith("http://") || dependencyUrl.startsWith("https://"))) {
                     showDialog("Please include a valid Dependency URL starts with http or https");
                 } else {
-                    Component.alertDialog(SubmitDependency.this,
+                    Widget.alertDialog(SubmitDependency.this,
                             true,
                             "Are you sure, You want to submit all the details that you have entered?",
                             "Yes, Submit Now",
@@ -107,7 +115,35 @@ public class SubmitDependency extends AppCompatActivity {
             startActivity(new Intent(SubmitDependency.this, Login.class));
             finish();
         }
+
+        Snippet.initializeInterstitialAd(SubmitDependency.this);
+        AdRequest submitDependencyAdRequest = new AdRequest.Builder().build();
+
+        Widget.showInterstitialAd(this, "ca-app-pub-3037529522611130/4061112510", submitDependencyAdRequest, new InterstitialAdLoadCallback() {
+            @Override
+            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                SubmitDependency.super.onBackPressed();
+            }
+
+            @Override
+            public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                submitDependencyInterstitialAd = interstitialAd;
+
+                interstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                    @Override
+                    public void onAdDismissedFullScreenContent() {
+                        SubmitDependency.super.onBackPressed();
+                    }
+
+                    @Override
+                    public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                        SubmitDependency.super.onBackPressed();
+                    }
+                });
+            }
+        });
     }
+
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -131,14 +167,27 @@ public class SubmitDependency extends AppCompatActivity {
         String depDesc = dependencyDescription.getText().toString().trim();
 
         if (TextUtils.isEmpty(depName) && TextUtils.isEmpty(depUrl) && TextUtils.isEmpty(depDesc)) {
-            super.onBackPressed();
+            if (submitDependencyInterstitialAd != null) {
+                submitDependencyInterstitialAd.show(SubmitDependency.this);
+            } else {
+                super.onBackPressed();
+            }
         } else {
             backButton();
         }
     }
 
+    @Override
+    protected void onResume() {
+        if (submitDependencyInterstitialAd != null) {
+            submitDependencyInterstitialAd.show(SubmitDependency.this);
+        } else {
+            super.onResume();
+        }
+    }
+
     private void backButton() {
-        Component.alertDialog(SubmitDependency.this,
+        Widget.alertDialog(SubmitDependency.this,
                 true,
                 "Are you sure you want to go back?",
                 "Yes",
@@ -152,7 +201,7 @@ public class SubmitDependency extends AppCompatActivity {
     }
 
     private void showDialog(String message) {
-        Component.alertDialog(SubmitDependency.this,
+        Widget.alertDialog(SubmitDependency.this,
                 true,
                 message,
                 "Ok",

@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|enterAlways"
-            app:titleTextAppearance="@style/toolbartextentity" />
+            app:titleTextAppearance="@style/toolbarTextEntity" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabsMainActivity"
@@ -35,14 +35,14 @@
             android:visibility="visible"
             app:tabBackground="@color/colorPrimary"
             app:tabGravity="center"
-            app:tabIndicatorColor="@color/indicatorcolor"
+            app:tabIndicatorColor="@color/indicator_color"
             app:tabIndicatorFullWidth="false"
             app:tabIndicatorHeight="2.5sp"
             app:tabMode="scrollable"
             app:tabRippleColor="@null"
-            app:tabSelectedTextColor="@color/selectedtextcolor"
+            app:tabSelectedTextColor="@color/selected_text_color"
             app:tabTextAppearance="@style/TabLayoutTextStyle"
-            app:tabTextColor="@color/tabTextColormain" />
+            app:tabTextColor="@color/tab_text_color_main" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

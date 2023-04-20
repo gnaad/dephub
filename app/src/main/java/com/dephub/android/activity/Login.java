@@ -19,12 +19,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.dephub.android.R;
-import com.dephub.android.common.Component;
-import com.dephub.android.common.Snippet;
+import com.dephub.android.utility.Snippet;
+import com.dephub.android.utility.Widget;
 
 public class Login extends AppCompatActivity {
-    public static final String privacyPolicy = "https://gnanendraprasadp.github.io/DepHub-Web/privacypolicy";
-    public static final String termsOfService = "https://gnanendraprasadp.github.io/DepHub-Web/termsofservice";
+    public static final String privacyPolicy = "https://gnanendraprasadp.github.io/dephub/privacypolicy";
+    public static final String termsOfService = "https://gnanendraprasadp.github.io/dephub/termsofservice";
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -39,7 +39,7 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         TextView termsAndCondition = findViewById(R.id.footer);
-        String footer = "By continuing you agree to DepHub's Terms of Service and Privacy Policy.";
+        String footer = getString(R.string.LoginBottomText);
         termsAndCondition.setText(footer);
 
         SpannableString spannableStringFooter = new SpannableString(footer);
@@ -51,7 +51,7 @@ public class Login extends AppCompatActivity {
 
             @Override
             public void onClick(@NonNull View widget) {
-                Component.openInBrowser(Login.this, privacyPolicy);
+                Widget.openInBrowser(Login.this, privacyPolicy);
             }
         };
 
@@ -63,7 +63,7 @@ public class Login extends AppCompatActivity {
 
             @Override
             public void onClick(@NonNull View widget) {
-                Component.openInBrowser(Login.this, termsOfService);
+                Widget.openInBrowser(Login.this, termsOfService);
             }
         };
 

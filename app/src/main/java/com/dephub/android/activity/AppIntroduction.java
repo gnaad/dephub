@@ -7,8 +7,8 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 import com.dephub.android.R;
-import com.dephub.android.common.Component;
-import com.dephub.android.common.Snippet;
+import com.dephub.android.utility.Snippet;
+import com.dephub.android.utility.Widget;
 import com.github.appintro.AppIntro2;
 import com.github.appintro.AppIntroFragment;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -23,94 +23,70 @@ public class AppIntroduction extends AppIntro2 {
         Snippet.layoutInDisplayCutoutMode(AppIntroduction.this);
 
         addSlide(AppIntroFragment.createInstance(
-                "How Dependencies are divided",
-                "Dependencies are divided based on \nAndroid Studio XML Editor Palette",
+                getString(R.string.slide1_title),
+                getString(R.string.slide1_description),
                 R.drawable.intro1,
-                R.color.introwhite,
-                R.color.introblack,
-                R.color.introblack
+                R.color.intro_white,
+                R.color.intro_black,
+                R.color.intro_black
         ));
         addSlide(AppIntroFragment.createInstance(
-                "Open Copy Share",
-                "• Tap on GitHub icon to open repository\n• Long hold on any two icons to copy details\n• Tap on share icon to share Dependency",
+                getString(R.string.slide2_title),
+                getString(R.string.slide2_description),
                 R.drawable.intro2,
-                R.color.introwhite,
-                R.color.introblack,
-                R.color.introblack
+                R.color.intro_white,
+                R.color.intro_black,
+                R.color.intro_black
         ));
         addSlide(AppIntroFragment.createInstance(
-                "Add to Favorites",
-                "Add any Dependency to your Favorite list to access it quickly",
+                getString(R.string.slide3_title),
+                getString(R.string.slide3_description),
                 R.drawable.intro8,
-                R.color.introwhite,
-                R.color.introblack,
-                R.color.introblack
+                R.color.intro_white,
+                R.color.intro_black,
+                R.color.intro_black
         ));
         addSlide(AppIntroFragment.createInstance(
-                "Dependency Overview",
-                "Get an overview of any Dependency like stars, pull request, license and many more by long holding Dependency Name",
+                getString(R.string.slide4_title),
+                getString(R.string.slide4_description),
                 R.drawable.intro9,
-                R.color.introwhite,
-                R.color.introblack,
-                R.color.introblack
+                R.color.intro_white,
+                R.color.intro_black,
+                R.color.intro_black
         ));
         addSlide(AppIntroFragment.createInstance(
-                "Submit Dependency",
-                "If your Dependency is not listed in DepHub\nYou can send a request in Submit Dependency",
+                getString(R.string.slide5_title),
+                getString(R.string.slide5_description),
                 R.drawable.intro3,
-                R.color.introwhite,
-                R.color.introblack,
-                R.color.introblack
+                R.color.intro_white,
+                R.color.intro_black,
+                R.color.intro_black
         ));
         addSlide(AppIntroFragment.createInstance(
-                "Found any dependency on Internet",
-                "• Tap Share\n• Search for DepHub Icon\n• Tap DepHub Icon to Submit Dependency",
+                getString(R.string.slide6_title),
+                getString(R.string.slide6_description),
                 R.drawable.intro4,
-                R.color.introwhite,
-                R.color.introblack,
-                R.color.introblack
+                R.color.intro_white,
+                R.color.intro_black,
+                R.color.intro_black
         ));
         addSlide(AppIntroFragment.createInstance(
-                "Search Dependency",
-                "Quickly Search any Dependency by typing its Name, Developer Name or Dependency Id",
+                getString(R.string.slide7_title),
+                getString(R.string.slide7_description),
                 R.drawable.intro10,
-                R.color.introwhite,
-                R.color.introblack,
-                R.color.introblack
-        ));
-        addSlide(AppIntroFragment.createInstance(
-                "Share QR Code",
-                "Every Dependency is assigned with QR Code which can be shared to other apps",
-                R.drawable.intro5,
-                R.color.introwhite,
-                R.color.introblack,
-                R.color.introblack
-        ));
-        addSlide(AppIntroFragment.createInstance(
-                "YouTube Video",
-                "Some Dependencies are provided with YouTube video links that give information about how to implement them",
-                R.drawable.intro6,
-                R.color.introwhite,
-                R.color.introblack,
-                R.color.introblack
-        ));
-        addSlide(AppIntroFragment.createInstance(
-                "Stay Updated with News",
-                "Get Information about new features and much more stuff",
-                R.drawable.intro7,
-                R.color.introwhite,
-                R.color.introblack,
-                R.color.introblack
+                R.color.intro_white,
+                R.color.intro_black,
+                R.color.intro_black
         ));
         setColorTransitionsEnabled(true);
         showStatusBar(false);
-        setNavBarColor(R.color.introwhite);
+        setNavBarColor(R.color.intro_white);
         setWizardMode(true);
         setImmersive(false);
         setIndicatorEnabled(true);
         setIndicatorColor(
-                getColor(R.color.introblack),
-                getColor(R.color.introunselected)
+                getColor(R.color.intro_black),
+                getColor(R.color.intro_unselected)
         );
     }
 
@@ -119,11 +95,11 @@ public class AppIntroduction extends AppIntro2 {
         super.onDonePressed(currentFragment);
 
         FirebaseMessaging.getInstance().subscribeToTopic("dev").addOnCompleteListener(task -> {
-            String message = "🖥";
+            String message = " 🖥";
             if (!task.isSuccessful()) {
                 message = "";
             }
-            Component.Toast(AppIntroduction.this, "Happy Coding " + message);
+            Widget.Toast(AppIntroduction.this, getString(R.string.WelcomeToast) + message);
         });
 
         Intent intent = new Intent(AppIntroduction.this, SplashScreen.class);

@@ -25,29 +25,23 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
+public class DependencyAdapter extends RecyclerView.Adapter<DependencyAdapter.ViewHolder> {
 
     private final Context context;
     View view;
     String id;
-    private ArrayList<DependencyModel> cardArrayList;
     ProgressDialog progressDialog;
+    private final ArrayList<DependencyModel> cardArrayList;
 
-    public SearchAdapter(ArrayList<DependencyModel> cardArrayList, Context context) {
+    public DependencyAdapter(ArrayList<DependencyModel> cardArrayList, Context context) {
         this.context = context;
         this.cardArrayList = cardArrayList;
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    public void filterList(ArrayList<DependencyModel> filterList) {
-        cardArrayList = filterList;
-        notifyDataSetChanged();
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.searchcard, parent, false);
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.defaultcardview, parent, false);
         return new ViewHolder(view);
     }
 
@@ -66,80 +60,78 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 Snippet.openWeb(context, model);
             }
         });
-        holder.dependencyNameAdapter.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                progressDialog.show();
-                String fullName = model.getFullName();
-                String dependencyName = model.getDependencyName();
-                String url = "https://api.github.com/repos/" + fullName;
 
-                Snippet.dependencyObject(context,
-                        url,
-                        response -> {
-                            try {
+        holder.dependencyNameAdapter.setOnLongClickListener(view -> {
+                    progressDialog.show();
+                    String fullName = model.getFullName();
+                    String dependencyName = model.getDependencyName();
+                    String url = "https://api.github.com/repos/" + fullName;
+
+                    Snippet.dependencyObject(this.view.getContext(), url,
+                            response -> {
+                                try {
+                                    progressDialog.dismiss();
+                                    id = model.getId();
+                                    String developer = model.getDeveloperName();
+                                    String name = response.getString("name");
+
+                                    JSONObject license = response.getJSONObject("license");
+                                    String licenseName = license.getString("name");
+
+                                    String desc = response.getString("description");
+                                    String lang = response.getString("language");
+                                    String star = response.getString("watchers_count");
+                                    String forkCount = response.getString("forks_count");
+                                    String watch = response.getString("subscribers_count");
+
+                                    JSONObject data = response.getJSONObject("owner");
+                                    String type = data.getString("type");
+                                    String openIssueCount = response.getString("open_issues_count");
+                                    Widget.alertDialog(context,
+                                            true,
+                                            "Overview of " + dependencyName +
+                                                    "\n\nDependency Id : " + id +
+                                                    "\n\nName : " + name +
+                                                    "\nDeveloper : " + developer +
+                                                    "\nType : " + type +
+                                                    "\n\nFork : " + forkCount +
+                                                    "\nStar : " + star +
+                                                    "\nWatch : " + watch +
+                                                    "\n\nOpen Issue Count : " + openIssueCount +
+                                                    "\nLanguage : " + lang +
+                                                    "\n\nDescription : " + desc +
+                                                    "\n\nLicense Name : " + licenseName,
+                                            "Close",
+                                            null,
+                                            (dialog, which) -> {
+                                                dialog.dismiss();
+                                                context.getCacheDir().delete();
+                                            },
+                                            null);
+                                } catch (JSONException e) {
+                                    progressDialog.dismiss();
+                                    Widget.alertDialog(context,
+                                            true,
+                                            "Oops...\n\nDependency Id : " + id + "\n\nWe've got some bad news.\n\nThere was problem while loading overview of " + dependencyName + " dependency.\n\nWould you like to open dependency?",
+                                            "Yes",
+                                            "No",
+                                            (dialog, which) -> {
+                                                Snippet.openWeb(context, model);
+                                            },
+                                            (dialog, which) -> {
+                                                dialog.dismiss();
+                                            });
+                                }
+                            },
+                            error -> {
                                 progressDialog.dismiss();
-                                id = model.getId();
-                                String developer = model.getDeveloperName();
-                                String name = response.getString("name");
-
-                                JSONObject license = response.getJSONObject("license");
-                                String licenseName = license.getString("name");
-
-                                String desc = response.getString("description");
-                                String lang = response.getString("language");
-                                String star = response.getString("watchers_count");
-                                String forkCount = response.getString("forks_count");
-                                String watch = response.getString("subscribers_count");
-
-                                JSONObject data = response.getJSONObject("owner");
-                                String type = data.getString("type");
-                                String openIssueCount = response.getString("open_issues_count");
-
-                                Widget.alertDialog(context,
-                                        true,
-                                        "Overview of " + dependencyName +
-                                                "\n\nDependency Id : " + id +
-                                                "\n\nName : " + name +
-                                                "\nDeveloper : " + developer +
-                                                "\nType : " + type +
-                                                "\n\nFork : " + forkCount +
-                                                "\nStar : " + star +
-                                                "\nWatch : " + watch +
-                                                "\n\nOpen Issue Count : " + openIssueCount +
-                                                "\nLanguage : " + lang +
-                                                "\n\nDescription : " + desc +
-                                                "\n\nLicense Name : " + licenseName,
-                                        "Close",
-                                        null,
-                                        (dialog, which) -> {
-                                            dialog.dismiss();
-                                            context.getCacheDir().delete();
-                                        },
-                                        null);
-                            } catch (JSONException e) {
-                                progressDialog.dismiss();
-                                Widget.alertDialog(context,
-                                        true,
-                                        "Oops...\n\nDependency Id : " + id + "\n\nWe've got some bad news.\n\nThere was problem while loading overview of " + dependencyName + " dependency.\n\nWould you like to open dependency?",
-                                        "Yes",
-                                        "No",
-                                        (dialog, which) -> {
-                                            Snippet.openWeb(context, model);
-                                        },
-                                        (dialog, which) -> {
-                                            dialog.dismiss();
-                                        });
-                            }
-                        },
-                        error -> {
-                            progressDialog.dismiss();
-                            Widget.Toast(context, "Failed to load overview with code " + error.networkResponse.statusCode);
-                        });
-                return false;
-            }
-        });
+                                Widget.Toast(context, "Failed to load overview with code " + error.networkResponse.statusCode);
+                            });
+                    return false;
+                }
+        );
         holder.dependencyDeveloperAdapter.setText(model.getDeveloperName());
+
         holder.githubLinkAdapter.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {

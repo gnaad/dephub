@@ -14,8 +14,8 @@ import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.dephub.android.R;
-import com.dephub.android.common.Component;
-import com.dephub.android.common.Snippet;
+import com.dephub.android.utility.Widget;
+import com.dephub.android.utility.Snippet;
 
 @SuppressLint("CustomSplashScreen")
 public class SplashScreen extends AppCompatActivity {
@@ -25,7 +25,7 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         if (!isNetworkAvailable()) {
-            Component.alertDialog(
+            Widget.alertDialog(
                     SplashScreen.this,
                     false,
                     "Internet Problem\n\nPlease check your Internet Connectivity or WiFi Connection",

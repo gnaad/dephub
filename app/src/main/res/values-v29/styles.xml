@@ -20,11 +20,11 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="fontFamily">@font/sans</item>
         <item name="android:windowContentOverlay">@null</item>
-        <item name="android:itemBackground">@color/lightblue</item>
+        <item name="android:itemBackground">@color/light_blue</item>
     </style>
 
-    <style name="tablayouttheme" parent="Widget.Design.TabLayout">
-        <item name="tabIndicatorColor">@color/indicatorcolor</item>
+    <style name="tabLayoutTheme" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">@color/indicator_color</item>
     </style>
 
     <style name="TabLayoutTextStyle">
@@ -32,7 +32,7 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="toolbartextentity">
+    <style name="toolbarTextEntity">
         <item name="android:textSize">20sp</item>
         <item name="android:textStyle">bold</item>
         <item name="windowActionBarOverlay">@null</item>
@@ -73,14 +73,14 @@
     </style>
 
     <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="colorPrimary">@color/blacktowhite</item>
+        <item name="colorPrimary">@color/black_to_white</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowBackground">@drawable/dialogroundcorner</item>
+        <item name="android:windowBackground">@drawable/ic_dialog_rounded_corner</item>
         <item name="fontFamily">@font/sans</item>
-        <item name="android:textColor">@color/blacktowhite</item>
-        <item name="android:textColor" tools:ignore="DuplicateDefinition">@color/blacktowhite</item>
-        <item name="android:textColorPrimary">@color/blacktowhite</item>
+        <item name="android:textColor">@color/black_to_white</item>
+        <item name="android:textColor" tools:ignore="DuplicateDefinition">@color/black_to_white</item>
+        <item name="android:textColorPrimary">@color/black_to_white</item>
         <item name="colorAccent" tools:ignore="DuplicateDefinition">@color/colorAccent</item>
         <item name="android:textAppearanceSmall">@style/MyTextAppearance</item>
         <item name="android:textAppearanceMedium">@style/MyTextAppearance</item>

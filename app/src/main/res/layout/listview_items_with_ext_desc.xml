@@ -36,7 +36,7 @@
             android:layout_marginLeft="90sp"
             android:fontFamily="@font/sans"
             android:text="Account"
-            android:textColor="@color/settingname"
+            android:textColor="@color/settings_name"
             android:textSize="15sp"
             android:textStyle="normal" />
 
@@ -50,7 +50,7 @@
             android:layout_marginBottom="5sp"
             android:fontFamily="@font/sans"
             android:text="Name, Email Address, Log Out"
-            android:textColor="@color/settingsubname"
+            android:textColor="@color/settings_sub_name"
             android:textSize="14sp"
             android:textStyle="normal" />
 

@@ -19,12 +19,16 @@ import com.dephub.android.R;
 import com.dephub.android.activity.Credits;
 import com.dephub.android.activity.OpenSource;
 import com.dephub.android.activity.WriteFeedback;
-import com.dephub.android.common.Component;
-import com.dephub.android.common.Snippet;
+import com.dephub.android.utility.Snippet;
+import com.dephub.android.utility.Widget;
+import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -35,13 +39,13 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Help extends AppCompatActivity {
-    public static final String pp = "https://gnanendraprasadp.github.io/DepHub-Web/privacypolicy";
-    public static final String tos = "https://gnanendraprasadp.github.io/DepHub-Web/termsofservice";
+    private InterstitialAd HelpInterstitialAd;
+    public static final String pp = "https://gnanendraprasadp.github.io/dephub/privacypolicy";
+    public static final String tos = "https://gnanendraprasadp.github.io/dephub/termsofservice";
     String[] ListViewTitle = new String[]{
             "Terms of Service",
             "Privacy Policy",
             "Write Feedback",
-            "Tell us how to improve",
             "Open Source Licenses",
             "Credits",
             "Clear Cache",
@@ -51,14 +55,12 @@ public class Help extends AppCompatActivity {
             R.drawable.ic_tos,
             R.drawable.ic_pp,
             R.drawable.ic_feedback,
-            R.drawable.ic_mail,
             R.drawable.ic_opensource,
             R.drawable.ic_credit,
             R.drawable.ic_broom,
             R.drawable.ic_rate,
             R.drawable.ic_info};
     int[] external = new int[]{
-            R.drawable.ic_external,
             R.drawable.ic_external,
             R.drawable.ic_external,
             R.drawable.ic_external,
@@ -139,7 +141,7 @@ public class Help extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         List<HashMap<String, String>> hashMapArrayList = new ArrayList<HashMap<String, String>>();
-        for (int x = 0; x <= 8; x++) {
+        for (int x = 0; x <= 7; x++) {
             HashMap<String, String> hashMap = new HashMap<String, String>();
             hashMap.put("ListTitle", ListViewTitle[x]);
             hashMap.put("ListImages", Integer.toString(images[x]));
@@ -171,52 +173,42 @@ public class Help extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
-                    Component.openInBrowser(Help.this, tos);
+                    Widget.openInBrowser(Help.this, tos);
                 }
                 if (position == 1) {
-                    Component.openInBrowser(Help.this, pp);
+                    Widget.openInBrowser(Help.this, pp);
                 }
                 if (position == 2) {
                     Intent intent = new Intent(view.getContext(), WriteFeedback.class);
                     startActivityForResult(intent, 2);
                 }
                 if (position == 3) {
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    String[] mailTo = {"mailtodephub@gmail.com"};
-                    intent.putExtra(Intent.EXTRA_EMAIL, mailTo);
-                    intent.putExtra(Intent.EXTRA_SUBJECT, "Users opinion about how to improve DepHub App");
-                    intent.putExtra(Intent.EXTRA_TEXT, "Hello\n\nI would like to say:\n");
-                    intent.setType("message/rfc822");
-                    startActivity(Intent.createChooser(intent, "Choose an email client"));
+                    Intent intent = new Intent(view.getContext(), OpenSource.class);
+                    startActivityForResult(intent, 3);
                 }
                 if (position == 4) {
-                    Intent intent = new Intent(view.getContext(), OpenSource.class);
-                    startActivityForResult(intent, 5);
+                    Intent intent = new Intent(view.getContext(), Credits.class);
+                    startActivityForResult(intent, 4);
                 }
                 if (position == 5) {
-                    Intent intent = new Intent(view.getContext(), Credits.class);
-                    startActivityForResult(intent, 5);
-                }
-
-                if (position == 6) {
-                    Component.alertDialog(Help.this,
+                    Widget.alertDialog(Help.this,
                             true,
                             "Are you sure want to clear cache?\n\nNote: Please don't clear cache until or unless DepHub is running slow.",
                             "Clear Cache",
                             "Cancel",
                             (dialog, which) -> {
                                 deleteCache(getApplicationContext());
-                                Component.Toast(Help.this, "Cache cleared successfully.");
+                                Widget.Toast(Help.this, "Cache cleared successfully.");
                             },
                             (dialog, which) -> {
                                 dialog.dismiss();
                             });
                 }
-                if (position == 7) {
+                if (position == 6) {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.dephub.android"));
                     startActivity(intent);
                 }
-                if (position == 8) {
+                if (position == 7) {
                     String versionName = BuildConfig.VERSION_NAME;
                     int versionCode = BuildConfig.VERSION_CODE;
                     String installer = "";
@@ -228,7 +220,7 @@ public class Help extends AppCompatActivity {
                     @SuppressLint("SimpleDateFormat")
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
                     if (BuildConfig.DEBUG) {
-                        Component.alertDialog(Help.this,
+                        Widget.alertDialog(Help.this,
                                 true,
                                 "DepHub\nVersion v" + versionName + " (" + versionCode + ")\n•Development Version\n" + installer + "\n\nCopyright \u00a9 2020-" + simpleDateFormat.format(new Date()) + " DepHub",
                                 null,
@@ -236,7 +228,7 @@ public class Help extends AppCompatActivity {
                                 null,
                                 null);
                     } else {
-                        Component.alertDialog(Help.this,
+                        Widget.alertDialog(Help.this,
                                 true,
                                 "DepHub\nVersion v" + versionName + " (" + versionCode + ")\n" + installer + "\nCopyright \u00A9 2020-" + simpleDateFormat.format(new Date()) + " DepHub",
                                 null,
@@ -247,6 +239,41 @@ public class Help extends AppCompatActivity {
                 }
             }
         });
+        Snippet.initializeInterstitialAd(Help.this);
+        AdRequest HelpAdRequest = new AdRequest.Builder().build();
+
+        Widget.showInterstitialAd(this, "ca-app-pub-3037529522611130/3494136300", HelpAdRequest, new InterstitialAdLoadCallback() {
+            @Override
+            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                Help.super.onBackPressed();
+            }
+
+            @Override
+            public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                HelpInterstitialAd = interstitialAd;
+
+                interstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                    @Override
+                    public void onAdDismissedFullScreenContent() {
+                        Help.super.onBackPressed();
+                    }
+
+                    @Override
+                    public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                        Help.super.onBackPressed();
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (HelpInterstitialAd != null) {
+            HelpInterstitialAd.show(Help.this);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     boolean verifyInstaller(Context context) {

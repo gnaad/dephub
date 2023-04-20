@@ -8,14 +8,23 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.dephub.android.R;
-import com.dephub.android.common.Snippet;
+import com.dephub.android.utility.Snippet;
+import com.dephub.android.utility.Widget;
+import com.google.android.gms.ads.AdError;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 
 public class OpenSource extends AppCompatActivity {
+    private InterstitialAd openSourceInterstitialAd;
 
     @SuppressLint({"SetJavaScriptEnabled", "ResourceAsColor"})
     @RequiresApi(api = Build.VERSION_CODES.Q)
@@ -60,16 +69,51 @@ public class OpenSource extends AppCompatActivity {
         webView.getSettings().setLoadWithOverviewMode(true);
         webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         webView.loadUrl("file:///android_asset/license.html");
+
+        Snippet.initializeInterstitialAd(OpenSource.this);
+        AdRequest openSourceAdRequest = new AdRequest.Builder().build();
+
+        Widget.showInterstitialAd(this, "ca-app-pub-3037529522611130/3494136300", openSourceAdRequest, new InterstitialAdLoadCallback() {
+            @Override
+            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                OpenSource.super.onBackPressed();
+            }
+
+            @Override
+            public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                openSourceInterstitialAd = interstitialAd;
+
+                interstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                    @Override
+                    public void onAdDismissedFullScreenContent() {
+                        OpenSource.super.onBackPressed();
+                    }
+
+                    @Override
+                    public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                        OpenSource.super.onBackPressed();
+                    }
+                });
+            }
+        });
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if (openSourceInterstitialAd != null) {
+            openSourceInterstitialAd.show(OpenSource.this);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
     public boolean onSupportNavigateUp() {
-        super.onBackPressed();
+        if (openSourceInterstitialAd != null) {
+            openSourceInterstitialAd.show(OpenSource.this);
+        } else {
+            super.onBackPressed();
+        }
         return false;
     }
 }

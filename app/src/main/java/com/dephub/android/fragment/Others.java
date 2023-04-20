@@ -13,19 +13,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.dephub.android.R;
-import com.dephub.android.cardview.CardAdapter;
-import com.dephub.android.cardview.CardModel;
-import com.dephub.android.common.Snippet;
+import com.dephub.android.cardview.DependencyAdapter;
+import com.dephub.android.cardview.DependencyModel;
+import com.dephub.android.utility.Snippet;
 
 import java.util.ArrayList;
 
 public class Others extends Fragment {
-    public static final String url = "https://gnanendraprasadp.github.io/DepHub-Web/json/dependency.json";
+    public static final String url = "https://gnanendraprasadp.github.io/dephub/json/dependency.json";
     private RecyclerView cardRecyclerViewOthers;
-    private ArrayList<CardModel> cardOthers;
+    private ArrayList<DependencyModel> cardOthers;
     private SwipeRefreshLayout swipeRefreshLayout;
     LinearLayoutManager linearLayoutManager;
-    private CardAdapter cardViewAdapterOthers;
+    private DependencyAdapter cardViewAdapterOthers;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,7 +71,7 @@ public class Others extends Fragment {
     }
 
     private void buildCardView() {
-        cardViewAdapterOthers = new CardAdapter(cardOthers, getActivity());
+        cardViewAdapterOthers = new DependencyAdapter(cardOthers, getActivity());
         linearLayoutManager = new LinearLayoutManager(getContext());
         cardRecyclerViewOthers.setHasFixedSize(true);
         cardRecyclerViewOthers.setLayoutManager(linearLayoutManager);

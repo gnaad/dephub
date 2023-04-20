@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
@@ -20,11 +21,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dephub.android.R;
-import com.dephub.android.cardview.CardModel;
+import com.dephub.android.cardview.DependencyModel;
 import com.dephub.android.cardview.SearchAdapter;
-import com.dephub.android.common.Component;
-import com.dephub.android.common.Snippet;
+import com.dephub.android.utility.Snippet;
+import com.dephub.android.utility.Widget;
 import com.github.aakira.compoundicontextview.CompoundIconTextView;
+import com.google.android.gms.ads.AdError;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,10 +46,11 @@ public class Search extends AppCompatActivity {
     Button submitYourDependency;
     LinearLayoutManager linearLayoutManager;
     CompoundIconTextView compoundIconTextView;
-    public static final String url = "https://gnanendraprasadp.github.io/DepHub-Web/json/dependency.json";
+    public static final String url = "https://gnanendraprasadp.github.io/dephub/json/dependency.json";
     SearchAdapter cardViewSearch;
-    private ArrayList<CardModel> cardSearch;
+    private ArrayList<DependencyModel> cardSearch;
     RelativeLayout relativeLayout;
+    private InterstitialAd searchInterstitialAd;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -68,7 +76,7 @@ public class Search extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Drawable drawable = toolbar.getOverflowIcon();
-        DrawableCompat.setTint(drawable.mutate(), getResources().getColor(R.color.toolbaricon));
+        DrawableCompat.setTint(drawable.mutate(), getResources().getColor(R.color.toolbar_icon));
         toolbar.setOverflowIcon(drawable);
 
         submitYourDependency.setOnClickListener(new View.OnClickListener() {
@@ -97,13 +105,13 @@ public class Search extends AppCompatActivity {
                             fullName = jsonObject.getString("full_name");
                             githubLink = jsonObject.getString("github_link");
                             @SuppressLint("ResourceType")
-                            String bg = getString(R.color.whitetoblack);
+                            String bg = getString(R.color.white_to_black);
                             cardBackground = bg;
                             youtube = jsonObject.getString("youtube_link");
                             id = jsonObject.getString("id");
                             license = jsonObject.getString("license");
                             licenseLink = jsonObject.getString("license_link");
-                            cardSearch.add(new CardModel(dependencyName, devName, githubLink, cardBackground, youtube, id, license, licenseLink, fullName));
+                            cardSearch.add(new DependencyModel(dependencyName, devName, githubLink, cardBackground, youtube, id, license, licenseLink, fullName));
                             buildSearchCardView();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -133,7 +141,7 @@ public class Search extends AppCompatActivity {
 
                 if (TextUtils.isDigitsOnly(newText)) {
                     if (newText.length() > 4) {
-                        Component.Toast(Search.this, "Dependency Id is only 4 digits. Check once");
+                        Widget.Toast(Search.this, "Dependency Id is only 4 digits. Check once");
                     }
                 }
 
@@ -152,18 +160,58 @@ public class Search extends AppCompatActivity {
                 return false;
             }
         });
+
+        Snippet.initializeInterstitialAd(Search.this);
+        AdRequest searchAdRequest = new AdRequest.Builder().build();
+
+        Widget.showInterstitialAd(this, "ca-app-pub-3037529522611130/4061112510", searchAdRequest, new InterstitialAdLoadCallback() {
+            @Override
+            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                Search.super.onBackPressed();
+            }
+
+            @Override
+            public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                searchInterstitialAd = interstitialAd;
+
+                interstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                    @Override
+                    public void onAdDismissedFullScreenContent() {
+                        Search.super.onBackPressed();
+                    }
+
+                    @Override
+                    public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                        Search.super.onBackPressed();
+                    }
+                });
+            }
+        });
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if (searchInterstitialAd != null) {
+            searchInterstitialAd.show(Search.this);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        if (searchInterstitialAd != null) {
+            searchInterstitialAd.show(Search.this);
+        } else {
+            super.onResume();
+        }
     }
 
     @SuppressLint("SetTextI18n")
     private void filter(String text) {
-        ArrayList<CardModel> filteredList = new ArrayList<>();
+        ArrayList<DependencyModel> filteredList = new ArrayList<>();
 
-        for (CardModel item : cardSearch) {
+        for (DependencyModel item : cardSearch) {
 
             if (item.getDependencyName().toLowerCase().contains(text.toLowerCase()) || item.getDeveloperName().toLowerCase().contains(text.toLowerCase()) ||
                     item.getId().toLowerCase().contains(text.toLowerCase())) {

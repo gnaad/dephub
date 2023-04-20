@@ -27,7 +27,7 @@
             android:layout_marginTop="12sp"
             android:fontFamily="@font/sans"
             android:text="Account"
-            android:textColor="@color/settingname"
+            android:textColor="@color/settings_name"
             android:textSize="16sp"
             android:textStyle="normal" />
 

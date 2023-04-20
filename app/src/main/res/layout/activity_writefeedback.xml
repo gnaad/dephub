@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/darktoggle"
+    android:background="@color/dark_toggle"
     android:overScrollMode="never">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/appbarFeedback"
-        android:background="@color/darktoggle"
+        android:background="@color/dark_toggle"
         android:overScrollMode="never">
 
         <RelativeLayout
@@ -32,7 +32,7 @@
                     android:layout_below="@+id/userProb"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="25sp"
-                    android:background="@drawable/roundedcorner"
+                    android:background="@drawable/ic_button_rounded"
                     android:fontFamily="@font/sans"
                     android:text="@string/feedbacksubmit"
                     android:textAllCaps="false"
@@ -49,7 +49,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="15sp"
                     android:layout_marginBottom="25sp"
-                    android:background="@drawable/roundedcorner"
+                    android:background="@drawable/ic_button_rounded"
                     android:elevation="20dp"
                     android:fontFamily="@font/sans"
                     android:text="@string/feedback_mail_my_feedback"
@@ -68,7 +68,7 @@
                     android:layout_marginLeft="25sp"
                     android:layout_marginTop="35sp"
                     android:layout_marginRight="25sp"
-                    android:background="@drawable/formedittextbg"
+                    android:background="@drawable/ic_form_input"
                     android:elevation="20sp"
                     android:ems="10"
                     android:fontFamily="@font/sans"
@@ -82,7 +82,7 @@
                     android:scrollbarStyle="insideInset"
                     android:scrollbars="vertical"
                     android:textColor="@color/edittext"
-                    android:textColorHint="@color/edittexthint"
+                    android:textColorHint="@color/edittext_hint"
                     android:windowSoftInputMode="adjustResize" />
 
                 <TextView
@@ -95,7 +95,7 @@
                     android:fontFamily="@font/sans"
                     android:text="@string/feedback_img_attch"
                     android:textAlignment="center"
-                    android:textColor="@color/blacktowhite"
+                    android:textColor="@color/black_to_white"
                     android:textSize="16.5sp"
                     android:textStyle="bold" />
 
@@ -105,7 +105,7 @@
                     android:layout_marginLeft="25sp"
                     android:fontFamily="@font/sans"
                     android:text="@string/feedback_your_feedback"
-                    android:textColor="@color/blacktowhite"
+                    android:textColor="@color/black_to_white"
                     android:textSize="16.5sp"
                     android:textStyle="bold" />
 
@@ -120,7 +120,7 @@
                 android:layout_marginRight="20sp"
                 android:fontFamily="@font/sans"
                 android:text="@string/feedback_title"
-                android:textColor="@color/blacktowhite"
+                android:textColor="@color/black_to_white"
                 android:textSize="17sp"
                 android:textStyle="normal" />
 
@@ -141,7 +141,7 @@
             android:layout_height="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|enterAlways"
             app:navigationIcon="?attr/homeAsUpIndicator"
-            app:titleTextAppearance="@style/toolbartextentity" />
+            app:titleTextAppearance="@style/toolbarTextEntity" />
 
     </com.google.android.material.appbar.AppBarLayout>
 </RelativeLayout>

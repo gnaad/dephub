@@ -1,4 +1,4 @@
-<img src="https://dephub.co/images/icon128×128.png" width="120"/>
+<img src="https://gnanendraprasadp.github.io/dephub/images/icon128×128.png" width="120"/>
 
 # DepHub - Collection of Android Dependencies
 
@@ -37,7 +37,7 @@ This app contains libraries from simple Styleable Toast to Complex APIs. You can
 
 [<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Google Play Download" height="100">](https://play.google.com/store/apps/details?id=com.dephub.android)
 
-#### Latest Version 1.0.25
+#### Latest Version 1.0.27
 # Screenshots
 
 <img src="https://play-lh.googleusercontent.com/FZBPIVuM-QgkJMehGkHEc8ndAgUl5BRLNESmrFNUfFxVXOLC_9jxUy7rdLNhxwFwaf0=w1536-h722-rw" width="200"/>|

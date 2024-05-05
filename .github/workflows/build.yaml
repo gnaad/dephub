@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - web
-    paths:
-      - 'react/**'
 
 jobs:
   build:

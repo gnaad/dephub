@@ -25,7 +25,7 @@ jobs:
       - name: Install Libraries    
         run: |
           cd react
-          npm install --force
+          npm ci --force
 
       - name: Build React app
         run: |

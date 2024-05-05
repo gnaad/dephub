@@ -4,27 +4,27 @@
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 
   <url>
-    <loc>https://dephub.co/</loc>
+    <loc>https://gnaad.github.io/dephub/</loc>
     <lastmod>2021-05-03T18:19:17+00:00</lastmod>
     <priority>1.00</priority>
   </url>
   <url>
-    <loc>https://dephub.co/blog.html</loc>
+    <loc>https://gnaad.github.io/dephub/blog.html</loc>
     <lastmod>2021-05-03T18:19:17+00:00</lastmod>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://dephub.co/privacypolicy.html</loc>
+    <loc>https://gnaad.github.io/dephub/privacypolicy.html</loc>
     <lastmod>2021-05-03T18:19:17+00:00</lastmod>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://dephub.co/termsofservice.html</loc>
+    <loc>https://gnaad.github.io/dephub/termsofservice.html</loc>
     <lastmod>2021-05-03T18:19:17+00:00</lastmod>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://dephub.co/download.html</loc>
+    <loc>https://gnaad.github.io/dephub/download.html</loc>
     <lastmod>2021-05-03T18:19:17+00:00</lastmod>
     <priority>0.80</priority>
   </url>

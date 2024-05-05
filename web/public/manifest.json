@@ -15,24 +15,24 @@
   ],
   "icons": [
     {
-      "src": "images/logo192.png",
+      "src": "logo192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "images/logo512.png",
+      "src": "logo512.png",
       "type": "image/png",
       "sizes": "512x512"
     },
     {
       "purpose": "maskable",
-      "src": "images/logo192.png",
+      "src": "logo192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
       "purpose": "maskable",
-      "src": "images/logo512.png",
+      "src": "logo512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
@@ -54,7 +54,7 @@
       "type": "image/webp"
     }
   ],
-  "start_url": "https://gnaad.github.io/dephub/app",
+  "start_url": "https://gnaad.github.io/dephub/web",
   "display": "standalone",
   "background_color": "#ffffff",
   "orientation": "portrait"

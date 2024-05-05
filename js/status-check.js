@@ -1,7 +1,7 @@
 getDependency();
 
 async function getDependency() {
-  await fetch("https://gnanendraprasadp.github.io/dephub/json/dependency.json")
+  await fetch("https://gnaad.github.io/dephub/json/dependency.json")
     .then((response) => response.json())
     .then((json) => {
       for (i = 0; i < json.length; i++) {

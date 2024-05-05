@@ -19,7 +19,7 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v4
     
-    - name: Use Node.js of version ${{ matrix.node-version }}
+    - name: Using Node.js of version ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}

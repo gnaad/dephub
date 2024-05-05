@@ -1,10 +1,10 @@
-<img src="https://gnanendraprasadp.github.io/dephub/images/icon128×128.png" width="120"/>
+<img src="https://gnaad.github.io/dephub/images/icon128×128.png" width="120"/>
 
 # DepHub - Collection of Android Dependencies
 
-[![GitHub repo size](https://img.shields.io/github/repo-size/gnanendraprasadp/DepHub)](https://github.com/gnanendraprasadp/DepHub)
-[![GitHub issues](https://img.shields.io/github/issues/gnanendraprasadp/DepHub?color=red)](https://github.com/gnanendraprasadp/DepHub/issues)
-[![GitHub license](https://img.shields.io/github/license/gnanendraprasadp/DepHub?color=lightgrey)](https://github.com/gnanendraprasadp/DepHub/blob/master/LICENSE)
+[![GitHub repo size](https://img.shields.io/github/repo-size/gnaad/dephub)](https://github.com/gnaad/dephub)
+[![GitHub issues](https://img.shields.io/github/issues/gnaad/dephub?color=red)](https://github.com/gnaad/dephub/issues)
+[![GitHub license](https://img.shields.io/github/license/gnaad/dephub?color=lightgrey)](https://github.com/gnaad/dephub/blob/master/LICENSE)
 
 DepHub has a collection of fast, frequently updated, categorized best Android Libraries/Dependencies on UI, API, Widgets, and many more. If you are an Android Developer, then this app is for you.
 
@@ -62,18 +62,18 @@ This app contains libraries from simple Styleable Toast to Complex APIs. You can
 
 # Join our team
   * Test the app with different devices
-  * Report issues in the [issue tracker](https://github.com/gnanendraprasadp/DepHub/issues)
-  * Create a [Pull Request](https://github.com/gnanendraprasadp/DepHub/pulls)
+  * Report issues in the [issue tracker](https://github.com/gnaad/dephub/issues)
+  * Create a [Pull Request](https://github.com/gnaad/dephub/pulls)
 
 # Feedback
 ##### Your feedback is important to us
 
-[Write Feedback](https://dephub.co/feedback)
+[Write Feedback](https://gnaad.github.io/dephub/feedback)
 
 # Support and Sponsorship
 #### Support
 
-[Support App Development](https://dephub.co/support)
+[Support App Development](https://gnaad.github.io/dephub/support)
 <br>
 
 #### To sponsor our project, Mail Us
@@ -86,7 +86,7 @@ I would like to thank all the Developers who published their Libraries/Dependenc
 
 We hope that Developers might find this app useful.
 
-Visit our Website: https://dephub.co
+Visit our Website: https://gnaad.github.io/dephub
 
 Happy Coding<br>
 DepHub

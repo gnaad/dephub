@@ -1,0 +1,42 @@
+name: Node.js CI
+
+on:
+  push:
+    branches:
+      - web
+    paths:
+      - 'web/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+    - name: Checkout Code
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js of version ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install Libraries    
+    - run: |
+        cd react
+        npm install --force
+
+    - name: Build React app
+    - run: |
+        cd react
+        npm run build
+        
+    - name: Move React Build to Root
+      run: |
+        mkdir -p web/static
+        cp -R react/build/static/* web/static/
+        cp -R react/build/* web/

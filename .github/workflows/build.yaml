@@ -5,7 +5,7 @@ on:
     branches:
       - web
     paths:
-      - 'web/**'
+      - 'react/**'
 
 jobs:
   build:

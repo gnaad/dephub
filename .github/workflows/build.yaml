@@ -26,12 +26,12 @@ jobs:
         cache: 'npm'
 
     - name: Install Libraries    
-    - run: |
+      run: |
         cd react
         npm install --force
 
     - name: Build React app
-    - run: |
+      run: |
         cd react
         npm run build
         

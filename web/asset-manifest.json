@@ -1,0 +1,9 @@
+{
+  "files": {
+    "main.js": "/dephub/web/static/js/main.ddf09c18.js",
+    "index.html": "/dephub/web/index.html"
+  },
+  "entrypoints": [
+    "static/js/main.ddf09c18.js"
+  ]
+}

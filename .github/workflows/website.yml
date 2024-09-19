@@ -1,4 +1,4 @@
-name: Build DepHub
+name: Build and Publish Website
 
 on:
   workflow_dispatch:

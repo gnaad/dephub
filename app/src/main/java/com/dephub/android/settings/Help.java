@@ -40,8 +40,8 @@ import java.util.List;
 
 public class Help extends AppCompatActivity {
     private InterstitialAd HelpInterstitialAd;
-    public static final String pp = "https://gnanendraprasadp.github.io/dephub/privacypolicy";
-    public static final String tos = "https://gnanendraprasadp.github.io/dephub/termsofservice";
+    public static final String pp = "https://gnaad.github.io/dephub/privacypolicy";
+    public static final String tos = "https://gnaad.github.io/dephub/termsofservice";
     String[] ListViewTitle = new String[]{
             "Terms of Service",
             "Privacy Policy",

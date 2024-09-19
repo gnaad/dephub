@@ -1,0 +1,46 @@
+name: Build DepHub
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "docs/**"
+
+jobs:
+  build:
+    name: Generate React Website
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Code Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "17"
+
+      - name: Install Dependencies
+        working-directory: ./web
+        run: npm install
+
+      - name: Build React app
+        working-directory: ./web
+        run: npm run build
+
+      - name: Copy React Build
+        shell: bash
+        run: |
+          mkdir temp
+          cp -r ./web/build/* ./temp
+          rm -rf web && mkdir web
+          mv temp/* web
+          rm -rf temp
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          publish_dir: ./

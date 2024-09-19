@@ -20,7 +20,7 @@ import com.dephub.android.utility.Snippet;
 import java.util.ArrayList;
 
 public class Layout extends Fragment {
-    public static final String url = "https://gnanendraprasadp.github.io/dephub/json/dependency.json";
+    public static final String url = "https://gnaad.github.io/dephub/json/dependency.json";
     private RecyclerView cardRecyclerViewLayout;
     private ArrayList<DependencyModel> cardLayout;
     private SwipeRefreshLayout swipeRefreshLayout;

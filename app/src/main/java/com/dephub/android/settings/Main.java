@@ -160,7 +160,7 @@ public class Main extends AppCompatActivity {
                     startActivity(intent);
                 }
                 if (position == 1) {
-                    String website = "https://gnanendraprasadp.github.io/dephub";
+                    String website = "https://gnaad.github.io/dephub";
                     Widget.openInBrowser(Main.this, website);
                 }
                 if (position == 2) {

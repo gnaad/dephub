@@ -1,0 +1,95 @@
+name: Build and Release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    name: Generate APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Code Checkout
+        uses: actions/checkout@v4
+
+      - name: set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: "temurin"
+
+      - name: Grant execute permission for gradlew
+        run: |
+          rm -rf docs
+          chmod +x gradlew
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Set Build Tool Version
+        shell: bash
+        run: |
+          BUILD_TOOL_VERSION=$(ls /usr/local/lib/android/sdk/build-tools/ | tail -n 1)
+          echo "BUILD_TOOL_VERSION=$BUILD_TOOL_VERSION" >> $GITHUB_ENV
+          echo Latest Build Tool version is: $BUILD_TOOL_VERSION
+
+      - name: Build Release APK and AAB
+        run: ./gradlew assembleRelease bundleRelease
+
+      - name: Sign APK
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: app/build/outputs/apk/release
+          signingKeyBase64: ${{secrets.KEYSTORE_BASE64}}
+          alias: ${{secrets.KEY_ALIAS}}
+          keyStorePassword: ${{secrets.KEYSTORE_PASSWORD}}
+          keyPassword: ${{secrets.KEY_PASSWORD}}
+        env:
+          BUILD_TOOLS_VERSION: ${{env.BUILD_TOOL_VERSION}}
+
+      - name: Sign AAB
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: app/build/outputs/bundle/release
+          signingKeyBase64: ${{secrets.KEYSTORE_BASE64}}
+          alias: ${{secrets.KEY_ALIAS}}
+          keyStorePassword: ${{secrets.KEYSTORE_PASSWORD}}
+          keyPassword: ${{secrets.KEY_PASSWORD}}
+        env:
+          BUILD_TOOLS_VERSION: ${{env.BUILD_TOOL_VERSION}}
+
+      - name: Upload APK to Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk
+          path: app/build/outputs/apk/release/app-release-unsigned-signed.apk
+
+      - name: Upload AAB to Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: aab
+          path: app/build/outputs/bundle/release/app-release.aab
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{github.ref_name}}
+          tag_name: ${{github.ref_name}}
+
+      - name: Renaming Binaries
+        shell: bash
+        run: |
+          mv app/build/outputs/apk/release/app-release-unsigned-signed.apk app/build/outputs/apk/release/${{github.event.repository.name}}.apk 
+          mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/${{github.event.repository.name}}.aab
+
+      - name: Upload APK and AAB to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            app/build/outputs/apk/release/${{github.event.repository.name}}.apk
+            app/build/outputs/bundle/release/${{github.event.repository.name}}.aab
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

@@ -23,8 +23,8 @@ import com.dephub.android.utility.Snippet;
 import com.dephub.android.utility.Widget;
 
 public class Login extends AppCompatActivity {
-    public static final String privacyPolicy = "https://gnanendraprasadp.github.io/dephub/privacypolicy";
-    public static final String termsOfService = "https://gnanendraprasadp.github.io/dephub/termsofservice";
+    public static final String privacyPolicy = "https://gnaad.github.io/dephub/privacypolicy";
+    public static final String termsOfService = "https://gnaad.github.io/dephub/termsofservice";
 
     @SuppressLint("SetTextI18n")
     @Override

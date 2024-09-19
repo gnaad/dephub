@@ -46,7 +46,7 @@ public class Search extends AppCompatActivity {
     Button submitYourDependency;
     LinearLayoutManager linearLayoutManager;
     CompoundIconTextView compoundIconTextView;
-    public static final String url = "https://gnanendraprasadp.github.io/dephub/json/dependency.json";
+    public static final String url = "https://gnaad.github.io/dephub/json/dependency.json";
     SearchAdapter cardViewSearch;
     private ArrayList<DependencyModel> cardSearch;
     RelativeLayout relativeLayout;

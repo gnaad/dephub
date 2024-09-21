@@ -1,0 +1,196 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_toggle"
+    android:overScrollMode="never">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/appbar_submit_your_dependency"
+        android:background="@color/white_to_black"
+        android:overScrollMode="never">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/layout_dependency_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/thanks"
+                android:layout_marginTop="25dp">
+
+                <EditText
+                    android:id="@+id/et_dependency_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="35dp"
+                    android:layout_marginRight="25dp"
+                    android:background="@drawable/ic_input_rounded"
+                    android:elevation="20dp"
+                    android:ems="10"
+                    android:fontFamily="@font/sans"
+                    android:hint="@string/submit_toast"
+                    android:inputType="textCapWords"
+                    android:paddingStart="25dp"
+                    android:paddingEnd="25dp"
+                    android:textColor="@color/edittext"
+                    android:textColorHint="@color/edittext_hint"
+                    android:windowSoftInputMode="adjustResize" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    android:fontFamily="@font/sans"
+                    android:text="@string/submit_dependency_name"
+                    android:textColor="@color/black_to_white"
+                    android:textSize="16.5sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layout_dependency_url"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/layout_dependency_name"
+                android:layout_marginTop="25dp">
+
+                <EditText
+                    android:id="@+id/et_dependency_url"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="35dp"
+                    android:layout_marginRight="25dp"
+                    android:background="@drawable/ic_input_rounded"
+                    android:elevation="20dp"
+                    android:ems="10"
+                    android:fontFamily="@font/sans"
+                    android:hint="@string/submit_https"
+                    android:inputType="textUri"
+                    android:paddingStart="25dp"
+                    android:paddingEnd="25dp"
+                    android:textColor="@color/edittext"
+                    android:textColorHint="@color/edittext_hint"
+                    android:windowSoftInputMode="adjustResize" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    android:fontFamily="@font/sans"
+                    android:text="@string/submit_dependency_url"
+                    android:textColor="@color/black_to_white"
+                    android:textSize="16.5sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layoutDependencyDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/layout_dependency_url"
+                android:layout_marginTop="25dp">
+
+                <Button
+                    android:id="@+id/submit_form"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/et_dependency_desc"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginBottom="25dp"
+                    android:background="@drawable/ic_rounded_button"
+                    android:elevation="12dp"
+                    android:fontFamily="@font/sans"
+                    android:text="@string/submit_submit_btn"
+                    android:textAllCaps="false"
+                    android:textColor="#ffffff"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/colorAccent" />
+
+                <EditText
+                    android:id="@+id/et_dependency_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="35dp"
+                    android:layout_marginRight="25dp"
+                    android:background="@drawable/ic_input_rounded"
+                    android:elevation="20dp"
+                    android:ems="10"
+                    android:fontFamily="@font/sans"
+                    android:hint="@string/submit_about"
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:maxLines="7"
+                    android:overScrollMode="always"
+                    android:padding="10dp"
+                    android:paddingStart="25dp"
+                    android:paddingEnd="25dp"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="vertical"
+                    android:textColor="@color/edittext"
+                    android:textColorHint="@color/edittext_hint"
+                    android:windowSoftInputMode="adjustResize" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    android:fontFamily="@font/sans"
+                    android:text="@string/submit_dependency_description"
+                    android:textColor="@color/black_to_white"
+                    android:textSize="16.5sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/thanks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:fontFamily="@font/sans"
+                android:text="@string/submit_desc"
+                android:textColor="@color/black_to_white"
+                android:textSize="16sp"
+                android:textStyle="normal" />
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_submit_your_dependency"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:elevation="0dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_submit_your_dependency"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            app:titleTextAppearance="@style/toolbar_text_entity" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+</RelativeLayout>

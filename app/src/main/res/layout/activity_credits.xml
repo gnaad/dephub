@@ -10,7 +10,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/appbarCredits"
+        android:layout_below="@id/appbar_credits"
         android:background="@color/dark_toggle"
         android:forceDarkAllowed="true"
         android:overScrollMode="never"
@@ -24,28 +24,28 @@
                 android:id="@+id/github"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="80sp">
+                android:layout_marginTop="80dp">
 
                 <ImageView
-                    android:layout_width="150sp"
-                    android:layout_height="150sp"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginLeft="25sp"
-                    android:layout_marginTop="50sp"
-                    android:layout_marginRight="25sp"
-                    android:layout_marginBottom="25sp"
-                    android:contentDescription="@string/credits_cont_github"
-                    android:src="@drawable/ic_github_credits" />
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginBottom="25dp"
+                    android:contentDescription="@string/credits_github"
+                    android:src="@drawable/ic_github" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20sp"
-                    android:layout_marginRight="20sp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
                     android:fontFamily="@font/sans"
                     android:text="@string/credits_github"
                     android:textColor="@color/black_to_white"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:textStyle="normal" />
 
             </RelativeLayout>
@@ -61,21 +61,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginLeft="25sp"
-                    android:layout_marginTop="50sp"
-                    android:layout_marginRight="25sp"
-                    android:layout_marginBottom="25sp"
-                    android:contentDescription="@string/credits_cont_flaticon"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginBottom="25dp"
+                    android:contentDescription="@string/credits_flaticon"
                     android:src="@drawable/ic_flaticon" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20sp"
+                    android:layout_marginStart="20dp"
                     android:fontFamily="@font/sans"
                     android:text="@string/credits_flaticon"
                     android:textColor="@color/black_to_white"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:textStyle="normal" />
 
             </RelativeLayout>
@@ -90,21 +90,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginLeft="25sp"
-                    android:layout_marginTop="50sp"
-                    android:layout_marginRight="25sp"
-                    android:layout_marginBottom="25sp"
-                    android:contentDescription="@string/credits_cont_storyset"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginBottom="25dp"
+                    android:contentDescription="@string/credits_storyset"
                     android:src="@drawable/ic_storyset" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20sp"
+                    android:layout_marginStart="20dp"
                     android:fontFamily="@font/sans"
                     android:text="@string/credits_storyset"
                     android:textColor="@color/black_to_white"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:textStyle="normal" />
 
             </RelativeLayout>
@@ -113,33 +113,33 @@
                 android:id="@+id/text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/appbarCredits"
-                android:layout_marginLeft="20sp"
-                android:layout_marginTop="15sp"
-                android:layout_marginRight="20sp"
+                android:layout_below="@id/appbar_credits"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="20dp"
                 android:fontFamily="@font/sans"
                 android:text="@string/credits_title"
                 android:textColor="@color/black_to_white"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:textStyle="normal" />
         </RelativeLayout>
 
     </ScrollView>
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbarCredits"
+        android:id="@+id/appbar_credits"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbarCredits"
+            android:id="@+id/toolbar_credits"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|enterAlways"
             app:navigationIcon="?attr/homeAsUpIndicator"
-            app:titleTextAppearance="@style/toolbarTextEntity" />
+            app:titleTextAppearance="@style/toolbar_text_entity" />
     </com.google.android.material.appbar.AppBarLayout>
 
 </RelativeLayout>

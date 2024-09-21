@@ -1,16 +1,15 @@
 package com.dephub.android.activity;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,263 +20,111 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.dephub.android.BuildConfig;
 import com.dephub.android.R;
-import com.dephub.android.fragment.Button;
-import com.dephub.android.fragment.Container;
-import com.dephub.android.fragment.Google;
-import com.dephub.android.fragment.Helper;
-import com.dephub.android.fragment.Layout;
-import com.dephub.android.fragment.Legacy;
-import com.dephub.android.fragment.Others;
-import com.dephub.android.fragment.Text;
-import com.dephub.android.settings.Main;
+import com.dephub.android.constant.ApplicationConstant;
+import com.dephub.android.fragment.Tab;
+import com.dephub.android.settings.Settings;
 import com.dephub.android.utility.Snippet;
 import com.dephub.android.utility.Widget;
-import com.google.android.gms.ads.AdError;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.FullScreenContentCallback;
-import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.interstitial.InterstitialAd;
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private String remoteVersionCode;
-    ProgressDialog progressDialog;
-    private FirebaseRemoteConfig remoteValue;
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
-    private InterstitialAd MainActivityInterstitialAd;
     private Boolean goBack;
+    private ViewPager viewPager;
 
-    @SuppressLint({"ResourceAsColor", "UseCompatLoadingForDrawables", "RestrictedApi"})
+    Drawable drawable;
+    TabLayout tabLayout;
+    Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Snippet.followNightModeInSystem();
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_mainactivity);
+        Snippet.layoutInDisplayCutoutMode(MainActivity.this);
+        Snippet.darkTheme(MainActivity.this, getApplicationContext());
+        setContentView(R.layout.activity_main_activity);
+
+        if (!isNetworkAvailable()) {
+            Widget.alertDialog(
+                    MainActivity.this,
+                    false,
+                    ApplicationConstant.CONNECTION_ISSUE,
+                    ApplicationConstant.CLOSE,
+                    ApplicationConstant.RETRY,
+                    (dialog, which) -> {
+                        finish();
+                    },
+                    (dialog, which) -> {
+                        finish();
+                        startActivity(getIntent());
+                    }
+            );
+        }
 
         getWindow().setNavigationBarColor(getResources().getColor(R.color.black));
 
         int limit = 10;
-        tabLayout = findViewById(R.id.tabsMainActivity);
-        viewPager = findViewById(R.id.viewPagerMainActivity);
+        tabLayout = findViewById(R.id.tabs_main_activity);
+        viewPager = findViewById(R.id.view_pager_main_activity);
         viewPager.setOffscreenPageLimit(limit);
 
-        Toolbar toolbar = findViewById(R.id.toolbarMainActivity);
-        findViewById(R.id.appbarMainActivity);
-        toolbar.setTitle("DepHub");
+        toolbar = findViewById(R.id.toolbar_main_activity);
+        findViewById(R.id.appbar_main_activity);
+        toolbar.setTitle(ApplicationConstant.DEPHUB);
         Snippet.toolbar(MainActivity.this, toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setElevation(0);
 
-        progressDialog = new ProgressDialog(MainActivity.this, R.style.CustomAlertDialog);
-        progressDialog.setMessage("Loading");
-        progressDialog.setIndeterminate(true);
-        progressDialog.setCancelable(false);
-
-        Drawable drawable = toolbar.getOverflowIcon();
+        drawable = toolbar.getOverflowIcon();
         DrawableCompat.setTint(drawable.mutate(), getResources().getColor(R.color.toolbar_icon));
         toolbar.setOverflowIcon(drawable);
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
-
-        remoteValue = FirebaseRemoteConfig.getInstance();
-        remoteValue.fetch(0);
-        FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
-                .setMinimumFetchIntervalInSeconds(0)
-                .build();
-        remoteValue.setDefaultsAsync(R.xml.default_map);
-
-        remoteValue.fetchAndActivate().addOnCompleteListener(this, new OnCompleteListener<Boolean>() {
-            @Override
-            public void onComplete(@NonNull Task<Boolean> task) {
-                if (task.isSuccessful()) {
-                    int versionName = BuildConfig.VERSION_CODE;
-                    remoteVersionCode = remoteValue.getString("version_code");
-                    if (Integer.parseInt(remoteVersionCode) != versionName) {
-                        update();
-                    }
-                }
-            }
-        });
-
-        remoteValue.fetchAndActivate().addOnCompleteListener(this, new OnCompleteListener<Boolean>() {
-            @Override
-            public void onComplete(@NonNull Task<Boolean> task) {
-                if (task.isSuccessful()) {
-                    final String blockUI = remoteValue.getString("visibility");
-                    if (!blockUI.equals("visible")) {
-                        blockUI();
-                    }
-                }
-            }
-        });
-
-        remoteValue.fetchAndActivate().addOnCompleteListener(this, new OnCompleteListener<Boolean>() {
-            @Override
-            public void onComplete(@NonNull Task<Boolean> task) {
-                if (task.isSuccessful()) {
-                    final String server_busy = remoteValue.getString("server_busy");
-                    if (server_busy.equals("yes")) {
-                        serverBusy();
-                    }
-                }
-            }
-        });
-
-        Snippet.initializeInterstitialAd(MainActivity.this);
-        AdRequest MainActivityAdRequest = new AdRequest.Builder().build();
-
-        Widget.showInterstitialAd(this, "ca-app-pub-3037529522611130/2378062737", MainActivityAdRequest, new InterstitialAdLoadCallback() {
-            @Override
-            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                MainActivity.super.onBackPressed();
-            }
-
-            @Override
-            public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-                MainActivityInterstitialAd = interstitialAd;
-
-                interstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
-                    @Override
-                    public void onAdDismissedFullScreenContent() {
-                        if (goBack) {
-                            MainActivity.super.onBackPressed();
-                        }
-                    }
-
-                    @Override
-                    public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
-                        if (goBack) {
-                            MainActivity.super.onBackPressed();
-                        }
-                    }
-                });
-            }
-        });
     }
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new Text(), "Text");
-        adapter.addFragment(new Button(), "Button");
-        adapter.addFragment(new com.dephub.android.fragment.Widget(), "Widgets");
-        adapter.addFragment(new Layout(), "Layout");
-        adapter.addFragment(new Container(), "Container");
-        adapter.addFragment(new Helper(), "Helper");
-        adapter.addFragment(new Google(), "Google");
-        adapter.addFragment(new Legacy(), "Legacy");
-        adapter.addFragment(new Others(), "Others");
+        for (int i = 0; i < 9; i++) {
+            adapter.addFragment(new Tab(ApplicationConstant.TABS[i]), ApplicationConstant.TABS[i]);
+        }
         viewPager.setAdapter(adapter);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.mainactivity_settings, menu);
+        menuInflater.inflate(R.menu.settings, menu);
         return true;
     }
 
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_search:
-                Intent intent1 = new Intent(this, Search.class);
-                this.startActivity(intent1);
-                break;
-            case R.id.action_submit_your_dependency:
-                Intent intent2 = new Intent(this, SubmitDependency.class);
-                this.startActivity(intent2);
-                break;
-            case R.id.action_settings:
-                Intent intent3 = new Intent(this, Main.class);
-                this.startActivity(intent3);
-                break;
-            default:
-                return super.onOptionsItemSelected(item);
+        int itemId = item.getItemId();
+        if (itemId == R.id.action_search) {
+            Intent intent1 = new Intent(this, Search.class);
+            this.startActivity(intent1);
+        } else if (itemId == R.id.action_submit_your_dependency) {
+            Intent intent2 = new Intent(this, SubmitDependency.class);
+            this.startActivity(intent2);
+        } else if (itemId == R.id.action_settings) {
+            Intent intent3 = new Intent(this, Settings.class);
+            this.startActivity(intent3);
+        } else {
+            return super.onOptionsItemSelected(item);
         }
         return true;
-    }
-
-    private void blockUI() {
-        tabLayout.setVisibility(View.INVISIBLE);
-        viewPager.setVisibility(View.INVISIBLE);
-        Widget.alertDialog(MainActivity.this,
-                false,
-                getString(R.string.blockUI_message),
-                "Ok",
-                "Mail Us",
-                (dialog, which) -> {
-                    finish();
-                },
-                (dialog, which) -> {
-                    finish();
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    String[] mailTo = {"mailtodephub@gmail.com"};
-                    intent.putExtra(Intent.EXTRA_EMAIL, mailTo);
-                    intent.putExtra(Intent.EXTRA_SUBJECT, "About DepHub App");
-                    intent.putExtra(Intent.EXTRA_TEXT, "Hello\n\nI would like to say:\n");
-                    intent.setType("message/rfc822");
-                    startActivity(Intent.createChooser(intent, "Choose an email client"));
-                }
-        );
-    }
-
-    private void serverBusy() {
-        tabLayout.setVisibility(View.INVISIBLE);
-        viewPager.setVisibility(View.INVISIBLE);
-        Widget.alertDialog(MainActivity.this,
-                false,
-                getString(R.string.server_busy_message),
-                "Close",
-                null,
-                (dialog, which) -> {
-                    finish();
-                }, null
-        );
-    }
-
-    private void update() {
-        tabLayout.setVisibility(View.INVISIBLE);
-        viewPager.setVisibility(View.INVISIBLE);
-        Widget.alertDialog(MainActivity.this,
-                false,
-                getString(R.string.update_message),
-                "Update Now",
-                "No,Thanks",
-                (dialog, which) -> {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.dephub.android"));
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    finish();
-                },
-                (dialog, which) -> {
-                    tabLayout.setVisibility(View.VISIBLE);
-                    viewPager.setVisibility(View.VISIBLE);
-                    dialog.dismiss();
-                }
-        );
     }
 
     @Override
     public void onBackPressed() {
         if (viewPager.getCurrentItem() == 0) {
             getCacheDir().delete();
-            if (MainActivityInterstitialAd != null) {
-                goBack = true;
-                MainActivityInterstitialAd.show(MainActivity.this);
-            }
+            goBack = true;
+            super.onBackPressed();
         } else {
             viewPager.setCurrentItem(0);
         }
@@ -285,16 +132,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        if (MainActivityInterstitialAd != null) {
-            goBack = false;
-            MainActivityInterstitialAd.show(MainActivity.this);
-        }
+        goBack = false;
         super.onResume();
     }
 
     static class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> FragmentList = new ArrayList<>();
-        private final List<String> FragmentTitleList = new ArrayList<>();
+        private final List<Fragment> listFragment = new ArrayList<>();
+        private final List<String> titleList = new ArrayList<>();
 
         public ViewPagerAdapter(FragmentManager manager) {
             super(manager);
@@ -303,22 +147,28 @@ public class MainActivity extends AppCompatActivity {
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            return FragmentList.get(position);
+            return listFragment.get(position);
         }
 
         @Override
         public int getCount() {
-            return FragmentList.size();
+            return listFragment.size();
         }
 
         public void addFragment(Fragment fragment, String title) {
-            FragmentList.add(fragment);
-            FragmentTitleList.add(title);
+            listFragment.add(fragment);
+            titleList.add(title);
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return FragmentTitleList.get(position);
+            return titleList.get(position);
         }
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

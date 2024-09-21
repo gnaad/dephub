@@ -13,12 +13,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dephub.android.R;
-import com.dephub.android.utility.Widget;
+import com.dephub.android.constant.ApplicationConstant;
 import com.dephub.android.utility.Snippet;
+import com.dephub.android.utility.Widget;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,12 +28,13 @@ import java.util.ArrayList;
 public class DependencyAdapter extends RecyclerView.Adapter<DependencyAdapter.ViewHolder> {
 
     private final Context context;
-    View view;
-    String id;
-    ProgressDialog progressDialog;
-    private final ArrayList<DependencyModel> cardArrayList;
+    private final ArrayList<Dependency> cardArrayList;
 
-    public DependencyAdapter(ArrayList<DependencyModel> cardArrayList, Context context) {
+    ProgressDialog progressDialog;
+    String id;
+    View view;
+
+    public DependencyAdapter(ArrayList<Dependency> cardArrayList, Context context) {
         this.context = context;
         this.cardArrayList = cardArrayList;
     }
@@ -47,25 +48,20 @@ public class DependencyAdapter extends RecyclerView.Adapter<DependencyAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        progressDialog = new ProgressDialog(context, R.style.CustomAlertDialog);
-        progressDialog.setMessage("Getting Overview");
+        progressDialog = new ProgressDialog(context, R.style.customAlertDialog);
+        progressDialog.setMessage(ApplicationConstant.GETTING_OVERVIEW);
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(false);
 
-        DependencyModel model = cardArrayList.get(position);
+        Dependency model = cardArrayList.get(position);
         holder.dependencyNameAdapter.setText(model.getDependencyName());
-        holder.dependencyNameAdapter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Snippet.openWeb(context, model);
-            }
-        });
+        holder.dependencyNameAdapter.setOnClickListener(v -> Snippet.openWeb(context, model));
 
         holder.dependencyNameAdapter.setOnLongClickListener(view -> {
                     progressDialog.show();
                     String fullName = model.getFullName();
                     String dependencyName = model.getDependencyName();
-                    String url = "https://api.github.com/repos/" + fullName;
+                    String url = ApplicationConstant.GITHUB_API + fullName;
 
                     Snippet.dependencyObject(this.view.getContext(), url,
                             response -> {
@@ -73,20 +69,20 @@ public class DependencyAdapter extends RecyclerView.Adapter<DependencyAdapter.Vi
                                     progressDialog.dismiss();
                                     id = model.getId();
                                     String developer = model.getDeveloperName();
-                                    String name = response.getString("name");
+                                    String name = response.getString(ApplicationConstant.GH_NAME);
 
-                                    JSONObject license = response.getJSONObject("license");
-                                    String licenseName = license.getString("name");
+                                    JSONObject license = response.getJSONObject(ApplicationConstant.GH_LICENSE);
+                                    String licenseName = license.getString(ApplicationConstant.GH_NAME);
 
-                                    String desc = response.getString("description");
-                                    String lang = response.getString("language");
-                                    String star = response.getString("watchers_count");
-                                    String forkCount = response.getString("forks_count");
-                                    String watch = response.getString("subscribers_count");
+                                    String description = response.getString(ApplicationConstant.GH_DESCRIPTION);
+                                    String language = response.getString(ApplicationConstant.GH_LANGUAGE);
+                                    String star = response.getString(ApplicationConstant.GH_WATCHERS_COUNT);
+                                    String forkCount = response.getString(ApplicationConstant.GH_FORKS_COUNT);
+                                    String watch = response.getString(ApplicationConstant.GH_SUBSCRIBERS_COUNT);
 
-                                    JSONObject data = response.getJSONObject("owner");
-                                    String type = data.getString("type");
-                                    String openIssueCount = response.getString("open_issues_count");
+                                    JSONObject data = response.getJSONObject(ApplicationConstant.GH_OWNER);
+                                    String type = data.getString(ApplicationConstant.GH_TYPE);
+                                    String openIssueCount = response.getString(ApplicationConstant.GH_OPEN_ISSUES_COUNT);
                                     Widget.alertDialog(context,
                                             true,
                                             "Overview of " + dependencyName +
@@ -98,10 +94,10 @@ public class DependencyAdapter extends RecyclerView.Adapter<DependencyAdapter.Vi
                                                     "\nStar : " + star +
                                                     "\nWatch : " + watch +
                                                     "\n\nOpen Issue Count : " + openIssueCount +
-                                                    "\nLanguage : " + lang +
-                                                    "\n\nDescription : " + desc +
+                                                    "\nLanguage : " + language +
+                                                    "\n\nDescription : " + description +
                                                     "\n\nLicense Name : " + licenseName,
-                                            "Close",
+                                            ApplicationConstant.CLOSE,
                                             null,
                                             (dialog, which) -> {
                                                 dialog.dismiss();
@@ -112,9 +108,9 @@ public class DependencyAdapter extends RecyclerView.Adapter<DependencyAdapter.Vi
                                     progressDialog.dismiss();
                                     Widget.alertDialog(context,
                                             true,
-                                            "Oops...\n\nDependency Id : " + id + "\n\nWe've got some bad news.\n\nThere was problem while loading overview of " + dependencyName + " dependency.\n\nWould you like to open dependency?",
-                                            "Yes",
-                                            "No",
+                                            "Oops...\n\nDependency Id : " + id + "\n\nThere was problem while loading overview of " + dependencyName + " dependency.\n\nWould you like to open dependency?",
+                                            ApplicationConstant.YES,
+                                            ApplicationConstant.NO,
                                             (dialog, which) -> {
                                                 Snippet.openWeb(context, model);
                                             },
@@ -125,21 +121,18 @@ public class DependencyAdapter extends RecyclerView.Adapter<DependencyAdapter.Vi
                             },
                             error -> {
                                 progressDialog.dismiss();
-                                Widget.Toast(context, "Failed to load overview with code " + error.networkResponse.statusCode);
+                                Widget.Toast(context, "Failed to load overview. Response code is " + error.networkResponse.statusCode);
                             });
                     return false;
                 }
         );
         holder.dependencyDeveloperAdapter.setText(model.getDeveloperName());
 
-        holder.githubLinkAdapter.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                String link = model.getGithubLink();
-                Snippet.vibrate(context, link);
-                Widget.Toast(context, "Link copied");
-                return false;
-            }
+        holder.githubLinkAdapter.setOnLongClickListener(v -> {
+            String link = model.getGithubLink();
+            Snippet.vibrate(context, link);
+            Widget.Toast(context, "Link copied");
+            return false;
         });
         holder.githubLinkAdapter.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.R)
@@ -149,34 +142,28 @@ public class DependencyAdapter extends RecyclerView.Adapter<DependencyAdapter.Vi
                 Snippet.openWeb(context, model);
             }
         });
-        holder.shareAdapter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name = model.getDependencyName();
-                String link = model.getGithubLink();
-                String id = model.getId();
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("text/plain");
-                String shareBody = "About Android Dependency";
-                String shareSub = "Hi there\n\nDependency Id : " + id + "\nDependency Name : " + name + "\nDependency Link : " + link + "\n\nInformation Delivered by : DepHub\nInformation Provided by : GitHub\n\nDownload our Android App : https://bit.ly/installdephubapp\n\nThank You\nLet's code for a better tomorrow";
-                intent.putExtra(Intent.EXTRA_SUBJECT, shareBody);
-                intent.putExtra(Intent.EXTRA_TEXT, shareSub);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                }
-                view.getContext().startActivity(Intent.createChooser(intent, "Share this Dependency using"));
+        holder.shareAdapter.setOnClickListener(v -> {
+            String name = model.getDependencyName();
+            String link = model.getGithubLink();
+            String id = model.getId();
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            String shareBody = "About Android Dependency";
+            String shareSub = "Hi there\n\nDependency Id : " + id + "\nDependency Name : " + name + "\nDependency Link : " + link + "\n\nInformation Delivered by : DepHub\nInformation Provided by : GitHub\n\nDownload our Android App : https://bit.ly/installdephubapp\n\nThank You\nLet's code for a better tomorrow";
+            intent.putExtra(Intent.EXTRA_SUBJECT, shareBody);
+            intent.putExtra(Intent.EXTRA_TEXT, shareSub);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             }
+            view.getContext().startActivity(Intent.createChooser(intent, "Share this Dependency using"));
         });
-        holder.shareAdapter.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                String name = model.getDependencyName();
-                String link = model.getGithubLink();
-                String id = model.getId();
-                Snippet.vibrate(context, "Hi there\n\nDependency Id : " + id + "\nDependency Name : " + name + "\nDependency Link : " + link + "\n\nInformation Delivered by : DepHub\nInformation Provided by : Github\n\nDownload our Android App : https://bit.ly/installdephubapp\n\nThank You\nLet's code for a better tomorrow");
-                Widget.Toast(context, "All details copied");
-                return false;
-            }
+        holder.shareAdapter.setOnLongClickListener(v -> {
+            String name = model.getDependencyName();
+            String link = model.getGithubLink();
+            String id = model.getId();
+            Snippet.vibrate(context, "Hi there\n\nDependency Id : " + id + "\nDependency Name : " + name + "\nDependency Link : " + link + "\n\nInformation Delivered by : DepHub\nInformation Provided by : Github\n\nDownload our Android App : https://bit.ly/installdephubapp\n\nThank You\nLet's code for a better tomorrow");
+            Widget.Toast(context, "All details copied");
+            return false;
         });
     }
 
@@ -193,11 +180,10 @@ public class DependencyAdapter extends RecyclerView.Adapter<DependencyAdapter.Vi
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            CardView cardBackgroundAdapter = itemView.findViewById(R.id.cardview);
             githubLinkAdapter = itemView.findViewById(R.id.github);
             shareAdapter = itemView.findViewById(R.id.share);
-            dependencyNameAdapter = itemView.findViewById(R.id.depname);
-            dependencyDeveloperAdapter = itemView.findViewById(R.id.devname);
+            dependencyNameAdapter = itemView.findViewById(R.id.dep_name);
+            dependencyDeveloperAdapter = itemView.findViewById(R.id.dev_name);
         }
     }
 }

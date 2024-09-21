@@ -5,24 +5,55 @@
     android:background="@color/dark_toggle"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/welcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="80dp"
+        android:fontFamily="@font/baloo"
+        android:letterSpacing="0.1"
+        android:text="@string/welcome_text"
+        android:textColor="@color/black_to_white"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tagline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/welcome"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="20dp"
+        android:fontFamily="@font/sans"
+        android:lineHeight="20dp"
+        android:text="@string/login_desc"
+        android:textColor="@color/black_to_white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/footer"
         android:layout_below="@id/tagline"
         android:layout_centerInParent="true"
-        android:layout_marginLeft="15sp"
-        android:layout_marginTop="15sp"
-        android:layout_marginRight="15sp"
-        android:layout_marginBottom="15sp"
-        android:contentDescription="@string/login_cont_welcome"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
+        android:contentDescription="@string/login_welcome_image"
         android:src="@drawable/ic_welcome" />
 
     <TextView
         android:id="@+id/footer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/sign_in"
+        android:layout_above="@id/continue_now"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
@@ -36,52 +67,20 @@
         android:textSize="13sp"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/welcome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="80sp"
-        android:fontFamily="@font/baloo"
-        android:letterSpacing="0.1"
-        android:text="Welcome👋"
-        android:textColor="@color/black_to_white"
-        android:textSize="30sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/tagline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/welcome"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="8sp"
-        android:layout_marginRight="20dp"
-        android:fontFamily="@font/sans"
-        android:lineHeight="20dp"
-        android:text="@string/login_desc"
-        android:textColor="@color/black_to_white"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
     <Button
-        android:id="@+id/sign_in"
-        android:layout_width="wrap_content"
+        android:id="@+id/continue_now"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="45sp"
-        android:background="@drawable/ic_button_rounded"
+        android:layout_marginBottom="45dp"
         android:elevation="12dp"
         android:fontFamily="@font/sans"
+        android:background="@drawable/ic_rounded_button"
         android:padding="8dp"
         android:text="@string/login_continue"
         android:textAlignment="center"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textStyle="bold" />
-
 </RelativeLayout>

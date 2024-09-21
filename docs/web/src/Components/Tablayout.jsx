@@ -100,7 +100,7 @@ export default function Tablayout() {
       <AppBar position="sticky" elevation={0}>
         <Toolbar>
           <Typography variant="h6">
-            DepHub Web <small style={{ fontSize: "10px" }}>Beta</small>
+            DepHub Web
           </Typography>
           <Tooltip title="More Options">
             <IconButton

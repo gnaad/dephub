@@ -11,13 +11,8 @@ import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.content.ContextCompat;
 
 import com.dephub.android.R;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.interstitial.InterstitialAd;
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 
 public class Widget {
-
-    private static InterstitialAd interstitialAd;
 
     public static void Toast(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
@@ -30,7 +25,7 @@ public class Widget {
                                    String negativeButtonTitle,
                                    DialogInterface.OnClickListener positiveButtonListener,
                                    DialogInterface.OnClickListener negativeButtonListener) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context, R.style.CustomAlertDialog);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context, R.style.customAlertDialog);
         alertDialogBuilder.setCancelable(cancellable);
         alertDialogBuilder.setMessage(message);
         alertDialogBuilder.setPositiveButton(positiveButtonTitle, positiveButtonListener);
@@ -49,9 +44,5 @@ public class Widget {
         builder.setUrlBarHidingEnabled(false);
         CustomTabsIntent customTabsIntent = builder.build();
         customTabsIntent.launchUrl(activity, Uri.parse(webURL));
-    }
-
-    public static void showInterstitialAd(Context context, String adUnitId, AdRequest adRequest, InterstitialAdLoadCallback loadCallback) {
-        InterstitialAd.load(context, adUnitId, adRequest, loadCallback);
     }
 }

@@ -10,17 +10,18 @@
         android:id="@+id/cardview"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_marginLeft="155sp"
-        android:layout_marginRight="155sp"
+        android:layout_marginLeft="155dp"
+        android:layout_marginRight="155dp"
         android:layout_marginBottom="14dp"
         android:forceDarkAllowed="false"
+        app:cardCornerRadius="18dp"
         app:cardBackgroundColor="@color/white_to_black"
         card_view:cardPreventCornerOverlap="false"
         card_view:cardUseCompatPadding="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:background="@drawable/ic_form_input"
+            android:background="@drawable/ic_input_rounded"
             android:layout_height="match_parent">
 
             <ImageButton
@@ -32,7 +33,7 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="18dp"
                 android:background="#00000000"
-                android:src="@drawable/ic_github_btw" />
+                android:src="@drawable/ic_github" />
 
             <ImageButton
                 android:id="@+id/share"
@@ -43,16 +44,16 @@
                 android:layout_marginEnd="18dp"
                 android:layout_marginBottom="10dp"
                 android:background="#00000000"
-                android:src="@drawable/ic_share_btw" />
+                android:src="@drawable/ic_share" />
 
             <TextView
-                android:id="@+id/devname"
+                android:id="@+id/dev_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="3dp"
                 android:layout_marginBottom="17dp"
-                android:layout_toRightOf="@id/developedby"
+                android:layout_toRightOf="@id/developed_by"
                 android:fontFamily="@font/sans"
                 android:letterSpacing="0.05"
                 android:maxLines="1"
@@ -63,7 +64,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/depname"
+                android:id="@+id/dep_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -80,13 +81,13 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/developedby"
+                android:id="@+id/developed_by"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginStart="15sp"
-                android:layout_marginBottom="18sp"
+                android:layout_marginStart="15dp"
+                android:layout_marginBottom="18dp"
                 android:fontFamily="@font/sans"
                 android:text="@string/cardview_developed_by"
                 android:textColor="@color/black_to_white"

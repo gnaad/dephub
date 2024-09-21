@@ -1,19 +1,17 @@
 plugins {
-    id 'com.android.application'
-    id 'com.google.gms.google-services'
+    alias(libs.plugins.android.application)
 }
 
 android {
-    compileSdkVersion 33
-    buildToolsVersion "30.0.3"
+    namespace 'com.dephub.android'
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.dephub.android"
-        minSdkVersion 23
-        targetSdkVersion 33
-        multiDexEnabled true
-        versionCode 10127
-        versionName "1.0.27"
+        minSdk 24
+        targetSdk 34
+        versionCode 10128
+        versionName "1.0.28"
     }
 
     buildTypes {
@@ -26,41 +24,25 @@ android {
             minifyEnabled true
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    packagingOptions {
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/license.txt'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/NOTICE.txt'
-        exclude 'META-INF/notice.txt'
-        exclude 'META-INF/ASL2.0'
+    buildFeatures {
+        buildConfig = true
     }
 }
 
 dependencies {
-    implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'com.android.volley:volley:1.2.1'
+    implementation libs.appcompat
+    implementation libs.material
+    implementation libs.activity
+    implementation libs.constraintlayout
 
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.viewpager:viewpager:1.0.0'
-    implementation 'androidx.browser:browser:1.4.0'
-    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-
-    implementation 'com.google.firebase:firebase-analytics:21.2.2'
-    implementation 'com.google.firebase:firebase-config:21.3.0'
-    implementation 'com.google.firebase:firebase-messaging:23.1.2'
-
-    implementation 'com.google.android.material:material:1.8.0'
-    implementation 'com.google.zxing:core:3.5.0'
-
-    implementation 'com.github.aakira:compound-icon-textview:1.2.1@aar'
-    implementation 'com.github.AppIntro:AppIntro:6.2.0'
-
-    implementation 'com.google.android.gms:play-services-ads:22.0.0'
+    implementation libs.volley
+    implementation libs.appintro
+    implementation libs.browser
+    implementation libs.swiperefreshlayout
 }

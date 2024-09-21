@@ -4,14 +4,15 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.EdgeToEdge;
 import androidx.fragment.app.Fragment;
 
 import com.dephub.android.R;
+import com.dephub.android.constant.ApplicationConstant;
 import com.dephub.android.utility.Snippet;
 import com.dephub.android.utility.Widget;
 import com.github.appintro.AppIntro2;
 import com.github.appintro.AppIntroFragment;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 public class AppIntroduction extends AppIntro2 {
 
@@ -21,59 +22,60 @@ public class AppIntroduction extends AppIntro2 {
         super.onCreate(savedInstanceState);
         Snippet.followNightModeInSystem();
         Snippet.layoutInDisplayCutoutMode(AppIntroduction.this);
+        EdgeToEdge.enable(this);
 
         addSlide(AppIntroFragment.createInstance(
-                getString(R.string.slide1_title),
-                getString(R.string.slide1_description),
-                R.drawable.intro1,
+                ApplicationConstant.SLIDE_TITLE1,
+                ApplicationConstant.SLIDE_DESCRIPTION1,
+                R.drawable.ic_intro1,
                 R.color.intro_white,
                 R.color.intro_black,
                 R.color.intro_black
         ));
         addSlide(AppIntroFragment.createInstance(
-                getString(R.string.slide2_title),
-                getString(R.string.slide2_description),
-                R.drawable.intro2,
+                ApplicationConstant.SLIDE_TITLE2,
+                ApplicationConstant.SLIDE_DESCRIPTION2,
+                R.drawable.ic_intro2,
                 R.color.intro_white,
                 R.color.intro_black,
                 R.color.intro_black
         ));
         addSlide(AppIntroFragment.createInstance(
-                getString(R.string.slide3_title),
-                getString(R.string.slide3_description),
-                R.drawable.intro8,
+                ApplicationConstant.SLIDE_TITLE3,
+                ApplicationConstant.SLIDE_DESCRIPTION3,
+                R.drawable.ic_intro3,
                 R.color.intro_white,
                 R.color.intro_black,
                 R.color.intro_black
         ));
         addSlide(AppIntroFragment.createInstance(
-                getString(R.string.slide4_title),
-                getString(R.string.slide4_description),
-                R.drawable.intro9,
+                ApplicationConstant.SLIDE_TITLE4,
+                ApplicationConstant.SLIDE_DESCRIPTION4,
+                R.drawable.ic_intro4,
                 R.color.intro_white,
                 R.color.intro_black,
                 R.color.intro_black
         ));
         addSlide(AppIntroFragment.createInstance(
-                getString(R.string.slide5_title),
-                getString(R.string.slide5_description),
-                R.drawable.intro3,
+                ApplicationConstant.SLIDE_TITLE5,
+                ApplicationConstant.SLIDE_DESCRIPTION5,
+                R.drawable.ic_intro5,
                 R.color.intro_white,
                 R.color.intro_black,
                 R.color.intro_black
         ));
         addSlide(AppIntroFragment.createInstance(
-                getString(R.string.slide6_title),
-                getString(R.string.slide6_description),
-                R.drawable.intro4,
+                ApplicationConstant.SLIDE_TITLE6,
+                ApplicationConstant.SLIDE_DESCRIPTION6,
+                R.drawable.ic_intro6,
                 R.color.intro_white,
                 R.color.intro_black,
                 R.color.intro_black
         ));
         addSlide(AppIntroFragment.createInstance(
-                getString(R.string.slide7_title),
-                getString(R.string.slide7_description),
-                R.drawable.intro10,
+                ApplicationConstant.SLIDE_TITLE7,
+                ApplicationConstant.SLIDE_DESCRIPTION7,
+                R.drawable.ic_intro7,
                 R.color.intro_white,
                 R.color.intro_black,
                 R.color.intro_black
@@ -93,16 +95,8 @@ public class AppIntroduction extends AppIntro2 {
     @Override
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
-
-        FirebaseMessaging.getInstance().subscribeToTopic("dev").addOnCompleteListener(task -> {
-            String message = " 🖥";
-            if (!task.isSuccessful()) {
-                message = "";
-            }
-            Widget.Toast(AppIntroduction.this, getString(R.string.WelcomeToast) + message);
-        });
-
-        Intent intent = new Intent(AppIntroduction.this, SplashScreen.class);
+        Widget.Toast(AppIntroduction.this, getString(R.string.welcome_message));
+        Intent intent = new Intent(AppIntroduction.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();

@@ -1,6 +1,5 @@
 package com.dephub.android.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,31 +18,45 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.dephub.android.R;
+import com.dephub.android.constant.ApplicationConstant;
 import com.dephub.android.utility.Snippet;
 import com.dephub.android.utility.Widget;
 
 public class Login extends AppCompatActivity {
-    public static final String privacyPolicy = "https://gnaad.github.io/dephub/privacypolicy";
-    public static final String termsOfService = "https://gnaad.github.io/dephub/termsofservice";
+    Button continueNow;
+    ClickableSpan clickableSpanTerms;
+    ForegroundColorSpan fcsTerms;
+    ForegroundColorSpan fcsPrivacy;
+    SpannableString spannableStringFooter;
+    TextView termsAndCondition;
 
-    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Snippet.followNightModeInSystem();
         Snippet.layoutInDisplayCutoutMode(Login.this);
         Snippet.loginFullScreen(Login.this);
-
-        getSupportActionBar().hide();
-
+        Snippet.uiVisibility(Login.this);
         setContentView(R.layout.activity_login);
 
-        TextView termsAndCondition = findViewById(R.id.footer);
-        String footer = getString(R.string.LoginBottomText);
+        termsAndCondition = findViewById(R.id.footer);
+        String footer = ApplicationConstant.LOGIN_FOOTER;
         termsAndCondition.setText(footer);
 
-        SpannableString spannableStringFooter = new SpannableString(footer);
-        ClickableSpan clickableSpanTerms = new ClickableSpan() {
+        spannableStringFooter = new SpannableString(footer);
+        clickableSpanTerms = new ClickableSpan() {
+            @Override
+            public void updateDrawState(@NonNull TextPaint textPaint) {
+                textPaint.setUnderlineText(false);
+            }
+
+            @Override
+            public void onClick(@NonNull View widget) {
+                Widget.openInBrowser(Login.this, ApplicationConstant.PRIVACY_POLICY);
+            }
+        };
+
+        ClickableSpan clickableSpanPrivacy = new ClickableSpan() {
             @Override
             public void updateDrawState(TextPaint textPaint) {
                 textPaint.setUnderlineText(false);
@@ -51,50 +64,37 @@ public class Login extends AppCompatActivity {
 
             @Override
             public void onClick(@NonNull View widget) {
-                Widget.openInBrowser(Login.this, privacyPolicy);
+                Widget.openInBrowser(Login.this, ApplicationConstant.TERMS_OF_SERVICE);
             }
         };
 
-        ClickableSpan clickableSpanPolicy = new ClickableSpan() {
-            @Override
-            public void updateDrawState(TextPaint textPaint) {
-                textPaint.setUnderlineText(false);
-            }
-
-            @Override
-            public void onClick(@NonNull View widget) {
-                Widget.openInBrowser(Login.this, termsOfService);
-            }
-        };
-
-        spannableStringFooter.setSpan(clickableSpanPolicy, 36, 52, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableStringFooter.setSpan(clickableSpanPrivacy, 36, 52, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         spannableStringFooter.setSpan(clickableSpanTerms, 57, 71, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        ForegroundColorSpan fcsTerms = new ForegroundColorSpan(getColor(R.color.colorAccent));
-        ForegroundColorSpan fcsPolicy = new ForegroundColorSpan(getColor(R.color.colorAccent));
+        fcsTerms = new ForegroundColorSpan(getColor(R.color.colorAccent));
+        fcsPrivacy = new ForegroundColorSpan(getColor(R.color.colorAccent));
 
         spannableStringFooter.setSpan(fcsTerms, 36, 52, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spannableStringFooter.setSpan(fcsPolicy, 57, 71, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableStringFooter.setSpan(fcsPrivacy, 57, 71, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         termsAndCondition.setText(spannableStringFooter);
         termsAndCondition.setMovementMethod(LinkMovementMethod.getInstance());
 
-        Snippet.uiVisibility(Login.this);
 
-        Button signInButton = findViewById(R.id.sign_in);
+        continueNow = findViewById(R.id.continue_now);
 
-        SharedPreferences prefs = getSharedPreferences("policy", MODE_PRIVATE);
-        boolean firstStart = prefs.getBoolean("agreed", false);
+        SharedPreferences sharedPreferences = getSharedPreferences(ApplicationConstant.POLICY, MODE_PRIVATE);
+        boolean firstStart = sharedPreferences.getBoolean(ApplicationConstant.AGREED, false);
 
         if (firstStart) {
-            startActivity(new Intent(Login.this, SplashScreen.class));
+            startActivity(new Intent(Login.this, MainActivity.class));
             finish();
         }
 
-        signInButton.setOnClickListener(view -> {
-            SharedPreferences prefs1 = getSharedPreferences("policy", MODE_PRIVATE);
-            SharedPreferences.Editor editor = prefs1.edit();
-            editor.putBoolean("agreed", true);
+        continueNow.setOnClickListener(view -> {
+            SharedPreferences preferences = getSharedPreferences(ApplicationConstant.POLICY, MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean(ApplicationConstant.AGREED, true);
             editor.apply();
 
             Intent intent = new Intent(Login.this, AppIntroduction.class);

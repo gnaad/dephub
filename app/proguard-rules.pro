@@ -1,4 +1,0 @@
-    -keep class com.dephub.android.cardview.DependencyAdapter { *; }
-    -keep class com.dephub.android.cardview.DependencyModel { *; }
-    -keep class com.dephub.android.firebase.OfflineSync { *; }
-    -keep class com.dephub.android.firebase.Messaging { *; }

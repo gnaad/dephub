@@ -1,8 +1,6 @@
 package com.dephub.android.utility;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -25,18 +23,14 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.dephub.android.R;
-import com.dephub.android.cardview.DependencyModel;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.dephub.android.cardview.Dependency;
+import com.dephub.android.constant.ApplicationConstant;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 
 public class Snippet {
@@ -46,8 +40,7 @@ public class Snippet {
 
     public static void layoutInDisplayCutoutMode(Activity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            activity.getWindow().getAttributes().layoutInDisplayCutoutMode = WindowManager.
-                    LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+            activity.getWindow().getAttributes().layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
         }
     }
 
@@ -70,6 +63,16 @@ public class Snippet {
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
 
+    public static void darkTheme(Activity activity, Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if ((context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES) {
+                activity.getWindow().getDecorView().setSystemUiVisibility(0);
+            } else {
+                activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            }
+        }
+    }
+
     public static void toolbar(Context context, Toolbar toolbar) {
         int nightModeFlags = context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
@@ -83,20 +86,11 @@ public class Snippet {
         }
     }
 
-
-    public static void initializeInterstitialAd(Context context) {
-        MobileAds.initialize(context, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
-        });
-    }
-
     public static void vibrate(Context context, String linkToCopy) {
         Vibrator vibrator = (Vibrator) context.getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
         vibrator.vibrate(28);
         ClipboardManager clipboard1 = (ClipboardManager) context.getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("DepHub", linkToCopy);
+        ClipData clip = ClipData.newPlainText(ApplicationConstant.DEPHUB, linkToCopy);
         clipboard1.setPrimaryClip(clip);
     }
 
@@ -122,49 +116,38 @@ public class Snippet {
         requestQueue.add(jsonObjectRequest);
     }
 
-    public static void fetchDependency(String dependencyType, Context context, JSONArray response, ArrayList<DependencyModel> cardText, ProgressDialog progressDialog) {
+    public static void fetchDependency(String dependencyType, JSONArray response, ArrayList<Dependency> cardText) {
         for (int i = 0; i < response.length(); i++) {
             try {
                 JSONObject jsonObject = response.getJSONObject(i);
-                String type = jsonObject.getString("type");
+                String type = jsonObject.getString(ApplicationConstant.TYPE);
                 if (type.equals(dependencyType)) {
-                    String dependencyName = jsonObject.getString("dependency_name");
-                    String developerName = jsonObject.getString("developer_name");
-                    String fullName = jsonObject.getString("full_name");
-                    String githubLink = jsonObject.getString("github_link");
-                    @SuppressLint("ResourceType")
-                    String bg = context.getString(R.color.white_to_black);
-                    String youtube = jsonObject.getString("youtube_link");
-                    String id = jsonObject.getString("id");
-                    String license = jsonObject.getString("license");
-                    String licenseLink = jsonObject.getString("license_link");
-                    cardText.add(new DependencyModel(dependencyName, developerName, githubLink, bg, youtube, id, license, licenseLink, fullName));
-
-                    Collections.sort(cardText, new Comparator<DependencyModel>() {
-                        @Override
-                        public int compare(DependencyModel o1, DependencyModel o2) {
-                            return o1.getDependencyName().compareTo(o2.getDependencyName());
-                        }
-                    });
+                    String id = jsonObject.getString(ApplicationConstant.ID);
+                    String dependencyName = jsonObject.getString(ApplicationConstant.DEPENDENCY_NAME);
+                    String developerName = jsonObject.getString(ApplicationConstant.DEVELOPER_NAME);
+                    String fullName = jsonObject.getString(ApplicationConstant.FULL_NAME);
+                    String githubLink = jsonObject.getString(ApplicationConstant.GITHUB_LINK);
+                    cardText.add(new Dependency(id, dependencyName, developerName, fullName, githubLink));
+                    cardText.sort(Comparator.comparing(Dependency::getDependencyName));
                 }
             } catch (JSONException e) {
-                progressDialog.dismiss();
-                e.printStackTrace();
+                cardText.add(new Dependency());
             }
         }
     }
 
-    public static void openWeb(Context context, DependencyModel model) {
+    public static void openWeb(Context context, Dependency model) {
         String githubLink = model.getGithubLink();
 
-        Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage("com.github.android");
+        Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(ApplicationConstant.GITHUB_PACKAGE_ID);
         if (launchIntent != null) {
             Intent githubIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(githubLink));
             githubIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            githubIntent.setPackage("com.github.android");
+            githubIntent.setPackage(ApplicationConstant.GITHUB_PACKAGE_ID);
             context.startActivity(githubIntent);
         } else {
             Widget.openInBrowser((Activity) context, githubLink);
         }
     }
+
 }

@@ -1,11 +1,10 @@
-import React from "react";
-import Tablayout from "./Tablayout";
+import TabLayout from "./layout/TabLayout";
 
 const Home = () => {
   return (
-    <div>
-      <Tablayout />
-    </div>
+    <>
+      <TabLayout />
+    </>
   );
 };
 

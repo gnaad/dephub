@@ -1,11 +1,13 @@
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Home from './Components/Home';
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Home from "./components/Home";
 
 const App = () => {
-  return (<div>
-    <CssBaseline/>
-    <Home/>
-  </div> );
-}
- 
+  return (
+    <>
+      <CssBaseline />
+      <Home />
+    </>
+  );
+};
+
 export default App;

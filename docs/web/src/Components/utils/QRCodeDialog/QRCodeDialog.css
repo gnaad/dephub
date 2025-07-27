@@ -1,0 +1,8 @@
+.dialog-content-text {
+  white-space: break-spaces;
+}
+
+.dialog-content {
+  display: block;
+  margin: 0 auto;
+}

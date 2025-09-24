@@ -1,9 +1,11 @@
 {
   "files": {
-    "main.js": "/dephub/web/static/js/main.b6744176.js",
+    "main.css": "/dephub/web/static/css/main.767149c2.css",
+    "main.js": "/dephub/web/static/js/main.0438584a.js",
     "index.html": "/dephub/web/index.html"
   },
   "entrypoints": [
-    "static/js/main.b6744176.js"
+    "static/css/main.767149c2.css",
+    "static/js/main.0438584a.js"
   ]
 }
